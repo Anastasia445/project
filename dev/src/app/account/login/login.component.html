@@ -1,0 +1,35 @@
+<mat-progress-spinner class="example-margin"
+[color]="color"
+[mode]="mode"
+ *ngIf="!isReady"></mat-progress-spinner>
+<div class="form" *ngIf="isReady">
+    <mat-card  class="login"> 
+        <mat-card-title>Вход:</mat-card-title>
+            <mat-form-field class="full-width">
+                <mat-label>Логин</mat-label>
+                <input  matInput  [(ngModel)]="loginUser.email" placeholder="ivan@mail.com" type="text" required>
+                <mat-error *ngIf="emailFormControl.hasError('required')">
+                  Поле логин не должно быть пустым
+                </mat-error>
+              </mat-form-field> 
+             <br>
+             <mat-form-field class="full-width">
+                <mat-label>Пароль</mat-label>
+                <input  matInput [(ngModel)]="loginUser.password" type="password" required>
+                <mat-error *ngIf="passwordFormControl.hasError('required')">
+                  Поле пароль не должно быть пустым
+                </mat-error>
+              </mat-form-field>
+               <br><br>
+          <button
+            class="ok"
+            mat-raised-button color="primary"
+            type="button"
+            (click)="login()" >
+            Сохранить
+          </button> 
+          <a class="signUp"  routerLink="/signup">Перейти на страницу регистрации</a>
+          <br>
+          <a class="password" routerLink="/sendEmail">Забыли пароль?</a>
+    </mat-card>
+    </div>

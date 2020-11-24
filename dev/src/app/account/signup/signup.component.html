@@ -1,0 +1,67 @@
+<mat-progress-spinner class="example-margin"
+[color]="color"
+[mode]="mode"
+ *ngIf="!isReady"></mat-progress-spinner>
+<div class="form" *ngIf="isReady">
+<mat-card  class="signup"> 
+    <mat-card-title>Регистрация:</mat-card-title>
+  <!--  <form > -->
+       <mat-form-field class="full-width">
+              <mat-label>Фамилия</mat-label>
+              <input  matInput [(ngModel)]="signupUser.lname" placeholder="Иванов" name="lname" type="text" required>
+              <mat-error *ngIf="lnameFormControl.hasError('required')">
+                Поле имя не должно быть пустым
+              </mat-error>
+            </mat-form-field> 
+           <br>
+           <mat-form-field class="full-width">
+              <mat-label>Имя</mat-label>
+              <input  matInput [(ngModel)]="signupUser.fname" placeholder="Иван"  name="fname" type="text" required>
+              <mat-error *ngIf="fnameFormControl.hasError('required')">
+                Поле фамилия не должно быть пустым
+              </mat-error>
+            </mat-form-field> 
+           <br>
+           <mat-form-field class="full-width">
+              <mat-label>Отчество</mat-label>
+              <input  matInput [(ngModel)]="signupUser.patronymic" placeholder="Иванович"  name="patronymic" type="text" required>
+              <mat-error *ngIf="patronymicFormControl.hasError('required')">
+                Поле отчество не должно быть пустым
+              </mat-error>
+            </mat-form-field> 
+           <br>
+           <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="signupUser.email" placeholder="Ex.  ivan@example.com" type="text" required>
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+              Поле Email не должно быть пустым
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Имя пользователя</mat-label>
+            <input matInput [(ngModel)]="signupUser.login" placeholder="Иванов_01" name="login" type="text" required>
+            <mat-error *ngIf="loginFormControl.hasError('required')">
+              Поле логин не должно быть пустым
+            </mat-error>
+        </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Пароль</mat-label>
+            <input matInput [(ngModel)]="signupUser.password" type="password"  name="password" required>
+            <mat-error *ngIf="passwordFormControl.hasError('required')">
+              Поле пароль не должно быть пустым
+            </mat-error>
+          </mat-form-field>
+           <br><br>
+      <button
+        class="ok"
+        mat-raised-button color="primary"
+        type="button"
+        (click)="register()">
+        Сохранить
+      </button> 
+      <a class="login"  routerLink="/login">Перейти на страницу входа</a>
+<!-- </form> -->
+</mat-card>
+</div>

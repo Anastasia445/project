@@ -1,0 +1,38 @@
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="formGroups" (submit)="onSubmitGroups()">
+      <h2 class="element-size">Редактирование группы:</h2>
+      <mat-form-field class="element-size">
+        <mat-label for="search-box">Название группы</mat-label>
+        <input #name formControlName="name" matInput type="text" id="name" name="name"/>
+        <mat-hint
+          *ngIf="formGroups.get('name').invalid && formGroups.get('name').touched"
+          >Поле Название группы не должно быть пустым</mat-hint>
+      </mat-form-field>
+      <br/>   
+  
+      <mat-form-field class="element-size">
+        <mat-label for="search-box">Описание</mat-label>
+        <input #description formControlName="description" matInput type="text" id="description" name="description"/>
+        <mat-hint
+          *ngIf="formGroups.get('description').invalid && formGroups.get('description').touched"
+          >Поле Описание группы не должно быть пустым</mat-hint>
+      </mat-form-field>
+      <br />
+  
+      <mat-dialog-actions align="end">
+        <button
+          mat-button
+          cdkFocusInitial
+          type="submit"
+          id="submitDetails"
+          name="submitDetails"
+          [disabled]="formGroups.invalid"
+        >
+          Сохранить
+        </button>
+        <button mat-button mat-dialog-close>Отмена</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+  

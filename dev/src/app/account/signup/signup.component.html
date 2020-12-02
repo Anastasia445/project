@@ -1,30 +1,49 @@
-<mat-progress-spinner class="example-margin"
+<!--<mat-progress-spinner class="example-margin"
 [color]="color"
 [mode]="mode"
- *ngIf="!isReady"></mat-progress-spinner>
+ *ngIf="!isReady"></mat-progress-spinner>-->
+ <div  class="example-margin" *ngIf="!isReady">
+  <mat-progress-spinner  
+    [color]="color"
+    [mode]="mode"
+    >  
+  </mat-progress-spinner>
+ </div>
+ 
 <div class="form" *ngIf="isReady">
 <mat-card  class="signup"> 
     <mat-card-title>Регистрация:</mat-card-title>
-  <!--  <form > -->
        <mat-form-field class="full-width">
               <mat-label>Фамилия</mat-label>
-              <input  matInput [(ngModel)]="signupUser.lname" placeholder="Иванов" name="lname" type="text" required>
+              <input  matInput [(ngModel)]="signupUser.lastName" placeholder="Ivanov" [errorStateMatcher]="matcher"
+                [formControl]="lnameFormControl" name="lastName" type="text" required>
+              <mat-error *ngIf="lnameFormControl.hasError('pattern') && !lnameFormControl.hasError('required')">
+                Неверный формат ввода
+              </mat-error>
               <mat-error *ngIf="lnameFormControl.hasError('required')">
-                Поле имя не должно быть пустым
+                Поле фимилия не должно быть пустым
               </mat-error>
             </mat-form-field> 
            <br>
            <mat-form-field class="full-width">
               <mat-label>Имя</mat-label>
-              <input  matInput [(ngModel)]="signupUser.fname" placeholder="Иван"  name="fname" type="text" required>
+              <input  matInput [(ngModel)]="signupUser.firstName" placeholder="Ivan" [errorStateMatcher]="matcher" 
+              [formControl]="fnameFormControl" name="firstName" type="text" required>
+              <mat-error *ngIf="fnameFormControl.hasError('pattern') && !fnameFormControl.hasError('required')">
+                Неверный формат ввода
+              </mat-error>
               <mat-error *ngIf="fnameFormControl.hasError('required')">
-                Поле фамилия не должно быть пустым
+                Поле имя не должно быть пустым
               </mat-error>
             </mat-form-field> 
            <br>
            <mat-form-field class="full-width">
               <mat-label>Отчество</mat-label>
-              <input  matInput [(ngModel)]="signupUser.patronymic" placeholder="Иванович"  name="patronymic" type="text" required>
+              <input  matInput [(ngModel)]="signupUser.patronymic" placeholder="Ivanovich"
+              [formControl]="patronymicFormControl" [errorStateMatcher]="matcher" name="patronymic" type="text" required>
+              <mat-error *ngIf="patronymicFormControl.hasError('pattern') && !patronymicFormControl.hasError('required')">
+                Неверный формат ввода
+              </mat-error>
               <mat-error *ngIf="patronymicFormControl.hasError('required')">
                 Поле отчество не должно быть пустым
               </mat-error>
@@ -32,25 +51,37 @@
            <br>
            <mat-form-field class="example-full-width">
             <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="signupUser.email" placeholder="Ex.  ivan@example.com" type="text" required>
+            <input matInput [(ngModel)]="signupUser.email" [errorStateMatcher]="matcher"
+            [formControl]="emailFormControl" placeholder="ivanov@mail.com" type="text" required>
+            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Введите правильный формат электронной почты 
+            </mat-error>
             <mat-error *ngIf="emailFormControl.hasError('required')">
-              Поле Email не должно быть пустым
+              Поле адрес электронной почты не должно быть пустым
             </mat-error>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Имя пользователя</mat-label>
-            <input matInput [(ngModel)]="signupUser.login" placeholder="Иванов_01" name="login" type="text" required>
+            <input matInput [(ngModel)]="signupUser.username" placeholder="Иванов_01" [errorStateMatcher]="matcher"
+            [formControl]="loginFormControl" name="username" type="text" required>
+            <mat-error *ngIf="loginFormControl.hasError('pattern') && !loginFormControl.hasError('required')">
+              Неверный формат ввода
+            </mat-error>
             <mat-error *ngIf="loginFormControl.hasError('required')">
               Поле логин не должно быть пустым
             </mat-error>
-        </mat-form-field>
+          </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Пароль</mat-label>
-            <input matInput [(ngModel)]="signupUser.password" type="password"  name="password" required>
+            <input matInput [(ngModel)]="signupUser.password" type="password"  [errorStateMatcher]="matcher"
+            [formControl]="passwordFormControl"  name="password" required>
             <mat-error *ngIf="passwordFormControl.hasError('required')">
               Поле пароль не должно быть пустым
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.hasError('minlength') && !passwordFormControl.hasError('required')">
+              Пароль должен состоять из 6 и более символов
             </mat-error>
           </mat-form-field>
            <br><br>

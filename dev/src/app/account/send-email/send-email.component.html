@@ -5,21 +5,26 @@
 <div class="form" *ngIf="isReady">
     <mat-card  class="login"> 
         <mat-card-title>Восстановление пароля:</mat-card-title>
-            <mat-form-field class="full-width">
+        <br>
+           <mat-form-field class="full-width">
                 <mat-label>Укажите адрес вашей электронной почты</mat-label>
-                <input  matInput  [(ngModel)]="loginUser.email" placeholder="ivan@mail.com" type="text" required>
+                <input  matInput  [(ngModel)]="loginUser.email" [errorStateMatcher]="matcher"
+                [formControl]="emailFormControl"  placeholder="ivanov@mail.com" type="email" required>
+                <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                  Введите правильный формат электронной почты 
+                </mat-error>
                 <mat-error *ngIf="emailFormControl.hasError('required')">
                   Поле адрес электронной почты не должно быть пустым
                 </mat-error>
               </mat-form-field> 
              <br>
-               <br><br>
+               <br>
           <button
             class="ok"
             mat-raised-button color="primary"
             type="button"
-            (click)="send()" >
-            Сохранить
+            (click)="sendEmail()" >
+            Отправить
           </button> 
           <a class="signUp"  routerLink="/login">Вернуться на страницу входа</a>
     </mat-card>

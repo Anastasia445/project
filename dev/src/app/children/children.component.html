@@ -1,0 +1,46 @@
+<!--*ngIf="Auth.loggedIn()"-->
+<div class="createChildren">
+    <button mat-raised-button color="primary" >
+      Добавить ребёнка
+    </button>
+    &nbsp; &nbsp; &nbsp;
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Назад
+    </button>
+  </div>
+  <br>
+  <div class="mat-elevation-z8 r">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="lname">
+      <th mat-header-cell *matHeaderCellDef> Название группы </th>
+      <td mat-cell *matCellDef="let element"> {{element.lname}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fname">
+        <th mat-header-cell *matHeaderCellDef> Название группы </th>
+        <td mat-cell *matCellDef="let element"> {{element.fname}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="patronymic">
+        <th mat-header-cell *matHeaderCellDef> Название группы </th>
+        <td mat-cell *matCellDef="let element"> {{element.patronymic}} </td>
+      </ng-container>
+  
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Описание </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  </div>
+  <!--
+  <div  class="spinner" *ngIf="isLoading>
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>-->
+  

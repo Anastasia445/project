@@ -13,5 +13,8 @@
     {
       "path": "./tsconfig.spec.json"
     }
-]
+],
+"esModuleInterop": true,
+"allowSyntheticDefaultImports": true,
 }
+

@@ -49,6 +49,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
 
 const MaterialComponents = [
     MatButtonModule,
@@ -100,6 +103,8 @@ const MaterialComponents = [
     PortalModule,
     ScrollingModule,
     BrowserAnimationsModule,
+    CommonModule,
+    RouterModule,
 ]
 
 

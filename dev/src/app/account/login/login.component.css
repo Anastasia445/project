@@ -1,37 +1,41 @@
 .login {
-    max-width: 380px;
-    border-radius: 15px;
-  }
-  .full-width {
-    width: 100%;
-  }
-  .example-full-width {
-    width: 100%;
-  }
-  .form {
-    padding: 5% 0 0 25%;
-  }
-  .ok {
-    border-radius: 10px;
-  }
+  max-width: 380px;
+  border-radius: 15px;
+}
+.full-width {
+  width: 100%;
+}
+.example-full-width {
+  width: 100%;
+}
+.form {
+  padding: 5% 0 0 30%;
+}
+.ok {
+  border-radius: 10px;
+}
 .signUp {
-    padding: 0 0 0 40px;
-  }
-  .password {
-    padding: 0 0 0 260px;
-  }
-  a{
-    text-decoration: none;
-  }
-  a:hover{
-    cursor: pointer;
-  }
-  .example-margin {
-    margin: 150px 0 0 500px;
-  }
-  .spinner{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-  }
+  padding: 0 0 0 40px;
+}
+.password {
+  padding: 0 0 0 260px;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  cursor: pointer;
+}
+.example-margin {
+  margin: 12% 0 0 40%;
+  background: white;
+  justify-content: center;
+  align-items: center;
+}
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10%;
+  background: white;
+}

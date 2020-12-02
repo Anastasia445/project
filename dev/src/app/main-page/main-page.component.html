@@ -1,1 +1,50 @@
-<p>main-page works!</p>
+<!--*ngIf="Auth.loggedIn()"-->
+<div class="createGroup">
+    <button (click)="addGroups()" mat-raised-button color="primary" >
+      Создать группу
+    </button>
+  </div>
+  <br>
+  <div class="mat-elevation-z8 r">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Название группы </th>
+      <td mat-cell *matCellDef="let element" routerLink="/info/{{element.childrenId}}"> {{element.name}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Учебный год </th>
+      <td mat-cell *matCellDef="let element" routerLink="/info/{{element.childrenId}}"> {{element.start}} - {{element.end}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Описание </th>
+      <td mat-cell *matCellDef="let element" routerLink="/info/{{element.childrenId}}"> {{element.description}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="changeGroup(element)">
+            <span class="material-icons"> create </span>
+          </button>
+          &nbsp;
+          <button mat-icon-button color="warn" (click)="removeGroup(element)">
+            <span class="material-icons"> delete </span>
+          </button>
+        </td>
+      </ng-container> 
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  </div>
+  <!--
+  <div  class="spinner" *ngIf="isLoading>
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>-->
+  

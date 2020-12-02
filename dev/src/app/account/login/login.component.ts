@@ -22,21 +22,25 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class LoginComponent implements OnInit {
 
   isLoading = true;
+
   loginUser = {
-    email:'', 
-    password:''}
+    username:'', 
+    password:''
+  }
+
     isLoadingResults = true;
     isReady:boolean;
     color: ThemePalette = 'primary';
     mode: ProgressSpinnerMode = 'indeterminate';
-    emailFormControl = new FormControl('', [
+
+    loginFormControl = new FormControl('', [
       Validators.required,
-      Validators.email,
+      Validators.pattern('^[a-zA-Z0-9-_]+$')
     ]);
-    
     passwordFormControl = new FormControl('', [
       Validators.required
     ]);
+
     matcher = new MyErrorStateMatcher();
 
   constructor( private Auth: AuthService, private router: Router, private toastr: ToastrService) {
@@ -62,6 +66,7 @@ export class LoginComponent implements OnInit {
       {
          
         localStorage.setItem('token', result.token)
+        localStorage.setItem('roles', result.roles)
         this.showSuccess();
     }, error => this.showError()
     );

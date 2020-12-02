@@ -7,6 +7,14 @@ import { ToastrService } from 'ngx-toastr';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 
+interface signup {
+  lastName:string, 
+  firstName:string, 
+  patronymic:string,
+  email:string,
+  username:string,
+  password:number
+}
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -17,35 +25,43 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
+  
 })
 export class SignupComponent implements OnInit {
 
   isReady:boolean;
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
+  records: signup[];
+  
   signupUser = {
-    lname:'', 
-    fname:'', 
-    patronymic: '',
+    username:'',
     email:'',
-    login:'',
+    firstName:'', 
+    lastName:'', 
+    patronymic: '',
     password: ''
   };
   lnameFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.pattern('^[a-zA-Z0-9-_]+$')
   ]);
   fnameFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.pattern('^[a-zA-Z0-9-_]+$')
   ]);
   patronymicFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.pattern('^[a-zA-Z0-9-_]+$')
   ]);
   loginFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.pattern('^[a-zA-Z0-9-_]+$')
   ]);
   passwordFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.minLength(6),
   ]);
   //formSignUp: FormGroup;
   emailFormControl = new FormControl('', [
@@ -76,6 +92,7 @@ export class SignupComponent implements OnInit {
     this.Auth.signupUser(this.signupUser)
     .subscribe(result => {
       localStorage.setItem('token', result.token)
+      localStorage.setItem('roles', result.roles)
       this.showSuccess();
     }, error => this.showError()
     );

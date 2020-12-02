@@ -13,15 +13,31 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SendEmailComponent } from './account/send-email/send-email.component';
-
+import { CreateGroupComponent } from './main-page/create-group/create-group.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import { EditGroupComponent } from './main-page/edit-group/edit-group.component';
+import { ChildrenComponent } from './children/children.component';
+import { CreateChildrenComponent } from './children/create-children/create-children.component';
+import { EditChildrenComponent } from './children/edit-children/edit-children.component';
+import { ViewChildrenComponent } from './children/view-children/view-children.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
     MainPageComponent,
-    SendEmailComponent
+    SendEmailComponent,
+    CreateGroupComponent,
+    EditGroupComponent,
+    ChildrenComponent,
+    CreateChildrenComponent,
+    EditChildrenComponent,
+    ViewChildrenComponent
   ],
+  entryComponents: [CreateGroupComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,10 +46,18 @@ import { SendEmailComponent } from './account/send-email/send-email.component';
     HttpClientModule,
     ToastrModule.forRoot(),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatNativeDateModule,
+      ReactiveFormsModule.withConfig({
+        warnOnNgModelWithFormControl: 'never'
+      })
   ],
   providers: [AuthGuard,
-    { provide : HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} },
+    { provide : HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,319 @@
+   
+  <div class="form">
+  <mat-card  class="createChild"> 
+    <mat-card-header>
+      <mat-card-title class="title"><h1>Добавление нового ребёнка:</h1></mat-card-title>
+   <div mat-card-avatar class="f">
+            <img [src]="url" height="150px"><br>
+            <input type="file" (change)="onSelectFile($event)">
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <mat-divider></mat-divider>
+      <br>
+      <h2>Общая информация:</h2>
+      <table>
+        <td>
+      <mat-form-field class="full-width">
+        <mat-label>Фамилия</mat-label>
+        <input  matInput [(ngModel)]="profile.lname" placeholder="Петров" type="text" required>
+      </mat-form-field> 
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Группа</mat-label>
+        <mat-select [(ngModel)]="profile.group" name="groups">
+          <mat-option *ngFor="let group of groups" [value]="group.value">
+            {{group.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </td>
+    &nbsp;&nbsp;&nbsp;
+    <td>
+      <mat-form-field class="full-width">
+        <mat-label>Имя</mat-label>
+        <input  matInput [(ngModel)]="profile.fname" type="text"  placeholder="Виктор" required>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Дата рождения</mat-label>
+        <input matInput [(ngModel)]="profile.dateBorn" [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </td>
+    </table>  
+    <mat-divider></mat-divider>
+    <br>
+    <h2>Антропометрические данные:</h2>           
+    <table>
+      <td>
+      <h4>Первое полугодие:</h4>
+      <mat-form-field class="full-width">
+        <mat-label>Рост</mat-label>
+        <input  matInput [(ngModel)]="profile.heightFirst" type="number" required>
+        <span matSuffix>&nbsp; см</span>
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Вес</mat-label>
+        <input  matInput [(ngModel)]="profile.weightFirst" type="number" required>
+        <span matSuffix>&nbsp; кг</span>
+      </mat-form-field>
+    </td>
+    &nbsp;&nbsp;&nbsp;
+    <td>
+      <h4>Второе полугодие:</h4>
+      <mat-form-field class="full-width">
+        <mat-label>Рост</mat-label>
+        <input  matInput [(ngModel)]="profile.heightSecond" type="number" required>
+        <span matSuffix>&nbsp; см</span>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Вес</mat-label>
+        <input  matInput [(ngModel)]="profile.weightSecond" type="number" required>
+        <span matSuffix>&nbsp; кг</span>
+      </mat-form-field> 
+      </td>
+    </table>
+    <mat-divider></mat-divider>
+    <br>
+    <h2>Здоровье:</h2>  
+    <table>
+      <td>
+        <mat-form-field appearance="fill">
+          <mat-label>Группа здоровья:</mat-label>
+          <mat-select [(ngModel)]="profile.groupHealth" name="health">
+            <mat-option *ngFor="let groupHealth of groupsHealth" [value]="groupHealth.value">
+              {{groupHealth.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Группа по физкультуре:</mat-label>
+        <mat-select [(ngModel)]="profile.groupType" name="type">
+          <mat-option  *ngFor="let groupType of groupsType" [value]="groupType.value">
+            {{groupType.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Диетический стол:</mat-label>
+        <mat-select [(ngModel)]="profile.groupFoodDiet" name="type">
+          <mat-option (click)="foodDietInfo()" *ngFor="let groupFoodDiet of groupsFoodDiet" [value]="groupFoodDiet.value">
+            {{groupFoodDiet.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="isReady">
+        <mat-label>Диета:</mat-label>
+        <textarea matInput [(ngModel)]="profile.groupFoodDietinfo"></textarea>
+      </mat-form-field>
+    </td>
+    &nbsp;&nbsp;&nbsp;
+    <td>
+      <h4>Комментарий:</h4>
+      <mat-form-field class="example-full-width">
+        <textarea matInput [(ngModel)]="profile.comment"></textarea>
+      </mat-form-field>
+    </td>
+    </table>
+    <mat-divider></mat-divider>
+    <br>
+    <h2>Место проживания:</h2>    
+    <table>
+      <td>
+        <h4>Адрес прописки:</h4>
+        <mat-form-field class="example-full-width">
+          <mat-label>Город</mat-label>
+          <input matInput [(ngModel)]="profile.residenceCity">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Улица</mat-label>
+          <input matInput  [(ngModel)]="profile.residenceStreet">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Дом</mat-label>
+          <input matInput type="number"  [(ngModel)]="profile.residenceHouse">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Квартира</mat-label>
+          <input matInput type="number"  [(ngModel)]="profile.residenceFlat">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Телефон</mat-label>
+          <input type="tel" matInput placeholder="22-65-74" [(ngModel)]="profile.residencePhone">
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+      </td>
+      <td>
+        <h4>Адрес проживания:</h4>
+        <mat-form-field class="example-full-width">
+          <mat-label>Город</mat-label>
+          <input matInput [(ngModel)]="profile.nowCity">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Улица</mat-label>
+          <input matInput  [(ngModel)]="profile.nowStreet">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Дом</mat-label>
+          <input matInput type="number"  [(ngModel)]="profile.nowHouse">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Квартира</mat-label>
+          <input matInput type="number"  [(ngModel)]="profile.nowFlat">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Телефон</mat-label>
+          <input type="tel" matInput placeholder="22-65-74" [(ngModel)]="profile.nowPhone">
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+      </td>
+    </table>
+    <mat-divider></mat-divider>
+    <br>
+    <h2>Сведения о матери:</h2>    
+    <table>
+      <td>
+        <mat-form-field class="full-width">
+          <mat-label>Фамилия</mat-label>
+          <input  matInput [(ngModel)]="profile.lnameMam" placeholder="Петрова" type="text" required>
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Имя</mat-label>
+          <input  matInput [(ngModel)]="profile.nameMam" placeholder="Виктория" type="text" required>
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Отчество</mat-label>
+          <input  matInput [(ngModel)]="profile.patronymicMam" placeholder="Анатольевна" type="text" required>
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Телефон</mat-label>
+          <span matPrefix>+375 &nbsp;</span>
+          <input type="tel" matInput placeholder="(29) 375-58-68" [(ngModel)]="profile.mamPhone">
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+      </td>
+      &nbsp;&nbsp;&nbsp;
+      <td>
+        <mat-form-field appearance="fill">
+          <mat-label>Образование:</mat-label>
+          <mat-select [(ngModel)]="profile.mamEducation" name="type">
+            <mat-option  *ngFor="let mamEducation of groupsEducation" [value]="mamEducation.value">
+              {{mamEducation.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Место работы:</mat-label>
+          <input  matInput [(ngModel)]="profile.mamPlaceWork">
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Должность:</mat-label>
+          <input  matInput [(ngModel)]="profile.mamPosition">
+        </mat-form-field> 
+      </td>
+    </table>
+    <mat-divider></mat-divider>
+<br>
+<h2>Сведения об отце:</h2>    
+<table>
+  <td>
+    <mat-form-field class="full-width">
+      <mat-label>Фамилия</mat-label>
+      <input  matInput [(ngModel)]="profile.lnameDad" placeholder="Петров" type="text" required>
+    </mat-form-field> 
+    <br>
+    <mat-form-field class="full-width">
+      <mat-label>Имя</mat-label>
+      <input  matInput [(ngModel)]="profile.nameDad" placeholder="Евгений" type="text" required>
+    </mat-form-field> 
+    <br>
+    <mat-form-field class="full-width">
+      <mat-label>Отчество</mat-label>
+      <input  matInput [(ngModel)]="profile.patronymicDad" placeholder="Анатольевич" type="text" required>
+    </mat-form-field> 
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>Телефон</mat-label>
+      <span matPrefix>+375 &nbsp;</span>
+      <input type="tel" matInput placeholder="(29) 375-58-68" [(ngModel)]="profile.dadPhone">
+      <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+  </td>
+  &nbsp;&nbsp;&nbsp;
+  <td>
+    <mat-form-field appearance="fill">
+      <mat-label>Образование:</mat-label>
+      <mat-select [(ngModel)]="profile.dadEducation" name="type">
+        <mat-option  *ngFor="let dadEducation of groupsEducation" [value]="dadEducation.value">
+          {{dadEducation.value}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="full-width">
+      <mat-label>Место работы:</mat-label>
+      <input  matInput [(ngModel)]="profile.dadPlaceWork">
+    </mat-form-field> 
+    <br>
+    <mat-form-field class="full-width">
+      <mat-label>Должность:</mat-label>
+      <input  matInput [(ngModel)]="profile.dadPosition">
+    </mat-form-field> 
+  </td>
+  </table>
+  <mat-divider></mat-divider>
+  <br>
+  <h2>Сведения о сёстрах и братьях:</h2>  
+    <br>
+    <button
+    mat-raised-button color="primary"
+    type="button">
+    Добавить
+  </button> 
+
+  </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-divider></mat-divider>
+    <div class="ok">
+      <button
+        mat-raised-button color="primary"
+        type="button"
+        (click)="save()" >
+        Сохранить
+      </button> 
+    </div>
+    &nbsp;&nbsp;&nbsp;
+    <div class="ok">
+      <button
+        mat-raised-button color="primary"
+        type="button"
+        (click)="close()" >
+        Отмена
+      </button> 
+    </div>
+  </mat-card-actions>
+    </mat-card>
+    </div>

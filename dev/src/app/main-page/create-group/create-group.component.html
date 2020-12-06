@@ -24,15 +24,15 @@
       <mat-form-field class="element-size" appearance="fill">
         <mat-label>Учебный год</mat-label>
         <mat-date-range-input [formGroup]="formGroups" [rangePicker]="picker" 
-        [comparisonStart]="formGroups.value.start"  [comparisonEnd]="formGroups.value.end">
-          <input #start matStartDate formControlName="start" placeholder="Start date" id="start" name="start">
-          <input #end matEndDate formControlName="end"  placeholder="End date" id="end" name="end">
+        [comparisonStart]="formGroups.value.localDate"  [comparisonEnd]="formGroups.value.end">
+          <input #localDate matStartDate formControlName="localDate" placeholder="Start date" id="localDate" name="localDate">
+          <input #localDate matEndDate formControlName="localDate"  placeholder="End date" id="localDate" name="localDate">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       
-        <mat-error *ngIf="formGroups.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="formGroups.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      <!--  <mat-error *ngIf="formGroups.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="formGroups.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> -->
       </mat-form-field>
      <!--<mat-form-field>
         <input

@@ -17,7 +17,9 @@ interface Grouptype {
 export class CreateChildrenComponent implements OnInit {
 
   records: children[];
-
+  displayedColumns: string[] = ['relatives'];
+  columnsToDisplay: string[] = this.displayedColumns.slice();
+  data: any;
   constructor( private location: Location) { }
 
   ngOnInit(): void {
@@ -64,7 +66,13 @@ export class CreateChildrenComponent implements OnInit {
     dadEducation:'',
     dadPlaceWork:'',
     dadPosition:'',
-    dadPhone:''
+    dadPhone:'',
+    groupsSiblings:'',
+    rLName:'',
+    rFName:'',
+    rPatronymic:'',
+    study:''
+
   } 
     groups: Grouptype[] = [
       {value: 'первая младшая'},
@@ -125,6 +133,11 @@ export class CreateChildrenComponent implements OnInit {
     {
       this.isReady = false;
     }
+  }
+
+  addColumn() {
+    const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
+    this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
   }
 
   save(): void{ 

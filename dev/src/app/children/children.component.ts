@@ -8,6 +8,7 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { children } from './children';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-children',
@@ -21,9 +22,9 @@ export class ChildrenComponent implements OnInit {
     'lname',
     'fname',
     'patronymic',
-    'description'
+    'dateBorn'
   ];
- // records = new MatTableDataSource<main>(this.main);
+
   length:number;
   dataSource: any;
   records: children[];
@@ -37,24 +38,33 @@ export class ChildrenComponent implements OnInit {
 
   constructor(
     private MainService: MainService,
+    private route: ActivatedRoute,
     public Auth: AuthService,
     private location: Location) 
-    {
-    setTimeout(()=> {
-    this.isReady = true;}, 600);
-    }
+    {    }
 
   ngOnInit() {
-  //  this.getchildren();
+   this.getchildren();
+  }
+  
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   getchildren(): void {
-    const childrenId = +this.route.snapshot.paramMap.get('id');
-    this.MainService.getchildren(childrenId).subscribe(results=>
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.MainService.getchildren(id).subscribe(results=>
     {
+      this.isLoading = false;
       this.records = results;
       this.dataSource = new MatTableDataSource(this.records);
-      console.log(this.userComment);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log(this.records);
     });
   }
 

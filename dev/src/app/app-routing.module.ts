@@ -14,9 +14,9 @@ import { ViewChildrenComponent } from './children/view-children/view-children.co
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'main', component: MainPageComponent, canActivate: [AuthGuard] },
-  { path: 'createGroup', component: CreateGroupComponent, canActivate: [AuthGuard] },
-  { path: 'children', component: ChildrenComponent, canActivate: [AuthGuard]},
+  { path: 'main', component: MainPageComponent, canActivate: [AuthGuard, ] },
+  { path: 'createGroup', component: CreateGroupComponent, canActivate: [AuthGuard]},
+  { path: 'children/:id', component: ChildrenComponent, canActivate: [AuthGuard]},
   { path: 'addChild/:id', component: CreateChildrenComponent, canActivate: [AuthGuard]},
   { path: 'editChild', component: EditChildrenComponent, canActivate: [AuthGuard]},
   { path: 'viewChild/:id', component: ViewChildrenComponent, canActivate: [AuthGuard]},

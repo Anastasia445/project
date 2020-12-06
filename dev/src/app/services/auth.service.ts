@@ -12,7 +12,8 @@ const login = '/api/auth/login';
 export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
-
+  roleAs: string;
+  
   signupUser(user) {
     return this.http.post<any>(register, user) 
   }
@@ -29,12 +30,15 @@ export class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('token') && localStorage.getItem('roles')
+    return localStorage.getItem('token') 
   }
   
   loggedIn(){
     return !!localStorage.getItem('token')    && !!localStorage.getItem('roles')
   }
-
+  getRole() {
+    this.roleAs = localStorage.getItem('roles');
+    return this.roleAs;
+  }
 
 }

@@ -28,13 +28,30 @@ export class EditGroupComponent implements OnInit {
 
   ngOnInit() {
     this.formGroups = new FormGroup({
+      id: new FormControl(''),
+      name: new FormControl(null, [Validators.required]),
+      localDate: new FormControl(''),
+    //  end: new FormControl(new Date(year+1, 5, 31)),
+      groupssTypee: new FormControl(''),
+      description: new FormControl(null, [Validators.required]),
+    });
+    if (this.data.item) {
+      this.formGroups.get('name').setValue(this.data.item.name);
+     this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee.id);
+      this.formGroups.get('localDate').setValue(this.data.item.localDate);
+      this.formGroups.get('id').setValue(this.data.item.id);
+      this.formGroups.get('description').setValue(this.data.item.description);
+    }
+    
+    /*
+    this.formGroups = new FormGroup({
       name: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
       this.formGroups.get('name').setValue(this.data.item.name);
       this.formGroups.get('description').setValue(this.data.item.description);
-    }
+    }*/
   }
 
   onConfirm() {

@@ -1,8 +1,15 @@
+*{
+  outline:none;
+}
+.tableChildren{  
+    width: 90%;
+   margin: 10px 0 0 60px;
+  }
 .createChildren {
-    padding: 20px 0 0 20px;
+    padding: 20px 0 0 10px;
    }
    table {
-    width: 60%;
+    width: 100%;
   }
   .spinner{
     display: flex;

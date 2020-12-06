@@ -51,16 +51,16 @@ export class CreateGroupComponent implements OnInit {
 
     this.formGroups = new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      start: new FormControl(new Date(year, 9, 1)),
-      end: new FormControl(new Date(year+1, 5, 31)),
+      localDate: new FormControl(new Date(year, 9, 1)),
+     // end: new FormControl(new Date(year+1, 5, 31)),
       groupssTypee: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
       this.formGroups.get('name').setValue(this.data.item.name);
       this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee);
-      this.formGroups.get('start').setValue(this.data.item.date);
-      this.formGroups.get('end').setValue(this.data.item.date);
+      this.formGroups.get('localDate').setValue(this.data.item.localDate);
+   //   this.formGroups.get('end').setValue(this.data.item.date);
       this.formGroups.get('description').setValue(this.data.item.description);
     }
   }

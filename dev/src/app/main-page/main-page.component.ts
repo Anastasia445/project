@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { tokenName } from '@angular/compiler';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -7,11 +8,13 @@ import { AuthService } from '../services/auth.service';
 import { MainService } from '../services/main.service';
 import { CreateGroupComponent } from './create-group/create-group.component';
 import { EditGroupComponent } from './edit-group/edit-group.component';
+import { MatPaginator } from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
 export interface group {
-  idgroup: number;
+  id: number;
   name: string;
-  start: string;
+  localDate: string;
   end: string;
   groupssTypee: {
     groupssTypee: string;
@@ -19,15 +22,7 @@ export interface group {
   };
   description: string;
 }
-/*const h: group[] = [
-  {
-    idgroup: 1,
-    name: 'sdgdsg',
-    start: '2020/11/18',
-    end: '2020/11/20',
-    description: 'fdgfd',
-    groupssTypee:'1'
-  }]*/
+
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -36,13 +31,15 @@ export interface group {
 export class MainPageComponent implements OnInit {
   //dataSource1 = new MatTableDataSource<group>(h);
   dataSource: any;
-  displayedColumns: string[] = ['name', 'date', 'description','details'];
+  displayedColumns: string[] = ['id','name', 'date', 'description','details'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
- // isLoading = true;
+  isLoading = true;
   groups: group[];
   [x: string]: any;
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  
   constructor(public Auth: AuthService,
     private MainService: MainService,
     public dialog: MatDialog) { }
@@ -51,11 +48,22 @@ export class MainPageComponent implements OnInit {
     this.getGroups();
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   getGroups(): void {
     this.MainService.getGroups().subscribe(results=>{
       this.isLoading = false;
       this.groups = results;
       this.dataSource = new MatTableDataSource(this.groups);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
   }
     );
   }
@@ -65,8 +73,8 @@ export class MainPageComponent implements OnInit {
       disableClose: true, 
       data: {
         name: this.name,
-        start: this.start,
-        end: this.end,
+        localDate: this.localDate,
+       // end: this.end,
         groupssTypee: this.groupssTypee,
         description: this.description,
       },
@@ -75,11 +83,15 @@ export class MainPageComponent implements OnInit {
       if (result) {
        this.MainService.addGroup(result.group).subscribe((result2) => {
        this.isLoading = false;
-       this.groups.push(result2),
+       this.groups.push(result2);
        this.dataSource = new MatTableDataSource(this.groups);
+       this.getGroups();
+       this.dataSource.paginator = this.paginator;
+       this.dataSource.sort = this.sort;
        console.log(this.groups);
+       console.log('2',result);
        });
-      }   console.log(result);
+      } //  console.log(result);
       
     });
   }
@@ -89,40 +101,39 @@ export class MainPageComponent implements OnInit {
       disableClose: true, 
       data: {
         item,
+        id: this.id,
         name: this.name,
-       // start: this.start,
-       // end: this.end,
         description: this.description,
       },
     });
+    console.log('one1', this.groups);
     dialogRef.afterClosed().subscribe((result) => {
-     /* if (result) {
+      if (result) {
           this.MainService.updateGroup(result.group).subscribe(data => { 
           this.isLoading = false;
-           const newvalue = data ? this.groups.findIndex(h => h.idgroup === data.idgroup) : -1;
+           const newvalue = data ? this.groups.findIndex(h => h.id === data.id) : -1;
           if (newvalue > -1) {
             this.groups[newvalue] = data;
           }
           this.dataSource = new MatTableDataSource(this.groups);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.getGroups();
         });
-    
-     console.log('one', this.groups);
-    }*/ 
-    console.log(result);
-
+    }
     });
-    
   }
 
   removeGroup(Group:group): void { 
    //this.dataSource = this.records.filter(h => h !== Record);
-  /* this.isLoading = false;
+  this.isLoading = false;
    this.dataSource.data.splice(this.groups.indexOf(Group), 1);
    this.dataSource = new MatTableDataSource(this.dataSource.data);
+   this.dataSource.paginator = this.paginator;
+   this.dataSource.sort = this.sort;
    this.MainService.deleteGroup(Group).subscribe();
-    console.log(this.groups);*/
-  this.dataSource1.data.splice(this.groups.indexOf(Group), 1);
-  this.dataSource1 = new MatTableDataSource(this.dataSource1.data);
+    console.log(this.groups);
+
   }
 
   onNoClick(): void {}

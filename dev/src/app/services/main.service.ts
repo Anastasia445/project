@@ -6,14 +6,18 @@ import { group } from '../main-page/main-page.component';
 import { Observable, of } from 'rxjs';
 import {children} from '../children/children'
 const  httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })/*.set('Authorization','token')*/
 };
 
-const getGroups = "/api/group/createGroup"
+const  httpOptions2 = {
+  headers: new HttpHeaders({ 'Bearer':'token'})
+};
+
+const getGroups = "api/group/findAll"
 const addGroup = "/api/group/createGroup"
-const deleteGroup = ""
-const updateGroup= ""
-const getchildren= ""
+const deleteGroup = "/api/group/delete"
+const updateGroup= "/api/group/updateGroup"
+const getchildren= "/api/children/findByGroupId"
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +29,8 @@ export class MainService {
     private router: Router,
     private injector: Injector) { }
 
-    getchildren(postId:number): Observable<children[]> {
-      return this.http.get<children[]>(`${getchildren}/?childrenId=${postId}`)
+    getchildren(id:number): Observable<children[]> {
+      return this.http.get<children[]>(`${getchildren}/${id}`)
     }
 
   getGroups(): Observable<group[]> {
@@ -41,15 +45,16 @@ export class MainService {
   addGroup(Record: group): Observable<any> {
     return this.http.post(addGroup, Record, httpOptions);
   }
-  
+
   deleteGroup(Record: group | number): Observable<group> {
-   const id = typeof Record === 'number' ? Record : Record.idgroup;
+   const id = typeof Record === 'number' ? Record : Record.id;
    const url = `${deleteGroup}/${id}`;
     return this.http.delete<group>(url, httpOptions)
   }
 
-  updateGroup(Record: group ): Observable<any>{
-    return this.http.put(updateGroup, Record, httpOptions);
+  updateGroup(Record: group): Observable<any>{
+    const idw = typeof Record === 'number' ? Record : Record.id;
+    return this.http.put<group>(`${updateGroup}/${Record.id}`,Record, httpOptions); 
   }  
 
 }

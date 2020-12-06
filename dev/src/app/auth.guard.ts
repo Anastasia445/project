@@ -11,6 +11,8 @@ export class AuthGuard implements CanActivate {
     private router: Router){ }
 
     canActivate():boolean{
+    const roles = localStorage.getItem('role')
+    //&& roles.indexOf('ROLE_MODERATOR') !=-1
      if(this.authService.loggedIn()){
         return true
       } else {
@@ -18,4 +20,4 @@ export class AuthGuard implements CanActivate {
         return false
       }
     }
-}
+  }

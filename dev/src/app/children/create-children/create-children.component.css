@@ -1,13 +1,75 @@
-.createChild {
+/*.createChild {
   max-width: 60%;
   border-radius: 15px;
 }
 .form {
   padding: 5% 0 0 20%;
 }
-.f{
+.f {
   padding: 40px 0 160px 0;
 }
-.ok{
+.ok {
   padding: 30px 0 30px 0;
+}
+.w {
+  width: 200px;
+}
+.mat-dialog-content {
+  overflow-y: hidden !important;
+  min-height: 100%;
+  min-width: 100%;
+  text-size-adjust: 5em;
+}
+.example-month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.example-month-picker .mat-calendar-arrow {
+  display: none;
+}
+.element-size {
+  max-width: 230px;
+  padding: 0 0 0 20px;
+}
+.element-size2 {
+  width: 230px;
+  padding: 0 0 0 20px;
+}*/
+
+.mat-dialog-content {
+  min-height: 100%;
+  min-width: 100%;
+  text-size-adjust: 5em;
+}
+.example-month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.example-month-picker .mat-calendar-arrow {
+  display: none;
+}
+.element-size {
+  max-width: 230px;
+  padding: 0 0 0 20px;
+}
+.element-size2 {
+  width: 230px;
+  padding: 0 0 0 20px;
+}
+.createChild {
+  width: 65%;
+  border-radius: 15px;
+  margin: 0 20% 0 20%;
+}
+.form {
+  padding: 5% 0 0 20%;
+}
+.f {
+  padding: 40px 0 160px 0;
+}
+.ok {
+  padding: 30px 0 30px 0;
+}
+.w {
+  width: 200px;
 }

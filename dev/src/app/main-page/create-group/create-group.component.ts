@@ -7,7 +7,7 @@ import {
   NgForm,
 } from '@angular/forms'; 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, MAY, SEP } from '@angular/material/core';
 import { group } from '../main-page.component';
 
 
@@ -40,7 +40,8 @@ export class CreateGroupComponent implements OnInit {
   dialogConfig: { disableClose: boolean; data: {} };
   matcher = new MyErrorStateMatcher();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
   public dialogRef: MatDialogRef<CreateGroupComponent>) { 
   }
 
@@ -48,19 +49,19 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit() {
     const today = new Date();
     const year = today.getFullYear();
-
+ console.log(year+1,'t',today);
     this.formGroups = new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      localDate: new FormControl(new Date(year, 9, 1)),
-     // end: new FormControl(new Date(year+1, 5, 31)),
+      start: new FormControl(new Date(year, 8, 1,23,59)),
+      end: new FormControl(new Date(year+1, 4, 31,23,59)),
       groupssTypee: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
       this.formGroups.get('name').setValue(this.data.item.name);
       this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee);
-      this.formGroups.get('localDate').setValue(this.data.item.localDate);
-   //   this.formGroups.get('end').setValue(this.data.item.date);
+      this.formGroups.get('start').setValue(this.data.item.start);
+      this.formGroups.get('end').setValue(this.data.item.end);
       this.formGroups.get('description').setValue(this.data.item.description);
     }
   }

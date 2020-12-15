@@ -1,1 +1,323 @@
-<p>edit-children works!</p>
+   
+  <div *ngIf="Record" class="form">
+    <mat-card  class="createChild"> 
+      <mat-card-header>
+        <mat-card-title class="title"><h1>Информация о ребёнке:</h1></mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <mat-divider></mat-divider>
+        <br>
+        <h2>Общая информация:</h2>
+        <table>
+          <td>
+        <mat-form-field class="full-width">
+          <mat-label>Фамилия</mat-label>
+          <input matInput  [(ngModel)]="Record.lastName" placeholder="Петров" readonly>
+        </mat-form-field> 
+        <br>
+      <mat-form-field class="full-width">
+        <mat-label>Отчество</mat-label>
+        <input  matInput readonly type="text" [(ngModel)]="Record.patronymic" placeholder="Андреевич">
+      </mat-form-field>
+        <br>
+      <mat-form-field appearance="fill">
+          <mat-label>Группа</mat-label>
+              <input  matInput readonly  [(ngModel)]="Record.group[0].id" >
+        </mat-form-field>  
+      </td>
+      &nbsp;&nbsp;&nbsp;
+      <td>
+        <mat-form-field class="full-width">
+          <mat-label>Имя</mat-label>
+          <input  matInput readonly type="text" [(ngModel)]="Record.firstName" placeholder="Виктор">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="w" appearance="fill">
+          <mat-label>Дата рождения</mat-label>
+          <input matInput  [(ngModel)]="Record.dayOfBirth" readonly >
+        </mat-form-field>
+      </td>
+      </table>  
+      <mat-divider></mat-divider>
+      <br>
+      <h2>Антропометрические данные:</h2>           
+      <table>
+        <td>
+        <h4>Первое полугодие:</h4>
+        <mat-form-field class="w">
+          <mat-label>Рост</mat-label>
+          <input  matInput readonly type="number" [(ngModel)]="Record.weightF" >
+          <span matSuffix>&nbsp; см</span>
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="w">
+          <mat-label>Вес</mat-label>
+          <input  matInput readonly type="number" [(ngModel)]="Record.heightF" >
+          <span matSuffix>&nbsp; кг</span>
+        </mat-form-field>
+      </td>
+      &nbsp;&nbsp;&nbsp;
+      <td>
+        <h4>Второе полугодие:</h4>
+        <mat-form-field class="w">
+          <mat-label>Рост</mat-label>
+          <input  matInput readonly type="number" [(ngModel)]="Record.weightS" >
+          <span matSuffix>&nbsp; см</span>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="w">
+          <mat-label>Вес</mat-label>
+          <input  matInput readonly type="number" [(ngModel)]="Record.heightS" >
+          <span matSuffix>&nbsp; кг</span>
+        </mat-form-field> 
+        </td>
+      </table>
+      <mat-divider></mat-divider>
+      <br>
+      <h2>Здоровье:</h2>  
+      <table>
+        <td>
+          <mat-form-field appearance="fill">
+            <mat-label>Группа здоровья:</mat-label>
+                <input  matInput [(ngModel)]="Record.groupOfHealth" readonly>
+          </mat-form-field>
+          <br>
+        <mat-form-field appearance="fill">
+          <mat-label>Группа по физкультуре:</mat-label>
+              <input  matInput placeholder="Нет" readonly>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+          <mat-label>Диетический стол:</mat-label>
+              <input  matInput readonly>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Диета:</mat-label>
+          <textarea matInput  readonly> Нет</textarea>
+        </mat-form-field>
+      </td>
+      &nbsp;&nbsp;&nbsp;
+      <td>
+        <h4>Комментарий:</h4>
+        <mat-form-field class="example-full-width">
+          <textarea matInput  [(ngModel)]="Record.comment" readonly></textarea>
+        </mat-form-field>
+      </td>
+      </table>
+      <mat-divider></mat-divider>
+      <br>
+      <h2>Место проживания:</h2>    
+      <table>
+        <td>
+          <h4>Адрес прописки:</h4>
+          <mat-form-field class="example-full-width">
+            <mat-label>Город</mat-label>
+            <input matInput [(ngModel)]="Record.cityR" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Улица</mat-label>
+            <input matInput [(ngModel)]="Record.streetR" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Дом</mat-label>
+            <input matInput type="number" [(ngModel)]="Record.houseR" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Квартира</mat-label>
+            <input matInput type="number" [(ngModel)]="Record.flatR" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="w">
+            <mat-label>Телефон</mat-label>
+            <input type="tel" matInput [(ngModel)]="Record.telephoneR" placeholder="22-65-74" readonly>
+            <mat-icon matSuffix>mode_edit</mat-icon>
+          </mat-form-field>
+        </td>
+        &nbsp;&nbsp;&nbsp;
+        <td>
+          <h4>Адрес проживания:</h4>
+          <mat-form-field class="example-full-width">
+            <mat-label>Город</mat-label>
+            <input matInput [(ngModel)]="Record.cityL" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Улица</mat-label>
+            <input matInput [(ngModel)]="Record.streetL" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Дом</mat-label>
+            <input matInput type="number" [(ngModel)]="Record.houseL" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-full-width">
+            <mat-label>Квартира</mat-label>
+            <input matInput type="number" [(ngModel)]="Record.flatL" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="w">
+            <mat-label>Телефон</mat-label>
+            <input type="tel" matInput [(ngModel)]="Record.telephoneL" placeholder="22-65-74" readonly>
+            <mat-icon matSuffix>mode_edit</mat-icon>
+          </mat-form-field>
+        </td>
+      </table>
+      <mat-divider></mat-divider>
+      <br>
+      <h2>Сведения о матери:</h2>    
+      <table>
+        <td>
+          <mat-form-field class="full-width">
+            <mat-label>Фамилия</mat-label>
+            <input  matInput readonly placeholder="Петрова"  [(ngModel)]="Record.parents[0].lastName" type="text" >
+          </mat-form-field> 
+          <br>
+          <mat-form-field class="full-width">
+            <mat-label>Имя</mat-label>
+            <input  matInput readonly placeholder="Виктория" [(ngModel)]="Record.parents[0].firstName" type="text" >
+          </mat-form-field> 
+          <br>
+          <mat-form-field class="full-width">
+            <mat-label>Отчество</mat-label>
+            <input  matInput readonly placeholder="Анатольевна" [(ngModel)]="Record.parents[0].patronymic" type="text" >
+          </mat-form-field> 
+          <br>
+          <mat-form-field class="w">
+            <mat-label>Телефон</mat-label>
+            <span matPrefix>+375 &nbsp;</span>
+            <input type="tel" matInput [(ngModel)]="Record.parents[0].telephone" readonly>
+            <mat-icon matSuffix>mode_edit</mat-icon>
+          </mat-form-field>
+        </td>
+        &nbsp;&nbsp;&nbsp;
+        <td>
+          <mat-form-field appearance="fill">
+            <mat-label>Образование:</mat-label>
+            <input  matInput [(ngModel)]="Record.parents[0].education" readonly>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="full-width">
+            <mat-label>Место работы:</mat-label>
+            <input  matInput [(ngModel)]="Record.parents[0].placeOfWork" readonly>
+          </mat-form-field> 
+          <br>
+          <mat-form-field class="full-width">
+            <mat-label>Должность:</mat-label>
+            <input  matInput [(ngModel)]="Record.parents[0].position" readonly>
+          </mat-form-field> 
+        </td>
+      </table>
+      <mat-divider></mat-divider>
+  <br>
+  <h2>Сведения об отце:</h2>    
+  <table>
+    <td>
+      <mat-form-field class="full-width">
+        <mat-label>Фамилия</mat-label>
+        <input  matInput readonly placeholder="Петров" [(ngModel)]="Record.parents[1].lastName" type="text" >
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Имя</mat-label>
+        <input  matInput readonly placeholder="Евгений" [(ngModel)]="Record.parents[1].firstName" type="text" >
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Отчество</mat-label>
+        <input  matInput readonly placeholder="Анатольевич" [(ngModel)]="Record.parents[1].patronymic" type="text">
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="w">
+        <mat-label>Телефон</mat-label>
+        <span matPrefix>+375 &nbsp;</span>
+        <input type="tel" matInput  [(ngModel)]="Record.parents[1].telephone" readonly>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </td>
+    &nbsp;&nbsp;&nbsp;
+    <td>
+      <mat-form-field appearance="fill">
+        <mat-label>Образование:</mat-label>
+         <input  matInput [(ngModel)]="Record.parents[1].education" readonly>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Место работы:</mat-label>
+        <input  matInput [(ngModel)]="Record.parents[1].placeOfWork" readonly>
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Должность:</mat-label>
+        <input  matInput [(ngModel)]="Record.parents[1].position" readonly>
+      </mat-form-field> 
+    </td>
+    </table>
+    <mat-divider></mat-divider>
+    <br>
+    <h2>Сведения о сёстрах и братьях:</h2>  
+      <br>
+    <!--  <button
+      mat-raised-button color="primary"
+      type="button">
+      Добавить
+    </button>  
+    <table>
+      <td>
+      <mat-form-field appearance="fill">
+        <mat-label>Образование:</mat-label>
+          <input  matInput readonly [(ngModel)]="Record.whoIs" type="text">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>Место учёбы(работы):</mat-label>
+        <input  matInput readonly>
+      </mat-form-field> 
+      </td>
+      &nbsp;&nbsp;&nbsp;
+      <td>
+        <mat-form-field class="full-width">
+          <mat-label>Фамилия</mat-label>
+          <input  matInput readonly [(ngModel)]="Record.firstNameW" type="text">
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Имя</mat-label>
+          <input  matInput readonly [(ngModel)]="Record.lastNameW"  type="text">
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="full-width">
+          <mat-label>Отчество</mat-label>
+          <input  matInput readonly [(ngModel)]="Record.patronymicW" type="text">
+        </mat-form-field> 
+      </td>
+    </table>
+  -->
+    </div>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <mat-divider></mat-divider>
+      <div class="ok">
+        <button
+          mat-raised-button color="primary"
+          type="button"
+          (click)="update()" >
+          Редактировать
+        </button> 
+        &nbsp;&nbsp;&nbsp;
+        <button
+          mat-raised-button color="primary"
+          type="button"
+          (click)="close()" >
+          Назад
+        </button> 
+      </div>
+    </mat-card-actions>
+      </mat-card>
+      </div>

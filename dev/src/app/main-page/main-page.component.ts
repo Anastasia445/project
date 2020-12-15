@@ -29,7 +29,7 @@ export interface group {
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent implements OnInit {
-  //dataSource1 = new MatTableDataSource<group>(h);
+  dataSource1 = new MatTableDataSource<group>(h);
   dataSource: any;
   displayedColumns: string[] = [/*'id',*/'name', 'date', 'description','details'];
   color: ThemePalette = 'primary';

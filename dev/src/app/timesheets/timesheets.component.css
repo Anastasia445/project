@@ -1,0 +1,31 @@
+.createTimesheets {
+    padding: 20px 0 0 10px;
+   }
+.form {
+    padding: 5% 0 0 30%;
+  }
+.groups{
+    max-width: 280px;
+    border-radius: 15px;
+  }
+  .buttons{
+      max-width: 200px;
+      text-align: center;
+      margin: 10px 20% 20px 20%;
+  }
+  .spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+  .timesheetsNo{
+    padding: 0 30px 0 0;
+  }
+  .spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 20%;
+  }

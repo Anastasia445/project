@@ -1,0 +1,22 @@
+.form {
+    padding: 5% 0 0 30%;
+  }
+.groups{
+    max-width: 280px;
+    border-radius: 15px;
+  }
+  .buttons{
+      width: 160px;
+      text-align: center;
+      margin: 10px 20% 20px 20%;
+  }
+  .groups {
+    padding: 20px 0 0 10px;
+   }
+   .spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 20%;
+  }

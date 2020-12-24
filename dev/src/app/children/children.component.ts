@@ -19,7 +19,7 @@ export interface children {
   lastName: string;
   firstName: string
   patronymic: string;
-  group: [{
+  groups: [{
    id:number;
    groupssTypee:{
      name:string;
@@ -41,13 +41,21 @@ export interface children {
       cause:string;
       causeBol:boolean;
   }];
-  dayOfBirth: string;
+  relatives:[{
+    firstName:string;
+    lastName:string;
+    patronymic:string;
+    education:string;
+    placeOfWork: string;
+  }];
+  dayOfBirth: Date;
   weightF: string;
   heightF: string;
   weightS: string;
   heightS: string;
   groupOfHealth: string;
-  diet: boolean;
+  diet: string;
+  physGroup: string;
   cityR: string;
   streetR: string;
   houseR: string;
@@ -58,10 +66,6 @@ export interface children {
   houseL: string;
   flatL: string;
   telephoneL: string;
-  whoIs: string;
-  firstNameW: string;
-  lastNameW: string;
-  patronymicW: string;
 }
 
 @Component({
@@ -115,6 +119,7 @@ export class ChildrenComponent implements OnInit {
   const dialogRef = this.dialog.open(CreateChildrenComponent, {
     disableClose: true, 
     data: { 
+      id: +this.route.snapshot.paramMap.get('id')
     },
   });
   dialogRef.afterClosed().subscribe((result) => {
@@ -139,7 +144,6 @@ export class ChildrenComponent implements OnInit {
       disableClose: true, 
       data: {
         item,
-     //   id: this.id,
         
         
       },

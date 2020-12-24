@@ -5,6 +5,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { group } from '../main-page/main-page.component';
 import { Observable, of } from 'rxjs';
 import {children} from '../children/children.component'
+import {timesheet} from 'src/app/timesheets/timesheets.component'
+
 const  httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })/*.set('Authorization','token')*/
 };
@@ -17,10 +19,17 @@ const getGroups = "api/group/findAll"
 const addGroup = "/api/group/createGroup"
 const deleteGroup = "/api/group/delete"
 const updateGroup= "/api/group/updateGroup"
+
 const getchildren= "/api/children/findByGroupId"
 const updateChild = "/api/children/update"
 const addChild = "/api/children/register"
 const getChildById= "/api/children/findById"
+
+const timesheets = "api/timesheet/findAll"
+const getGroupByType = "/api/group/findByGroupTypeId"
+const getGroupTypes = "/api/group/findAllGroupTypes"
+const getTimeSheetsByGroupId="/api/timesheet/findByGroupId"
+const createTimesheet= "api/timesheet/create"
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +81,27 @@ export class MainService {
   updateChild(Record2: children): Observable<any>{
   return this.http.put<children>( `${updateChild}/${Record2.id}`,Record2, httpOptions); 
   }  
+
+                               /* For timesheets */
+
+  getTimesheets(){
+    return this.http.get(timesheets);
+  }
+
+  getGroupByType(id){
+    return this.http.get(`${getGroupByType}/${id}`)
+  }
+
+  getGroupTypes(){
+    return this.http.get(getGroupTypes)
+  }
+
+  getTimesheetsForGroup(id){
+    return this.http.get(`${getTimeSheetsByGroupId}/${id}`)
+  }
+
+  createTimesheet(record:timesheet):Observable<any>{
+    return this.http.post(`${createTimesheet}/${record.id}`, record)
+  }
 
 }

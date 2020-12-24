@@ -10,9 +10,26 @@
 <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" routerLink="/login" *ngIf="!auth.loggedIn()" routerLinkActive="active">
   <mat-icon>login</mat-icon>
 </button>
-<button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"*ngIf="auth.loggedIn()" (click)="auth.logoutUser()">
-  <mat-icon>logout</mat-icon>
+<button  *ngIf="auth.loggedIn()" mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>menu</mat-icon>
 </button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item  routerLink="/main">
+    <mat-icon>groups</mat-icon>
+    <span>Группы</span>
+  </button>
+  <button mat-menu-item  routerLink="/groupType">
+    <mat-icon>table_view</mat-icon>
+    <span>Табель</span>
+  </button>
+  <button mat-menu-item (click)="auth.logoutUser()">
+    <mat-icon>logout</mat-icon>
+    <span>Выход</span>
+  </button>
+</mat-menu>
+<!--<ng-container ></ng-container><button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"*ngIf="auth.loggedIn()" (click)="auth.logoutUser()">
+  <mat-icon>logout</mat-icon>
+</button>-->
     </mat-toolbar-row>
     </mat-toolbar>
 <p>

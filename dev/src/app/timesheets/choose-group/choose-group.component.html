@@ -1,0 +1,27 @@
+
+ <div *ngIf="!isLoading" class="groups">
+  <button mat-raised-button color="primary" (click)="goBack()">
+    Назад
+  </button>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+
+ <div  *ngIf="!isLoading" class="form">
+    <mat-card class="groups">
+      <mat-card-title>Выберите группу:</mat-card-title>
+      <br>
+      <ng-container class="timesheets" *ngFor="let record of records">
+        <button mat-raised-button color="primary" class="buttons" (click)="onSelect(record)">
+          {{record.name}}&nbsp;
+        <mat-icon>group</mat-icon>
+        </button>
+      </ng-container>
+      <br>
+    </mat-card>
+  </div>

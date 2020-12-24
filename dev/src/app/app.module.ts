@@ -23,6 +23,11 @@ import { ChildrenComponent } from './children/children.component';
 import { CreateChildrenComponent } from './children/create-children/create-children.component';
 import { EditChildrenComponent } from './children/edit-children/edit-children.component';
 import { ViewChildrenComponent } from './children/view-children/view-children.component';
+import { TimesheetsComponent } from './timesheets/timesheets.component';
+import { CreateTimesheetsComponent } from './timesheets/create-timesheets/create-timesheets.component';
+import { ChooseGrouptypeComponent } from './timesheets/choose-grouptype/choose-grouptype.component';
+import { DetailsComponent } from './timesheets/details/details.component';
+import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +40,12 @@ import { ViewChildrenComponent } from './children/view-children/view-children.co
     ChildrenComponent,
     CreateChildrenComponent,
     EditChildrenComponent,
-    ViewChildrenComponent
+    ViewChildrenComponent,
+    TimesheetsComponent,
+    CreateTimesheetsComponent,
+    ChooseGrouptypeComponent,
+    DetailsComponent,
+    ChooseGroupComponent
   ],
   entryComponents: [CreateGroupComponent],
   imports: [

@@ -63,8 +63,7 @@ export class LoginComponent implements OnInit {
   login(){
     this.Auth.login(this.loginUser)
     .subscribe(result => 
-      {
-         
+      { 
         localStorage.setItem('token', result.token)
         localStorage.setItem('roles', result.roles)
         this.showSuccess();

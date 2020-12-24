@@ -10,6 +10,9 @@ import { CreateGroupComponent } from './create-group/create-group.component';
 import { EditGroupComponent } from './edit-group/edit-group.component';
 import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { children } from '../children/children.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 
 export interface group {
   id: number;
@@ -29,7 +32,9 @@ export interface group {
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent implements OnInit {
+  
   //dataSource1 = new MatTableDataSource<group>(h);
+  durationInSeconds = 3;
   dataSource: any;
   displayedColumns: string[] = [/*'id',*/'name', 'date', 'description','details'];
   color: ThemePalette = 'primary';
@@ -42,11 +47,19 @@ export class MainPageComponent implements OnInit {
   
   constructor(public Auth: AuthService,
     private MainService: MainService,
-    public dialog: MatDialog) {
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private route: ActivatedRoute) {
     }
 
   ngOnInit(): void {
     this.getGroups();
+  }
+
+  openDialog() {
+    this._snackBar.openFromComponent(DialogComponent, {
+      duration: this.durationInSeconds * 1000,
+    });
   }
 
   applyFilter(event: Event) {
@@ -123,17 +136,40 @@ export class MainPageComponent implements OnInit {
     }           
     });      
   }
-
+  
+  records2: children[];
   removeGroup(Group:group): void { 
-   //this.dataSource = this.records.filter(h => h !== Record);
-  this.isLoading = false;
-   this.dataSource.data.splice(this.groups.indexOf(Group), 1);
-   this.dataSource = new MatTableDataSource(this.dataSource.data);
-   this.dataSource.paginator = this.paginator;
-   this.dataSource.sort = this.sort;
-   this.MainService.deleteGroup(Group).subscribe();
+    const id = Group.id;
+   this.MainService.getchildren(id).subscribe(results=>
+    {
+      this.isLoading = true;
+      this.records2 = results;
+      console.log(this.records2);
+      if(this.records2.length > 0){
+        this.openDialog();
+      } else{
+        //this.dataSource = this.records.filter(h => h !== Record);
+        this.dataSource.data.splice(this.groups.indexOf(Group), 1);
+        this.dataSource = new MatTableDataSource(this.dataSource.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.MainService.deleteGroup(Group).subscribe();
+      }
+      this.getGroups();
+    });
   }
 
   onNoClick(): void {}
 
 }
+
+@Component({
+  selector: 'dialog-component',
+  templateUrl: 'dialog-component.html',
+  styles: [`
+    .example {
+      color: hotpink;
+    }
+  `],
+})
+export class DialogComponent {}

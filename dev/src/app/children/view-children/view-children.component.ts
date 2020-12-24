@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+
 interface Grouptype {
   value: string;
 }
@@ -22,59 +23,22 @@ export class ViewChildrenComponent implements OnInit {
 
   records: children[];
   Record: children;
+  bins = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    patronymic: new FormControl(''),
+    education: new FormControl(''),
+    telephone: new FormControl(''),
+    placeOfWork: new FormControl(''),
+    position: new FormControl('')
+  });
   diet={
     value:''
   }
-  r ={
-   // photo: '',
-    lastName: '',
-    firstName: '',
-    patronymic: '',
-    dayOfBirth:'',
-    id: +this.route.snapshot.paramMap.get('id'),
-parents:[{
-    firstName:'',
-    lastName:'',
-    patronymic:'',
-    education:'',
-    placeOfWork: '',
-    position: '',
-    telephone:'',
-}],
-comment:'',
-causes:[
-{
-    date:'',
-    cause:'',
-    causeBol:'',
-}],
 
-weightF: '',
-heightF: '',
-weightS: '',
-heightS: '',
-groupOfHealth: '',
-diet: '',
-cityR: '',
-streetR: '',
-houseR: '',
-flatR: '',
-telephoneR:'',
-cityL: '',
-streetL: '',
-houseL: '',
-flatL: '',
-telephoneL: '',
-whoIs: '',
-firstNameW: '',
-lastNameW: '',
-patronymicW: ''
-  }
-  
   isReady:boolean;
   Edit: boolean;
   url="assets/profile.png";
-  formGroups: FormGroup;
   dialogConfig: { disableClose: boolean; data: {} };
   isReadyDiet: boolean;
 
@@ -108,7 +72,7 @@ patronymicW: ''
   ];*/
   groupsEducation: Grouptype[] = [
     {value: 'Высшее'},
-    {value: 'Среднее спец/ое'},
+    {value: 'Среднее специальное'},
     {value: 'Среднее общее'},
     {value: 'Среднее базовое'},
   ];
@@ -116,50 +80,51 @@ patronymicW: ''
     {value: 'Брат'},
     {value: 'Сестра'},
   ];
- 
- 
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-public dialogRef: MatDialogRef<ViewChildrenComponent>,
+    public dialogRef: MatDialogRef<ViewChildrenComponent>,
     private location: Location,
     private MainService: MainService,
-    private route: ActivatedRoute,
-    private fb: FormBuilder
-  ) { }
+    private route: ActivatedRoute) { }
+
+    formGroups = new FormGroup({
+    lastName:new FormControl(''),
+    firstName:new FormControl(''),
+    patronymic:new FormControl(''),
+    dayOfBirth:new FormControl('', [Validators.required]),
+    weightF:new FormControl('', [Validators.required]),
+    heightF:new FormControl('', [Validators.required]),
+    weightS:new FormControl('', [Validators.required]),
+    heightS:new FormControl('', [Validators.required]),
+    physGroup:new FormControl(''),
+    groupOfHealth:new FormControl(''),
+    diet:new FormControl('', [Validators.required]),
+    comment:new FormControl('',[Validators.required]),
+    cityR:new FormControl('', [Validators.required]),
+    streetR:new FormControl('', [Validators.required]),
+    houseR:new FormControl('', [Validators.required]),
+    flatR:new FormControl('', [Validators.required]),
+    telephoneR:new FormControl('', [Validators.required]),
+    cityL:new FormControl('', [Validators.required]),
+    streetL:new FormControl('', [Validators.required]),
+    houseL:new FormControl('', [Validators.required]),
+    flatL:new FormControl('', [Validators.required]),
+    telephoneL:new FormControl('', [Validators.required]),
+    parents: new FormArray([])
+    });
+
+
+   /* get parents() {
+      return this.formGroups.get('parents') as FormArray;
+    }*/
+  parents = this.formGroups.get('parents') as FormArray;
 
   ngOnInit(): void {
-  //  this.viewChild();
-    this.formGroups = new FormGroup({
-      lastName:new FormControl(null, [Validators.required]),
-      firstName:new FormControl(null, [Validators.required]),
-      patronymic:new FormControl(null, [Validators.required]),
-      dayOfBirth:new FormControl(null, [Validators.required]),
-      weightF:new FormControl(null, [Validators.required]),
-      heightF:new FormControl(null, [Validators.required]),
-      weightS:new FormControl(null, [Validators.required]),
-      heightS:new FormControl(null, [Validators.required]),
-      groupOfHealth:new FormControl(/*null, [Validators.required]*/),
-  /* */    diet:new FormControl(null, [Validators.required]),
-      comment:new FormControl(),
-      cityR:new FormControl(null, [Validators.required]),
-      streetR:new FormControl(null, [Validators.required]),
-      houseR:new FormControl(null, [Validators.required]),
-      flatR:new FormControl(null, [Validators.required]),
-      telephoneR:new FormControl(null, [Validators.required]),
-      cityL:new FormControl(null, [Validators.required]),
-      streetL:new FormControl(null, [Validators.required]),
-      houseL:new FormControl(null, [Validators.required]),
-      flatL:new FormControl(null, [Validators.required]),
-      telephoneL:new FormControl(null, [Validators.required]),
-      
-   /*   parents: new FormArray([
-    new FormGroup({
-        lastName:new FormControl(null, [Validators.required]),
-firstName:new FormControl(null, [Validators.required]),
-patronymic:new FormControl(null, [Validators.required])
-        })  ])*/
-        parents: this.fb.array([]),
-  });
+   //  this.formGroups.get('parents') as FormArray;
+
+    this.formGroups;
+    //this.formGroups.get('parents') as FormArray;
     if (this.data.item) {
       this.formGroups.get('lastName').setValue(this.data.item.lastName);
       this.formGroups.get('firstName').setValue(this.data.item.firstName);
@@ -170,7 +135,8 @@ patronymic:new FormControl(null, [Validators.required])
       this.formGroups.get('weightS').setValue(this.data.item.weightS);
       this.formGroups.get('heightS').setValue(this.data.item.heightS);
       this.formGroups.get('groupOfHealth').setValue(this.data.item.groupOfHealth);
-   /* */   this.formGroups.get('diet').setValue(this.data.item.diet);
+      this.formGroups.get('physGroup').setValue(this.data.item.physGroup);
+      this.formGroups.get('diet').setValue(this.data.item.diet);
       this.formGroups.get('comment').setValue(this.data.item.comment);
       this.formGroups.get('cityR').setValue(this.data.item.cityR);
       this.formGroups.get('streetR').setValue(this.data.item.streetR);
@@ -182,9 +148,60 @@ patronymic:new FormControl(null, [Validators.required])
       this.formGroups.get('houseL').setValue(this.data.item.houseL);
       this.formGroups.get('flatL').setValue(this.data.item.flatL);
       this.formGroups.get('telephoneL').setValue(this.data.item.telephoneL);
+     
+    } 
+
+  /*   this.parents.select('parents').subscribe(parents => {
+        for(const skill of parents) {
+          this.parents.push(new FormGroup({
+            firstName: new FormControl(skill,Validators.required),
+            lastName: new FormControl(skill),
+            patronymic: new FormControl(skill),
+            education: new FormControl(skill),
+            telephone: new FormControl(skill),
+            placeOfWork: new FormControl(skill),
+            position: new FormControl(skill)
+          })
+          )
+      }
+    })*/
+
+    /*this.parents.forEach(element => {
+      this.addd(element);
+    });*/
+
+ //     this.formGroups.registerControl('parents', new FormArray(controls));
+   // this.addd(value);  
+    //this.addd();
     }
-  }
-   
+
+    item = new FormGroup({
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      patronymic: new FormControl(''),
+      education: new FormControl(''),
+      telephone: new FormControl(''),
+      placeOfWork: new FormControl(''),
+      position: new FormControl('')
+    });
+
+    addd( value){
+      /*  return new FormGroup({
+        firstName: new FormControl(value.firstName),
+        lastName: new FormControl(value.lastName),
+        patronymic: new FormControl(value.patronymic),
+        education: new FormControl(value.education),
+        telephone: new FormControl(value.telephone),
+        placeOfWork: new FormControl(value.placeOfWork),
+        position: new FormControl(value.position)
+      });*/
+   //   const arr = <FormArray>this.parents;
+    //  arr.push(parents);
+    this.item;
+     //  this.parents.push(this.item);
+    }  
+
+
   onSelectFile(file){
   if(file.target.files){
     let reader = new FileReader();
@@ -222,20 +239,6 @@ foodDietInfo(){
   count(){
     this.kol++;
   }
-
-  save(){ 
-  /*   this.MainService.updateChild(this.r).subscribe(data => { 
-      //  this.isLoading = false;
-    const  id= +this.route.snapshot.paramMap.get('id')
-        const newvalue = data ? this.records.findIndex(h => h.id === data.id) : -1;
-        if (newvalue > -1) {
-          this.records[newvalue] = data;
-        }
-        console.log('Record1',this.Record);
-      })
-      console.log('Record2',this.Record);
-    this.Edit = false;*/
-   }
 
   close(): void {
     this.location.back();

@@ -1,0 +1,25 @@
+.form {
+  padding: 5% 0 0 30%;
+}
+.groupTypes {
+  max-width: 280px;
+  border-radius: 15px;
+}
+.buttons {
+  width: 170px;
+  text-align: center;
+  margin: 10px 20% 20px 20%;
+}
+.groups {
+  padding: 20px 0 0 10px;
+}
+.timesheets {
+  padding: 0 0 10px 0;
+}
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 20%;
+}

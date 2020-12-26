@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
+//import { merge } from 'rxjs';
 
 
 interface Grouptype {
@@ -23,28 +25,20 @@ export class ViewChildrenComponent implements OnInit {
 
   records: children[];
   Record: children;
-  bins = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    patronymic: new FormControl(''),
-    education: new FormControl(''),
-    telephone: new FormControl(''),
-    placeOfWork: new FormControl(''),
-    position: new FormControl('')
-  });
   diet={
     value:''
   }
-
   isReady:boolean;
   Edit: boolean;
   url="assets/profile.png";
   dialogConfig: { disableClose: boolean; data: {} };
   isReadyDiet: boolean;
 
-  groupsFoodDiet: Groupdiet[] = [
-    { diet:false, value:'Общий'},
-    { diet:true, value:'Диета'},
+  groupsFoodDiet: Grouptype[] = [
+    
+    {value:'Общий'},
+    {value: 'fggfj'},
+    { value:'Диета'},
   ];
 
   groups: Grouptype[] = [
@@ -59,17 +53,14 @@ export class ViewChildrenComponent implements OnInit {
     {value: 'Третья'},
     {value: 'Четвёртая'},
   ];
-      
+  
   groupsType: Grouptype[] = [
     {value: 'Основная'},
     {value: 'Подготовительная'},
     {value: 'СМГ'},
     {value: 'ЛФК'},
   ];
-  /* groupsFoodDiet: Groupdiet[] = [
-    {value: 'Общий', diet:false},
-    {value: 'Диета', diet:true},
-  ];*/
+
   groupsEducation: Grouptype[] = [
     {value: 'Высшее'},
     {value: 'Среднее специальное'},
@@ -80,15 +71,20 @@ export class ViewChildrenComponent implements OnInit {
     {value: 'Брат'},
     {value: 'Сестра'},
   ];
+  i: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewChildrenComponent>,
     private location: Location,
     private MainService: MainService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private store: Store<children>,
+    private fb: FormBuilder) { }
 
+   
     formGroups = new FormGroup({
+    id:new FormControl(this.data.id),
     lastName:new FormControl(''),
     firstName:new FormControl(''),
     patronymic:new FormControl(''),
@@ -97,7 +93,7 @@ export class ViewChildrenComponent implements OnInit {
     heightF:new FormControl('', [Validators.required]),
     weightS:new FormControl('', [Validators.required]),
     heightS:new FormControl('', [Validators.required]),
-    physGroup:new FormControl(''),
+    physGroup:new FormControl('', [Validators.required]),
     groupOfHealth:new FormControl(''),
     diet:new FormControl('', [Validators.required]),
     comment:new FormControl('',[Validators.required]),
@@ -111,20 +107,44 @@ export class ViewChildrenComponent implements OnInit {
     houseL:new FormControl('', [Validators.required]),
     flatL:new FormControl('', [Validators.required]),
     telephoneL:new FormControl('', [Validators.required]),
-    parents: new FormArray([])
-    });
+    parents: new FormArray([
+      new FormGroup({
+        firstName: new FormControl(''),
+        lastName: new FormControl(''),
+        patronymic: new FormControl(''),
+        education: new FormControl(''),
+        telephone: new FormControl(''),
+        placeOfWork: new FormControl(''),
+        position: new FormControl('')
+      }),
+      new FormGroup({
+        firstName: new FormControl(''),
+        lastName: new FormControl(''),
+        patronymic: new FormControl(''),
+        education: new FormControl(''),
+        telephone: new FormControl(''),
+        placeOfWork: new FormControl(''),
+        position: new FormControl('')
+      })
+    ]),
+    brothersAndSisters: new FormArray([ 
+  /*  new FormGroup({
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      patronymic: new FormControl(''),
+      education: new FormControl(''),
+      placeOfWork: new FormControl('')
+   })*/
+  ])
 
-
-   /* get parents() {
-      return this.formGroups.get('parents') as FormArray;
-    }*/
+});
+  item: any;
   parents = this.formGroups.get('parents') as FormArray;
-
+  brothersAndSisters = this.formGroups.get('brothersAndSisters') as FormArray;
+ 
   ngOnInit(): void {
-   //  this.formGroups.get('parents') as FormArray;
 
     this.formGroups;
-    //this.formGroups.get('parents') as FormArray;
     if (this.data.item) {
       this.formGroups.get('lastName').setValue(this.data.item.lastName);
       this.formGroups.get('firstName').setValue(this.data.item.firstName);
@@ -148,57 +168,91 @@ export class ViewChildrenComponent implements OnInit {
       this.formGroups.get('houseL').setValue(this.data.item.houseL);
       this.formGroups.get('flatL').setValue(this.data.item.flatL);
       this.formGroups.get('telephoneL').setValue(this.data.item.telephoneL);
-     
+      this.formGroups.get('parents').setValue(this.data.item.parents);
+     // this.formGroups.get('relatives').setValue(this.data.item.relatives);
     } 
+  
+    console.log(
+    /* this.formGroups.get('brothersAndSisters').setValue(this.data.item.brothersAndSisters)*/)
+  
+ // }
 
-  /*   this.parents.select('parents').subscribe(parents => {
-        for(const skill of parents) {
-          this.parents.push(new FormGroup({
-            firstName: new FormControl(skill,Validators.required),
-            lastName: new FormControl(skill),
-            patronymic: new FormControl(skill),
-            education: new FormControl(skill),
-            telephone: new FormControl(skill),
-            placeOfWork: new FormControl(skill),
-            position: new FormControl(skill)
+     /* this.store.select('relatives').subscribe(relatives => {
+      const controls = relatives.map(item => {
+        return new FormGroup({
+          firstName: new FormControl(item.firstName),
+          lastName: new FormControl(item.lastName),
+          patronymic: new FormControl(item.patronymic),
+          education: new FormControl(item.education),
+          placeOfWork: new FormControl(item.placeOfWork)
+        })
+      });
+
+      this.formGroups.registerControl('relatives', new FormArray(controls));
+    })*/
+
+    
+ /* console.log( this.store.select('relatives').subscribe(relatives => {
+      for(const item of relatives) {
+        this.relatives.push(
+          
+           new FormGroup({
+            firstName: new FormControl(item.firstName),
+            lastName: new FormControl(item.lastName),
+            patronymic: new FormControl(item.patronymic),
+            education: new FormControl(item.education),
+            placeOfWork: new FormControl(item.placeOfWork)
           })
+        // new FormControl(skill, Validators.required)
+      )}
+    })
+  )*/
+
+   /*  this.store.select('parents').subscribe(parents => {
+        for(const skill of parents) {
+          this.parents.push(
+            new FormGroup({
+              firstName: new FormControl(skill),
+              lastName: new FormControl(skill),
+              patronymic: new FormControl(skill),
+              education: new FormControl(skill),
+              placeOfWork: new FormControl(skill)
+            })
           )
       }
     })*/
 
-    /*this.parents.forEach(element => {
-      this.addd(element);
+    /*this.item.formGroups.brothersAndSisters.forEach(el => {
+      this.addd(el);
     });*/
-
- //     this.formGroups.registerControl('parents', new FormArray(controls));
-   // this.addd(value);  
-    //this.addd();
+   
     }
-
-    item = new FormGroup({
+    selectedDiet = this.formGroups.get('groupOfHealth').value;
+    selectedHealth = this.formGroups.get('groupOfHealth').value;
+    selectedphysGroup = this.formGroups.get('physGroup').value;
+ 
+   /* item = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
       patronymic: new FormControl(''),
       education: new FormControl(''),
-      telephone: new FormControl(''),
-      placeOfWork: new FormControl(''),
-      position: new FormControl('')
-    });
+      placeOfWork: new FormControl('')
+    });*/
 
-    addd( value){
-      /*  return new FormGroup({
+    addd(value: any = {}){
+      return new FormGroup({
         firstName: new FormControl(value.firstName),
         lastName: new FormControl(value.lastName),
         patronymic: new FormControl(value.patronymic),
         education: new FormControl(value.education),
-        telephone: new FormControl(value.telephone),
-        placeOfWork: new FormControl(value.placeOfWork),
-        position: new FormControl(value.position)
-      });*/
+        placeOfWork: new FormControl(value.placeOfWork)   
+      });
    //   const arr = <FormArray>this.parents;
     //  arr.push(parents);
-    this.item;
-     //  this.parents.push(this.item);
+
+   // this.item;
+
+  // this.brothersAndSisters.push(item);
     }  
 
 
@@ -219,6 +273,17 @@ foodDietInfo(){
   } else
   {
     this.isReadyDiet = false;
+  }
+}
+ isClick: boolean;
+  IsClick(){
+    console.log("review",this.formGroups.get('diet').value);
+  if(true)
+  {
+    this.isClick = true;
+  } else
+  {
+    this.isClick = false;
   }
 }
 

@@ -38,10 +38,10 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroups;
-    /*if (this.data.item) {
-      this.formGroups.get('name').setValue(this.data.item.name);
-  //    this.formGroups.get('id').setValue(this.data.item.id);
-    }*/
+    if (this.data.item) {
+     this.formGroups.get('name').setValue(this.data.item.name);
+     this.formGroups.get('id').setValue(this.data.item.id);
+    }
   }
 
   onClose() {

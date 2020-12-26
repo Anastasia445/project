@@ -35,11 +35,13 @@ export interface children {
       telephone: string;
   }];
   comment:string;
-  causes:[
+  cause:[
   {
-      date:string;
-      cause:string;
-      causeBol:boolean;
+    year: number;
+    month: number;
+    day: number;
+    cause:string;
+    causeBol:boolean;
   }];
   relatives:[{
     firstName:string;
@@ -47,7 +49,7 @@ export interface children {
     patronymic:string;
     education:string;
     placeOfWork: string;
-  }];
+  }]; 
   dayOfBirth: Date;
   weightF: string;
   heightF: string;
@@ -144,7 +146,7 @@ export class ChildrenComponent implements OnInit {
       disableClose: true, 
       data: {
         item,
-        
+        id: +this.route.snapshot.paramMap.get('id'),
         
       },
     });

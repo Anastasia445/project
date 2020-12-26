@@ -4,6 +4,13 @@
     <button mat-raised-button color="primary" *ngIf="timesheets[0] == null" (click)="addTimesheets()"> 
       Добавить табель
     </button>
+    <div *ngIf="timesheets[0] != null">
+    <button mat-raised-button color="primary" *ngFor="let timesheet of timesheets" (click)="changeTimesheet(timesheet)"> 
+      Изменить название табеля
+    </button>
+    <br>
+    <br>
+    </div>
     &nbsp;&nbsp;&nbsp;&nbsp;
       <button mat-raised-button color="primary" (click)="goBack()">
         Назад

@@ -30,6 +30,7 @@ const getGroupByType = "/api/group/findByGroupTypeId"
 const getGroupTypes = "/api/group/findAllGroupTypes"
 const getTimeSheetsByGroupId="/api/timesheet/findByGroupId"
 const createTimesheet= "api/timesheet/create"
+const updateTimesheet = "/api/timesheet/update"
 
 @Injectable({
   providedIn: 'root'
@@ -78,8 +79,9 @@ export class MainService {
     return this.http.put<group>(`${updateGroup}/${Record.id}`,Record, httpOptions); 
   } 
 
-  updateChild(Record2: children): Observable<any>{
-  return this.http.put<children>( `${updateChild}/${Record2.id}`,Record2, httpOptions); 
+  updateChild(Record: children): Observable<any>{
+    const idw = typeof Record === 'number' ? Record : Record.id;
+  return this.http.put<children>( `${updateChild}/${Record.id}`,Record, httpOptions); 
   }  
 
                                /* For timesheets */
@@ -102,6 +104,10 @@ export class MainService {
 
   createTimesheet(record:timesheet):Observable<any>{
     return this.http.post(`${createTimesheet}/${record.id}`, record)
-  }
+  }  
+
+  updateTimesheet(Record: timesheet): Observable<any>{
+  return this.http.put<timesheet>( `${updateTimesheet}/${Record.id}`,Record, httpOptions); 
+  }  
 
 }

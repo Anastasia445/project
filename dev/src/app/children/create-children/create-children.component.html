@@ -95,7 +95,7 @@
          <br>
          <mat-form-field appearance="fill">
            <mat-label>Группа по физкультуре:</mat-label>
-           <mat-select  #physGroup formControlName="physGroup" name="type">
+           <mat-select  #physGroup formControlName="physGroup" name="physGroup">
              <mat-option *ngFor="let groupType of groupsType" [value]="groupType.value">
                {{groupType.value}}
              </mat-option>
@@ -104,7 +104,7 @@
          <br>
          <mat-form-field appearance="fill">
            <mat-label>Диетический стол:</mat-label>
-           <mat-select #diet formControlName="diet" >
+           <mat-select #diet formControlName="diet" name="diet" >
              <mat-option  *ngFor="let groupFoodDiet of groupsFoodDiet" [value]="groupFoodDiet.value">
                {{groupFoodDiet.value}}
              </mat-option>

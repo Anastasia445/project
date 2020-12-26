@@ -28,6 +28,7 @@ import { CreateTimesheetsComponent } from './timesheets/create-timesheets/create
 import { ChooseGrouptypeComponent } from './timesheets/choose-grouptype/choose-grouptype.component';
 import { DetailsComponent } from './timesheets/details/details.component';
 import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.component';
+import { StoreModule } from '@ngrx/store';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,7 +62,8 @@ import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.com
     MatNativeDateModule,
       ReactiveFormsModule.withConfig({
         warnOnNgModelWithFormControl: 'never'
-      })
+      }),
+      StoreModule.forRoot({}, {})
   ],
   providers: [AuthGuard,
     { provide: MAT_DIALOG_DATA, useValue: {} },

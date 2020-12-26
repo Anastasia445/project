@@ -23,7 +23,7 @@
 
     <ng-container matColumnDef="lname">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Фамилия </th>
-      <td mat-cell *matCellDef="let element" (click)="changeChild(element.id)" > {{element.lastName}} </td>
+      <td mat-cell *matCellDef="let element" (click)="changeChild(element)" > {{element.lastName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="fname">

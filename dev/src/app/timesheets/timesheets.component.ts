@@ -26,10 +26,11 @@ export class TimesheetsComponent implements OnInit {
   records:any;
   groups: timesheet[];
   group: timesheet;
-  newTimesheet = {
+  [x: string]: any;
+  /*newTimesheet = {
     name: '',
     id: this.route.snapshot.paramMap.get('id')
-  }
+  }*/
   
   constructor(private MainService: MainService,
       private dialog: MatDialog,
@@ -60,13 +61,33 @@ export class TimesheetsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-       this.MainService.createTimesheet(result.group).subscribe()
-       this.isLoading = true;
-     //  this.groups.push(result2);
-     //  });
+       this.MainService.createTimesheet(result.group).subscribe((data)=>{
+       this.isLoading = true,
+       this.timesheets.push(data),
+     this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'))
+       })
       }  
-      this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'));
     });
+  }
+
+  changeTimesheet(item): void{
+    const dialogRef = this.dialog.open(DetailsComponent, {
+      disableClose: true, 
+      data: {
+        item,
+        id: this.id
+      },
+    });
+    console.log('one1', this.groups);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+          this.MainService.updateTimesheet(result.group).subscribe((data) => { 
+          this.isLoading = true;
+            this.groups = data;
+          this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'));
+        });     
+    }           
+    });      
   }
 
   onSelect(group){

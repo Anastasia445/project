@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,10 +6,25 @@ import { ActivatedRoute } from '@angular/router';
 import { children } from 'src/app/children/children.component';
 import { MainService} from 'src/app/services/main.service'
 import { Location } from '@angular/common';
+import { DiaologCauseComponent } from '../diaolog-cause/diaolog-cause.component'; 
+import { MatPaginator } from '@angular/material/paginator';
+import { DiaologPayComponent } from '../diaolog-pay/diaolog-pay.component';
 
 interface Month {
-  value: string;
+  value: number;
   viewValue: string;
+}
+
+export interface causes {
+  id: number;
+  causes:[
+    {
+      year: number;
+      month: number;
+      day: number;
+      cause: string;
+      causeBol:boolean;
+    }];
 }
 
 @Component({
@@ -35,18 +50,18 @@ export class CreateTimesheetsComponent implements OnInit {
   getMonth: boolean;
 
   months: Month[] = [
-    {value: '1', viewValue: 'Январь'},
-    {value: '2', viewValue: 'Февраль'},
-    {value: '3', viewValue: 'Март'},
-    {value: '4', viewValue: 'Апрель'},
-    {value: '5', viewValue: 'Май'},
-    {value: '6', viewValue: 'Июнь'},
-    {value: '7', viewValue: 'Июль'},
-    {value: '8', viewValue: 'Август'},
-    {value: '9', viewValue: 'Сентябрь'},
-    {value: '10', viewValue: 'Октябрь'},
-    {value: '11', viewValue: 'Ноябрь'},
-    {value: '12', viewValue: 'Декабрь'}
+    {value: 1, viewValue: 'Январь'},
+    {value: 2, viewValue: 'Февраль'},
+    {value: 3, viewValue: 'Март'},
+    {value: 4, viewValue: 'Апрель'},
+    {value: 5, viewValue: 'Май'},
+    {value: 6, viewValue: 'Июнь'},
+    {value: 7, viewValue: 'Июль'},
+    {value: 8, viewValue: 'Август'},
+    {value: 9, viewValue: 'Сентябрь'},
+    {value: 10, viewValue: 'Октябрь'},
+    {value: 11, viewValue: 'Ноябрь'},
+    {value: 12, viewValue: 'Декабрь'}
   ];
   selectedValue: number;
 
@@ -58,6 +73,10 @@ export class CreateTimesheetsComponent implements OnInit {
   days: Array<number> = []; 
   day2: number;
   kol2: any = 28;
+  dayAbsent: boolean = false;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+
 
   daysInMonth() {
     const today = new Date();
@@ -65,17 +84,16 @@ export class CreateTimesheetsComponent implements OnInit {
     const month2 = this.selectedValue;
     const day2 = new Date(year2, month2, 0).getDate();
     console.log("1",this.toDate2 = {year: year2, month: month2, day: day2});
-    
-   const  kol3 = new Date(this.today.getFullYear(), this.selectedValue, 0).getDate();
-   console.log(kol3);
+    const  kol3 = new Date(this.today.getFullYear(), this.selectedValue, 0).getDate();
+    //console.log(kol3);
     this.kol2 = kol3;
     this.getMonth = true;
     this.Days();
+    this.findMonth();
   }
 
     today = new Date();
     kol = this.daysInMonth();
-    
 
   constructor(
     private location: Location,
@@ -85,8 +103,8 @@ export class CreateTimesheetsComponent implements OnInit {
     
   ngOnInit() {
     this.getchildren(this.route.snapshot.paramMap.get('id'));
-    
   }
+
   getchildren(id): void {
   //  const id = +this.route.snapshot.paramMap.get('id');
     this.MainService.getchildren(id).subscribe(results=>
@@ -94,8 +112,8 @@ export class CreateTimesheetsComponent implements OnInit {
       this.isLoading = false;
       this.child = results;
       this.dataSource = new MatTableDataSource(this.child);
-      console.log(this.child);
-      console.log(this.result);
+     // console.log(this.child);
+      //console.log(this.result);
       this.getMonth = false;
     });
   }
@@ -105,7 +123,6 @@ export class CreateTimesheetsComponent implements OnInit {
   check: boolean = false;
   check2: boolean = false;
   payed: boolean = false;
-  //obj: newObj[];
   ex: {}
   pair = {};
   pair2 = {};
@@ -129,9 +146,9 @@ export class CreateTimesheetsComponent implements OnInit {
         this.pair[element.id]-=1;
       }
       // console.log('count=',this.count);
-       console.log(this.pair); 
-       console.log(this.kol);
-       console.log(this.kol2);
+     // console.log(this.pair); 
+     // console.log(this.kol);
+     // console.log(this.kol2);
   }
   
   day31: boolean;
@@ -183,8 +200,66 @@ export class CreateTimesheetsComponent implements OnInit {
          this.pair2[element.id]-=1;
        }
      //  console.log('count2=',this.count2);
-       console.log(this.pair2);
+      // console.log(this.pair2);
   }
+
+  number: any;
+  addAbsentGood(item,elem,value): void{
+    const dialogRef = this.dialog.open(DiaologCauseComponent, {
+      disableClose: true, 
+      data: { 
+        //item,
+        id: elem,
+        year: this.today.getFullYear(),
+        month: this.selectedValue,
+        day: item,
+        causeBol: value
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+       this.MainService.addcause(result.group).subscribe((result2) => {
+     //  this.isLoading = true;
+       //this.records.push(result2);
+      // this.dataSource = new MatTableDataSource(this.records);
+
+      // console.log(this.records);
+      // console.log('newCause',result);
+
+      // this.getchildren();
+       });
+      }  //else this.f();
+    });
+    }
+
+    confirmPay(item): void{
+      const dialogRef = this.dialog.open(DiaologPayComponent, {
+        disableClose: true, 
+        data: { 
+          //item,
+          id: item,
+        },
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+         this.MainService.updateChild(result.group).subscribe((result2) => {});
+      }
+      });
+    }
+ 
+    oldMonth: boolean = true;
+    findMonth(){
+      const month2 = this.selectedValue;
+      const month = this.today.getMonth()+1;
+      if(month2 < month){
+        this.oldMonth = true;
+      } else if(month2 >= month){
+        this.oldMonth = false;
+      }
+    // console.log("chouse",month2);
+    // console.log("now",month);
+    }
+
   goBack(): void {
      this.location.back();
   }

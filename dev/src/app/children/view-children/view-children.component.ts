@@ -79,7 +79,7 @@ export class ViewChildrenComponent implements OnInit {
     private location: Location,
     private MainService: MainService,
     private route: ActivatedRoute,
-    private store: Store<children>,
+   // private store: Store<children>,
     private fb: FormBuilder) { }
 
    
@@ -222,16 +222,16 @@ export class ViewChildrenComponent implements OnInit {
       }
     })*/
 
-    /*this.item.formGroups.brothersAndSisters.forEach(el => {
+    this.item.formGroups.brothersAndSisters.forEach(el => {
       this.addd(el);
-    });*/
+    });
    
     }
     selectedDiet = this.formGroups.get('groupOfHealth').value;
     selectedHealth = this.formGroups.get('groupOfHealth').value;
     selectedphysGroup = this.formGroups.get('physGroup').value;
  
-   /* item = new FormGroup({
+   /*this.item = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
       patronymic: new FormControl(''),

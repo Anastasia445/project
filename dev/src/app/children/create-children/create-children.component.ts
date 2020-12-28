@@ -52,7 +52,7 @@ export class CreateChildrenComponent implements OnInit {
     public dialogRef: MatDialogRef<CreateChildrenComponent>,
     private location: Location,
     private MainService: MainService,
-    private route: ActivatedRoute,) { }
+    private route: ActivatedRoute) { }
     
     formGroups = new FormGroup({
       lastName:new FormControl(''),

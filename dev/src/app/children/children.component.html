@@ -7,6 +7,10 @@
     <button mat-raised-button color="primary" (click)="goBack()">
       Назад
     </button>
+    &nbsp; &nbsp; &nbsp;
+    <button *ngIf="!isImport" mat-raised-button color="primary" (click)="importChildren()">
+      Импортировать список детей
+   </button>
   </div>
   <br>
 

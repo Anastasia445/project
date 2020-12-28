@@ -27,13 +27,13 @@
 
   <div *ngIf="!isLoading" class="form">
     <mat-card class="groups">
-      <mat-card-title>Выберите табель :</mat-card-title>
+      <mat-card-title>Выберите табель:</mat-card-title>
       <br>
       <div class="timesheets">
         <div *ngIf="timesheets[0] != null">
         <button mat-raised-button color="primary"  *ngFor="let timesheet of timesheets" class="buttons" (click)="onSelect(timesheet)">
           {{timesheet.name}}
-        <mat-icon>group</mat-icon>
+        <mat-icon>table_view</mat-icon>
         </button>
       </div>
       <ng-container *ngIf="timesheets[0] == null">

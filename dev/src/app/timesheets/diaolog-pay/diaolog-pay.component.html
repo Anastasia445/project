@@ -1,0 +1,19 @@
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="formGroups" (submit)="onSubmitGroups()">
+      <h1 class="element-size">Оплачено </h1>
+    
+      <mat-dialog-actions align="end">
+        <button
+          mat-button
+          type="submit"
+          id="submitDetails"
+          name="submitDetails"
+        >
+          Да
+        </button>
+        <button mat-button mat-dialog-close>Нет</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+  

@@ -6,6 +6,7 @@ import { group } from '../main-page/main-page.component';
 import { Observable, of } from 'rxjs';
 import {children} from '../children/children.component'
 import {timesheet} from 'src/app/timesheets/timesheets.component'
+import { causes } from 'src/app/timesheets/create-timesheets/create-timesheets.component';
 
 const  httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })/*.set('Authorization','token')*/
@@ -31,6 +32,7 @@ const getGroupTypes = "/api/group/findAllGroupTypes"
 const getTimeSheetsByGroupId="/api/timesheet/findByGroupId"
 const createTimesheet= "api/timesheet/create"
 const updateTimesheet = "/api/timesheet/update"
+const addCause= "/api/children/addCause"
 
 @Injectable({
   providedIn: 'root'
@@ -105,9 +107,13 @@ export class MainService {
   createTimesheet(record:timesheet):Observable<any>{
     return this.http.post(`${createTimesheet}/${record.id}`, record)
   }  
-
+  
   updateTimesheet(Record: timesheet): Observable<any>{
   return this.http.put<timesheet>( `${updateTimesheet}/${Record.id}`,Record, httpOptions); 
   }  
 
+  addcause(Record: causes): Observable<any>{
+    return this.http.put<causes>( `${addCause}/${Record.id}`,Record, httpOptions); 
+    }  
 }
+

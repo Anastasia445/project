@@ -1,0 +1,10 @@
+.mat-dialog-content {
+    overflow-y: hidden !important;
+    min-height: 100px;
+    min-width: 200px;
+    text-size-adjust: 5em;
+}
+.element-size {
+      text-align: center;
+      
+}

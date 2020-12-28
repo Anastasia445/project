@@ -19,9 +19,10 @@ export interface children {
   lastName: string;
   firstName: string
   patronymic: string;
-  groups: [{
+  group: [{
    id:number;
    groupssTypee:{
+     id: number;
      name:string;
      }
   }];
@@ -50,6 +51,7 @@ export interface children {
     education:string;
     placeOfWork: string;
   }]; 
+  payed: boolean;
   dayOfBirth: Date;
   weightF: string;
   heightF: string;
@@ -106,7 +108,6 @@ export class ChildrenComponent implements OnInit {
 
   ngOnInit() {
    this.getchildren();
-   
   }
 
   applyFilter(event: Event) {
@@ -178,7 +179,25 @@ export class ChildrenComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       console.log(this.records);
+      this.getGroupTypeId();
     });
+  }
+
+  GroupTypeId: any = 0;
+  isImport: boolean = true;
+ getGroupTypeId(){
+   if(this.records[0] != undefined){
+     this.GroupTypeId = this.records[0].group[0].groupssTypee.id;
+     if(this.GroupTypeId <= 3){
+        this.isImport = true;
+     } else if(this.GroupTypeId == 4){
+        this.isImport = false;
+     }
+   }
+ }
+
+  importChildren(){
+
   }
 
   onNoClick(): void {}

@@ -353,7 +353,7 @@
         <td>
           <mat-form-field appearance="fill">
               <mat-label>Группа здоровья:</mat-label>
-              <mat-select   #groupOfHealth  formControlName="groupOfHealth" name="groupOfHealth" id="groupOfHealth">
+              <mat-select   #groupOfHealth  formControlName="groupOfHealth" name="groupOfHealth">
                 <mat-option *ngFor="let groupOfHealth of groupsHealth" [value]="groupOfHealth.value">
                   {{groupOfHealth.value}}
                 </mat-option>
@@ -362,7 +362,7 @@
           <br>
           <mat-form-field appearance="fill">
             <mat-label>Группа по физкультуре:</mat-label>
-            <mat-select #physGroup  formControlName="physGroup" id="physGroup">
+            <mat-select #physGroup  formControlName="physGroup" name="physGroup">
               <mat-option  *ngFor="let physGroup of groupsType" [value]="physGroup">
                 {{physGroup.value}}
               </mat-option>

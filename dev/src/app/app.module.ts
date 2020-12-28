@@ -29,6 +29,8 @@ import { ChooseGrouptypeComponent } from './timesheets/choose-grouptype/choose-g
 import { DetailsComponent } from './timesheets/details/details.component';
 import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.component';
 import { StoreModule } from '@ngrx/store';
+import { DiaologCauseComponent } from './timesheets/diaolog-cause/diaolog-cause.component';
+import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +48,9 @@ import { StoreModule } from '@ngrx/store';
     CreateTimesheetsComponent,
     ChooseGrouptypeComponent,
     DetailsComponent,
-    ChooseGroupComponent
+    ChooseGroupComponent,
+    DiaologCauseComponent,
+    DiaologPayComponent
   ],
   entryComponents: [CreateGroupComponent],
   imports: [

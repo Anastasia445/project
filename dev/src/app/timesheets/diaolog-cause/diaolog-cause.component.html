@@ -1,0 +1,31 @@
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="formGroups" (submit)="onSubmitGroups()">
+      <h2 class="element-size">Добавление пропуска:</h2>
+      <ng-container formArrayName="causes">
+        <div *ngFor="let _ of causes.controls; let i = index;">
+          <ng-container [formGroupName]="i">
+            <mat-form-field class="element-size">
+            <mat-label for="search-box">Причина пропуска</mat-label>
+            <input #cause formControlName="cause" matInput type="text" name="cause" required>
+          </mat-form-field>
+        </ng-container>
+      </div>
+    </ng-container>
+    
+      <mat-dialog-actions align="end">
+        <button
+          mat-button
+          cdkFocusInitial
+          type="submit"
+          id="submitDetails"
+          name="submitDetails"
+          [disabled]="formGroups.invalid"
+        >
+          Сохранить
+        </button>
+        <button mat-button mat-dialog-close>Отмена</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+  

@@ -21,7 +21,6 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import { EditGroupComponent } from './main-page/edit-group/edit-group.component';
 import { ChildrenComponent } from './children/children.component';
 import { CreateChildrenComponent } from './children/create-children/create-children.component';
-import { EditChildrenComponent } from './children/edit-children/edit-children.component';
 import { ViewChildrenComponent } from './children/view-children/view-children.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
 import { CreateTimesheetsComponent } from './timesheets/create-timesheets/create-timesheets.component';
@@ -42,7 +41,6 @@ import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.compon
     EditGroupComponent,
     ChildrenComponent,
     CreateChildrenComponent,
-    EditChildrenComponent,
     ViewChildrenComponent,
     TimesheetsComponent,
     CreateTimesheetsComponent,

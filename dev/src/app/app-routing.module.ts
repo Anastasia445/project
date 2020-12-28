@@ -8,7 +8,6 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { CreateGroupComponent } from './main-page/create-group/create-group.component';
 import { ChildrenComponent } from './children/children.component';
 import { CreateChildrenComponent } from './children/create-children/create-children.component';
-import { EditChildrenComponent } from './children/edit-children/edit-children.component';
 import { ViewChildrenComponent } from './children/view-children/view-children.component';
 import { CreateTimesheetsComponent } from './timesheets/create-timesheets/create-timesheets.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
@@ -26,8 +25,6 @@ const routes: Routes = [
   { path: 'timesheets/:id', component: TimesheetsComponent, canActivate: [AuthGuard] },
   { path: 'children/:id', component: ChildrenComponent, canActivate: [AuthGuard]},
   { path: 'addChild', component: CreateChildrenComponent, canActivate: [AuthGuard]},
-  { path: 'editChild', component: EditChildrenComponent, canActivate: [AuthGuard]},
-  { path: 'editChild/:id', component: EditChildrenComponent, canActivate: [AuthGuard]},
   { path: 'viewChild/:id', component: ViewChildrenComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent },
   { path: 'sendEmail', component: SendEmailComponent},

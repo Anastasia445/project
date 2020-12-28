@@ -363,7 +363,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Группа по физкультуре:</mat-label>
             <mat-select #physGroup  formControlName="physGroup" name="physGroup">
-              <mat-option  *ngFor="let physGroup of groupsType" [value]="physGroup">
+              <mat-option  *ngFor="let physGroup of groupsType" [value]="physGroup.value">
                 {{physGroup.value}}
               </mat-option>
             </mat-select>

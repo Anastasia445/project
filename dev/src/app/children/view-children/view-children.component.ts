@@ -169,11 +169,9 @@ export class ViewChildrenComponent implements OnInit {
       this.formGroups.get('flatL').setValue(this.data.item.flatL);
       this.formGroups.get('telephoneL').setValue(this.data.item.telephoneL);
       this.formGroups.get('parents').setValue(this.data.item.parents);
-     // this.formGroups.get('relatives').setValue(this.data.item.relatives);
+      //this.formGroups.get('brothersAndSisters').setValue(this.data.item.brothersAndSisters);
     } 
   
-    console.log(
-    /* this.formGroups.get('brothersAndSisters').setValue(this.data.item.brothersAndSisters)*/)
   
  // }
 
@@ -222,9 +220,9 @@ export class ViewChildrenComponent implements OnInit {
       }
     })*/
 
-    this.item.formGroups.brothersAndSisters.forEach(el => {
+   /* this.data.item.brothersAndSisters.forEach(el => {
       this.addd(el);
-    });
+    });*/
    
     }
     selectedDiet = this.formGroups.get('groupOfHealth').value;
@@ -239,7 +237,7 @@ export class ViewChildrenComponent implements OnInit {
       placeOfWork: new FormControl('')
     });*/
 
-    addd(value: any = {}){
+    addd(value){
       return new FormGroup({
         firstName: new FormControl(value.firstName),
         lastName: new FormControl(value.lastName),

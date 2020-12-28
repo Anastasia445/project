@@ -53,13 +53,13 @@
        <h4>Первое полугодие:</h4>
        <mat-form-field class="w">
          <mat-label>Рост</mat-label>
-         <input #weightF matInput type="number" formControlName="weightF" >
+         <input #weightF matInput type="number" formControlName="weightF" name="weightF" />
          <span matSuffix>&nbsp; см</span>
        </mat-form-field> 
        <br>
        <mat-form-field class="w">
          <mat-label>Вес</mat-label>
-         <input #heightF matInput type="number" formControlName="heightF" >
+         <input #heightF matInput type="number" formControlName="heightF" />
          <span matSuffix>&nbsp; кг</span>
        </mat-form-field>
      </td>
@@ -68,13 +68,13 @@
        <h4>Второе полугодие:</h4>
        <mat-form-field class="w">
          <mat-label>Рост</mat-label>
-         <input #weightS matInput type="number" formControlName="weightS" >
+         <input #weightS matInput type="number" formControlName="weightS" />
          <span matSuffix>&nbsp; см</span>
        </mat-form-field>
        <br>
        <mat-form-field class="w">
          <mat-label>Вес</mat-label>
-         <input #heightS matInput type="number" formControlName="heightS" >
+         <input #heightS matInput type="number" formControlName="heightS" />
          <span matSuffix>&nbsp; кг</span>
        </mat-form-field> 
        </td>
@@ -131,22 +131,22 @@
          <h4>Адрес прописки:</h4>
          <mat-form-field class="example-full-width">
            <mat-label>Город</mat-label>
-           <input #cityR matInput formControlName="cityR">
+           <input #cityR matInput formControlName="cityR"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Улица</mat-label>
-           <input #streetR matInput formControlName="streetR">
+           <input #streetR matInput formControlName="streetR"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Дом</mat-label>
-           <input #houseR matInput type="number"formControlName="houseR">
+           <input #houseR matInput type="number"formControlName="houseR"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Квартира</mat-label>
-           <input #flatR matInput type="number"formControlName="flatR">
+           <input #flatR matInput type="number"formControlName="flatR"/>
          </mat-form-field>
          <br>
          <mat-form-field class="w">
@@ -160,27 +160,27 @@
          <h4>Адрес проживания:</h4>
          <mat-form-field class="example-full-width">
            <mat-label>Город</mat-label>
-           <input #cityL matInput formControlName="cityL">
+           <input #cityL matInput formControlName="cityL"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Улица</mat-label>
-           <input #streetL matInput formControlName="streetL">
+           <input #streetL matInput formControlName="streetL"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Дом</mat-label>
-           <input #houseL matInput type="number"formControlName="houseL">
+           <input #houseL matInput type="number"formControlName="houseL"/>
          </mat-form-field>
          <br>
          <mat-form-field class="example-full-width">
            <mat-label>Квартира</mat-label>
-           <input #flatL matInput type="number"formControlName="flatL">
+           <input #flatL matInput type="number"formControlName="flatL"/>
          </mat-form-field>
          <br>
          <mat-form-field class="w">
            <mat-label>Телефон</mat-label>
-           <input #telephoneL type="tel" matInput placeholder="22-65-74" formControlName="telephoneL">
+           <input #telephoneL type="tel" matInput placeholder="22-65-74" formControlName="telephoneL"/>
            <mat-icon matSuffix>mode_edit</mat-icon>
          </mat-form-field>
        </td>
@@ -202,8 +202,8 @@
       <td>
       <mat-form-field class="full-width">
         <mat-label>Фамилия</mat-label>
-        <input *ngIf="i <= 0" #lastName matInput placeholder="Петрова" formControlName="lastName" type="text" >
-        <input *ngIf="i > 0" #lastName matInput placeholder="Петров" formControlName="lastName" type="text" >
+        <input *ngIf="i <= 0" #lastName matInput placeholder="Петрова" formControlName="lastName" type="text" />
+        <input *ngIf="i > 0" #lastName matInput placeholder="Петров" formControlName="lastName" type="text" />
       </mat-form-field> 
       <br>
       <mat-form-field class="full-width">

@@ -133,11 +133,9 @@ export class ChildrenComponent implements OnInit {
      this.dataSource = new MatTableDataSource(this.records);
      this.dataSource.paginator = this.paginator;
      this.dataSource.sort = this.sort;
-     console.log(this.records);
-     console.log('2',result);
      this.getchildren();
      });
-    }   console.log();
+    }   
     
   });
   }
@@ -151,7 +149,6 @@ export class ChildrenComponent implements OnInit {
         
       },
     });
-    console.log('one1', this.records);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
           this.MainService.updateChild(result.group).subscribe(data => { 
@@ -178,7 +175,6 @@ export class ChildrenComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.records);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      console.log(this.records);
       this.getGroupTypeId();
     });
   }

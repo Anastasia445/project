@@ -49,7 +49,6 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit() {
     const today = new Date();
     const year = today.getFullYear();
- console.log(year+1,'t',today);
     this.formGroups = new FormGroup({
       name: new FormControl(null, [Validators.required]),
       start: new FormControl(new Date(year, 8, 1,23,59)),
@@ -65,24 +64,7 @@ export class CreateGroupComponent implements OnInit {
       this.formGroups.get('description').setValue(this.data.item.description);
     }
   }
-/*
-  chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.date.value;
-    ctrlValue.year(normalizedYear.year());
-    this.date.setValue(ctrlValue);
-      datepicker.close();
-  }
-
-  chosenMonthHandler(
-    normalizedMonth: Moment,
-    datepicker: MatDatepicker<Moment>
-  ) {
-    const ctrlValue = this.date.value;
-    ctrlValue.month(normalizedMonth.month());
-    this.date.setValue(ctrlValue);
-    datepicker.close();
-  }
-*/
+  
 public groupssTypee = [
     { groupssTypee: '1', group: 'Первая младшая' },
     { groupssTypee: '2', group: 'Вторая младшая' },

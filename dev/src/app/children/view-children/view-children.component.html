@@ -223,12 +223,10 @@
         </ng-container>
       </div>
      </ng-container>
-     
-       <h2>Сведения о сёстрах и братьях:</h2>  
- 
 
   <ng-container formArrayName="brothersAndSisters">
    <div *ngFor="let _ of brothersAndSisters.controls; let i = index;">
+    <h2>Сведения о сёстрах и братьях:</h2>  
      <ng-container [formGroupName]="i">
        <br>
        <table>
@@ -365,15 +363,15 @@
             <mat-select #physGroup  formControlName="physGroup" name="physGroup">
               <mat-option  *ngFor="let physGroup of groupsType" [value]="physGroup.value">
                 {{physGroup.value}}
-              </mat-option>
+              </mat-option> 
             </mat-select>
           </mat-form-field>
           <br>
           <mat-form-field appearance="fill">
             <mat-label>Диетический стол:</mat-label>
-            <mat-select [(value)]="selectedDiet" #diet  formControlName="diet" >
-              <mat-option  *ngFor="let diet of groupsFoodDiet" [value]="diet.value">
-                {{diet.value}}
+            <mat-select #diet formControlName="diet" name="diet" >
+              <mat-option  *ngFor="let groupFoodDiet of groupsFoodDiet" [value]="groupFoodDiet.value">
+                {{groupFoodDiet.value}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -398,27 +396,27 @@
           <h4>Адрес прописки:</h4>
           <mat-form-field class="example-full-width">
             <mat-label>Город</mat-label>
-            <input #cityR matInput formControlName="cityR">
+            <input #cityR matInput formControlName="cityR"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Улица</mat-label>
-            <input #streetR matInput formControlName="streetR">
+            <input #streetR matInput formControlName="streetR"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Дом</mat-label>
-            <input #houseR matInput type="number"formControlName="houseR">
+            <input #houseR matInput type="number"formControlName="houseR"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Квартира</mat-label>
-            <input #flatR matInput type="number"formControlName="flatR">
+            <input #flatR matInput type="number"formControlName="flatR"/>
           </mat-form-field>
           <br>
           <mat-form-field class="w">
             <mat-label>Телефон</mat-label>
-            <input #telephoneR type="tel" matInput placeholder="22-65-74" formControlName="telephoneR">
+            <input #telephoneR type="tel" matInput placeholder="22-65-74" formControlName="telephoneR"/>
             <mat-icon matSuffix>mode_edit</mat-icon>
           </mat-form-field>
         </td>
@@ -427,27 +425,27 @@
           <h4>Адрес проживания:</h4>
           <mat-form-field class="example-full-width">
             <mat-label>Город</mat-label>
-            <input #cityL matInput formControlName="cityL">
+            <input #cityL matInput formControlName="cityL"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Улица</mat-label>
-            <input #streetL matInput formControlName="streetL">
+            <input #streetL matInput formControlName="streetL"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Дом</mat-label>
-            <input #houseL matInput type="number"formControlName="houseL">
+            <input #houseL matInput type="number"formControlName="houseL"/>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
             <mat-label>Квартира</mat-label>
-            <input #flatL matInput type="number"formControlName="flatL">
+            <input #flatL matInput type="number"formControlName="flatL"/>
           </mat-form-field>
           <br>
           <mat-form-field class="w">
             <mat-label>Телефон</mat-label>
-            <input #telephoneL type="tel" matInput placeholder="22-65-74" formControlName="telephoneL">
+            <input #telephoneL type="tel" matInput placeholder="22-65-74" formControlName="telephoneL"/>
             <mat-icon matSuffix>mode_edit</mat-icon>
           </mat-form-field>
         </td>
@@ -467,22 +465,22 @@
            <td>
            <mat-form-field class="full-width">
              <mat-label>Фамилия</mat-label>
-             <input  #lastName matInput placeholder="Петрова" formControlName="lastName" type="text" >
+             <input  #lastName matInput placeholder="Петрова" formControlName="lastName" type="text" />
            </mat-form-field> 
            <br>
            <mat-form-field class="full-width">
              <mat-label>Имя</mat-label>
-             <input  #firstName matInput placeholder="Виктория" formControlName="firstName" type="text" >
+             <input  #firstName matInput placeholder="Виктория" formControlName="firstName" type="text" />
            </mat-form-field> 
            <br>
            <mat-form-field  class="full-width">
              <mat-label>Отчество</mat-label>
-             <input  #patronymic matInput placeholder="Анатольевич" formControlName="patronymic" type="text">
+             <input  #patronymic matInput placeholder="Анатольевич" formControlName="patronymic" type="text"/>
            </mat-form-field> 
            <mat-form-field class="w">
              <mat-label>Телефон</mat-label>
              <span matPrefix>+375 &nbsp;</span>
-             <input type="tel" #telephone matInput formControlName="telephone" >
+             <input type="tel" #telephone matInput formControlName="telephone" />
              <mat-icon matSuffix>mode_edit</mat-icon>
            </mat-form-field>
          </td>
@@ -499,44 +497,62 @@
            <br>
            <mat-form-field class="full-width">
              <mat-label>Место работы:</mat-label><!--#placeOfWork formControlName="placeOfWork"-->
-             <input #placeOfWork formControlName="placeOfWork"  matInput  >
+             <input #placeOfWork formControlName="placeOfWork"  matInput />
            </mat-form-field> 
            <br>
            <mat-form-field class="full-width">
              <mat-label>Должность:</mat-label><!--#position matInput formControlName="position" -->
-             <input matInput #position formControlName="position" >
+             <input matInput #position formControlName="position" />
            </mat-form-field> 
          </td>
           </table>
         </ng-container>
       </div>
      </ng-container>
-      
-
-
-
-
-
-    <!--   <ng-container formArrayName="parents">
-          <div *ngFor="let _ of parents.controls; index as i">
-            <ng-container [formGroupName]="i">
-              <mat-form-field class="full-width">
-                <mat-label>Фамилия</mat-label>
-                <input  matInput readonly placeholder="Петрова" formControlName="lastName" type="text" >
-              </mat-form-field> 
-              <br>
-              <mat-form-field class="full-width">
-                <mat-label>Имя</mat-label>
-                <input  matInput readonly placeholder="Виктория" formControlName="firstName" type="text" >
-              </mat-form-field> 
-              <br>
-              <mat-form-field  class="full-width">
-                <mat-label>Отчество</mat-label>
-                <input  matInput readonly placeholder="Анатольевна" formControlName="patronymic" type="text" >
-              </mat-form-field> 
-            </ng-container>
-          </div>
-        </ng-container>  -->
+    
+     <ng-container formArrayName="brothersAndSisters">
+      <div *ngFor="let _ of brothersAndSisters.controls; let i = index;">
+       <h2>Сведения о сёстрах и братьях:</h2>  
+        <ng-container [formGroupName]="i">
+          <br>
+          <table>
+            <td>
+            <mat-form-field appearance="fill">
+              <mat-label>Родство:</mat-label>
+              <mat-select #placeOfWork matInput formControlName="placeOfWork" name="placeOfWork">
+              <mat-option *ngFor="let groups of groupsSiblings" [value]="groups.value">
+                {{groups.value}}
+              </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="full-width">
+              <mat-label>Место учёбы(работы):</mat-label>
+              <input #education matInput formControlName="education" type="text"/>
+            </mat-form-field> 
+            </td>
+            &nbsp;&nbsp;&nbsp; 
+            <td> 
+            <mat-form-field class="full-width">
+              <mat-label>Фамилия</mat-label>
+              <input #firstName matInput formControlName="firstName" type="text"/>
+            </mat-form-field> 
+            <br>
+            <mat-form-field class="full-width">
+              <mat-label>Имя</mat-label>
+              <input #lastName matInput formControlName="lastName"  type="text"/>
+            </mat-form-field> 
+            <br>
+            <mat-form-field class="full-width">
+              <mat-label>Отчество</mat-label>
+              <input #patronymic matInput formControlName="patronymic" type="text"/>
+            </mat-form-field> 
+            </td>
+          </table>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </div>
+    </ng-container>
       
     </div>
   </mat-card-content>

@@ -4,10 +4,7 @@ import { children } from '../children.component';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-//import { merge } from 'rxjs';
-
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface Grouptype {
   value: string;
@@ -35,9 +32,7 @@ export class ViewChildrenComponent implements OnInit {
   isReadyDiet: boolean;
 
   groupsFoodDiet: Grouptype[] = [
-    
     {value:'Общий'},
-    {value: 'fggfj'},
     { value:'Диета'},
   ];
 
@@ -67,21 +62,18 @@ export class ViewChildrenComponent implements OnInit {
     {value: 'Среднее общее'},
     {value: 'Среднее базовое'},
   ];
+
   groupsSiblings: Grouptype[] = [
     {value: 'Брат'},
     {value: 'Сестра'},
   ];
-  i: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewChildrenComponent>,
     private location: Location,
     private MainService: MainService,
-    private route: ActivatedRoute,
-   // private store: Store<children>,
-    private fb: FormBuilder) { }
-
+    private route: ActivatedRoute) { }
    
     formGroups = new FormGroup({
     id:new FormControl(this.data.id),
@@ -127,21 +119,13 @@ export class ViewChildrenComponent implements OnInit {
         position: new FormControl('')
       })
     ]),
-    brothersAndSisters: new FormArray([ 
-  /*  new FormGroup({
-      firstName: new FormControl(''),
-      lastName: new FormControl(''),
-      patronymic: new FormControl(''),
-      education: new FormControl(''),
-      placeOfWork: new FormControl('')
-   })*/
-  ])
+    brothersAndSisters: new FormArray([ ])
+  });
 
-});
-  item: any;
+  koll: any = 0;
   parents = this.formGroups.get('parents') as FormArray;
   brothersAndSisters = this.formGroups.get('brothersAndSisters') as FormArray;
- 
+
   ngOnInit(): void {
 
     this.formGroups;
@@ -169,122 +153,65 @@ export class ViewChildrenComponent implements OnInit {
       this.formGroups.get('flatL').setValue(this.data.item.flatL);
       this.formGroups.get('telephoneL').setValue(this.data.item.telephoneL);
       this.formGroups.get('parents').setValue(this.data.item.parents);
-      //this.formGroups.get('brothersAndSisters').setValue(this.data.item.brothersAndSisters);
     } 
-  
-  
- // }
+    this.getSistersAndBrothers();
 
-     /* this.store.select('relatives').subscribe(relatives => {
-      const controls = relatives.map(item => {
-        return new FormGroup({
-          firstName: new FormControl(item.firstName),
-          lastName: new FormControl(item.lastName),
-          patronymic: new FormControl(item.patronymic),
-          education: new FormControl(item.education),
-          placeOfWork: new FormControl(item.placeOfWork)
-        })
+  }
+
+  getSistersAndBrothers(){
+   /* console.log("f", this.formGroups.get('brothersAndSisters').value.length,
+    this.formGroups.get('brothersAndSisters').value.count,
+    this.data.item.brothersAndSisters.length);*/
+    if(this.data.item.brothersAndSisters.length > this.koll){
+      this.koll++;
+      this.data.item.brothersAndSisters.forEach(el => {
+      this.addSistersAndBrothers(el);
       });
-
-      this.formGroups.registerControl('relatives', new FormArray(controls));
-    })*/
-
-    
- /* console.log( this.store.select('relatives').subscribe(relatives => {
-      for(const item of relatives) {
-        this.relatives.push(
-          
-           new FormGroup({
-            firstName: new FormControl(item.firstName),
-            lastName: new FormControl(item.lastName),
-            patronymic: new FormControl(item.patronymic),
-            education: new FormControl(item.education),
-            placeOfWork: new FormControl(item.placeOfWork)
-          })
-        // new FormControl(skill, Validators.required)
-      )}
-    })
-  )*/
-
-   /*  this.store.select('parents').subscribe(parents => {
-        for(const skill of parents) {
-          this.parents.push(
-            new FormGroup({
-              firstName: new FormControl(skill),
-              lastName: new FormControl(skill),
-              patronymic: new FormControl(skill),
-              education: new FormControl(skill),
-              placeOfWork: new FormControl(skill)
-            })
-          )
-      }
-    })*/
-
-   /* this.data.item.brothersAndSisters.forEach(el => {
-      this.addd(el);
-    });*/
-   
     }
-    selectedDiet = this.formGroups.get('groupOfHealth').value;
-    selectedHealth = this.formGroups.get('groupOfHealth').value;
-    selectedphysGroup = this.formGroups.get('physGroup').value;
- 
-   /*this.item = new FormGroup({
-      firstName: new FormControl(''),
-      lastName: new FormControl(''),
-      patronymic: new FormControl(''),
-      education: new FormControl(''),
-      placeOfWork: new FormControl('')
-    });*/
+  }
 
-    addd(value){
-      return new FormGroup({
-        firstName: new FormControl(value.firstName),
-        lastName: new FormControl(value.lastName),
-        patronymic: new FormControl(value.patronymic),
-        education: new FormControl(value.education),
-        placeOfWork: new FormControl(value.placeOfWork)   
-      });
-   //   const arr = <FormArray>this.parents;
-    //  arr.push(parents);
-
-   // this.item;
-
-  // this.brothersAndSisters.push(item);
-    }  
-
+  addSistersAndBrothers(value){
+    const item = new FormGroup({
+      firstName: new FormControl(value.firstName),
+      lastName: new FormControl(value.lastName),
+      patronymic: new FormControl(value.patronymic),
+      education: new FormControl(value.education),
+      placeOfWork: new FormControl(value.placeOfWork)   
+    });
+   this.brothersAndSisters.push(item);
+  }  
 
   onSelectFile(file){
-  if(file.target.files){
-    let reader = new FileReader();
-    reader.readAsDataURL(file.target.files[0]);
-    reader.onload=(event:any)=>{
-    this.url=event.target.result;
+    if(file.target.files){
+      let reader = new FileReader();
+      reader.readAsDataURL(file.target.files[0]);
+      reader.onload=(event:any)=>{
+      this.url=event.target.result;
+      }
     }
   }
-}
 
-foodDietInfo(){
-  if(true)
-  {
-    this.isReadyDiet = true;
-  } else
-  {
-    this.isReadyDiet = false;
+  foodDietInfo(){
+    if(true)
+    {
+      this.isReadyDiet = true;
+    } else
+    {
+      this.isReadyDiet = false;
+    }
   }
-}
- isClick: boolean;
-  IsClick(){
-    console.log("review",this.formGroups.get('diet').value);
-  if(true)
-  {
-    this.isClick = true;
-  } else
-  {
-    this.isClick = false;
+   isClick: boolean;
+    IsClick(){
+      console.log("review",this.formGroups.get('diet').value);
+    if(true)
+    {
+      this.isClick = true;
+    } else
+    {
+      this.isClick = false;
+    }
   }
-}
-
+  
   viewChild():void{
     const id = +this.route.snapshot.paramMap.get('id');
     this.MainService.getChildById(id)

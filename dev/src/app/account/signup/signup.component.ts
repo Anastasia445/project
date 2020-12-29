@@ -45,19 +45,19 @@ export class SignupComponent implements OnInit {
   };
   lnameFormControl = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9-_]+$')
+    Validators.pattern('^[a-zA-Zа-яА-Я0-9-_ ]+$')
   ]);
   fnameFormControl = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9-_]+$')
+    Validators.pattern('^[a-zA-Zа-яА-Я0-9-_ ]+$')
   ]);
   patronymicFormControl = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9-_]+$')
+    Validators.pattern('^[a-zA-Zа-яА-Я0-9-_ ]+$')
   ]);
   loginFormControl = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9-_]+$')
+    Validators.pattern('^[a-zA-Zа-яА-Я0-9-_ ]+$')
   ]);
   passwordFormControl = new FormControl('', [
     Validators.required,

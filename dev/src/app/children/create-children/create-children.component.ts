@@ -179,15 +179,8 @@ export class CreateChildrenComponent implements OnInit {
    groupsFoodDiet: Groupdiet[] = [
       {value: 'Общий', diet:false},
       {value: 'Диета', diet:true},
-    ];
-
-    
-    
-    
-    
-    
-    
-
+    ];                
+            
     groupsSiblings: Grouptype[] = [
       {value: 'Брат'},
       {value: 'Сестра'},

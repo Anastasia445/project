@@ -144,7 +144,6 @@ export class MainPageComponent implements OnInit {
     {
       this.isLoading = true;
       this.records2 = results;
-      console.log(this.records2);
       if(this.records2.length > 0){
         this.openDialog();
       } else{

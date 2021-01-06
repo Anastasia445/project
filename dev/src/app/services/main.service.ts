@@ -33,6 +33,10 @@ const getTimeSheetsByGroupId="/api/timesheet/findByGroupId"
 const createTimesheet= "api/timesheet/create"
 const updateTimesheet = "/api/timesheet/update"
 const addCause= "/api/children/addCause"
+const downloadTimesheets = "/api/file/downloadT"
+const goodAbsent="/api/children/countOfTrue"
+const badAbsent="/api/children/countOfFalse"
+const allAbsent="/api/children/AllGap"
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +96,18 @@ export class MainService {
     return this.http.get(timesheets);
   }
 
+  getGoodAbsent(id){
+    return this.http.get(`${goodAbsent}/${id}`);
+  }
+
+  getBadAbsent(id){
+    return this.http.get(`${badAbsent}/${id}`);
+  }
+
+  getAllAbsent(id){
+    return this.http.get(`${allAbsent}/${id}`);
+  }
+
   getGroupByType(id){
     return this.http.get(`${getGroupByType}/${id}`)
   }
@@ -115,5 +131,17 @@ export class MainService {
   addcause(Record: causes): Observable<any>{
     return this.http.put<causes>( `${addCause}/${Record.id}`,Record, httpOptions); 
     }  
+
+  downloadTimesheet(id, month){
+    return this.http.get(`${downloadTimesheets}/${id}/${month}`,{
+      responseType: 'arraybuffer'} 
+     ).subscribe(response => this.downLoadFile(response, "application/ms-excel"));
+  }
+  downLoadFile(response: ArrayBuffer, arg1: string): void {
+    throw new Error('Method not implemented.');
+  }
+
+
+
 }
 

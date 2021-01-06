@@ -9,6 +9,8 @@ import { Location } from '@angular/common';
 import { DiaologCauseComponent } from '../diaolog-cause/diaolog-cause.component'; 
 import { MatPaginator } from '@angular/material/paginator';
 import { DiaologPayComponent } from '../diaolog-pay/diaolog-pay.component';
+import * as moment from 'moment';
+
 
 interface Month {
   value: number;
@@ -48,6 +50,8 @@ export class CreateTimesheetsComponent implements OnInit {
   [x: string]: any;
   selected=-1;
   getMonth: boolean;
+  chouseDay: boolean = true;
+  gAbsent: any;
 
   months: Month[] = [
     {value: 1, viewValue: 'Январь'},
@@ -74,9 +78,16 @@ export class CreateTimesheetsComponent implements OnInit {
   day2: number;
   kol2: any = 28;
   dayAbsent: boolean = false;
+  //templateName: boolean = true;
+  colTrue: number = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  downloadTimesheet(){
+    this.MainService.downloadTimesheet(this.route.snapshot.paramMap.get('id'),this.selectedValue)
 
+  
+    
+  }
 
   daysInMonth() {
     const today = new Date();
@@ -85,7 +96,7 @@ export class CreateTimesheetsComponent implements OnInit {
     const day2 = new Date(year2, month2, 0).getDate();
     console.log("1",this.toDate2 = {year: year2, month: month2, day: day2});
     const  kol3 = new Date(this.today.getFullYear(), this.selectedValue, 0).getDate();
-    //console.log(kol3);
+    console.log();
     this.kol2 = kol3;
     this.getMonth = true;
     this.Days();
@@ -103,6 +114,7 @@ export class CreateTimesheetsComponent implements OnInit {
     
   ngOnInit() {
     this.getchildren(this.route.snapshot.paramMap.get('id'));
+
   }
 
   getchildren(id): void {
@@ -113,11 +125,16 @@ export class CreateTimesheetsComponent implements OnInit {
       this.child = results;
       this.dataSource = new MatTableDataSource(this.child);
      // console.log(this.child);
-      //console.log(this.result);
+      console.log(this.child[0].cause.value);
       this.getMonth = false;
+      console.log("h",this.child[0].cause.length);
     });
+    
+    
   }
 
+  show: boolean = false;
+  valueGood: boolean =false;
   count: number = 0;
   count2: number = 0;
   check: boolean = false;
@@ -126,28 +143,49 @@ export class CreateTimesheetsComponent implements OnInit {
   ex: {}
   pair = {};
   pair2 = {};
+
+  isCorrect(element,days){
+    return element.cause.some(t=> t.day === days)
+  }
+
+  absentCount(element,days,month2){
+      console.log(this.selectedValue);
+    return element.cause.some(t=> t.day === days && t.month === month2)
+  }
+
+  absentCause(element,month2){
+    console.log(this.selectedValue);
+  return element.cause.some(t=> t.month === month2)
+}
     
   payment(pay: boolean,element:any){
 
    }
+   
+    countGoodAbsent(id){
+    this.MainService.getGoodAbsent(id).subscribe(results=>
+      {
+      console.log(results);
+    });
+   }
 
-  goodAbsent(completed: boolean,element:any){  
+  goodAbsent(completed,element:any){  
    // console.log(element); 
     if(this.pair[element.id] === undefined){
     this.pair[element.id] = 0;}
-      if(completed == true){
+      if(completed === true){
       // this.count=0;
       this.count++;
-      this.pair[element.id]+=1;
+      this.pair[element]+=1;
     
-      } else if(completed == false)
+      } else if(completed === false)
       {
         this.count--;
         this.pair[element.id]-=1;
       }
       // console.log('count=',this.count);
-     // console.log(this.pair); 
-     // console.log(this.kol);
+      console.log(this.pair); 
+      console.log(this.pair[element.id]);
      // console.log(this.kol2);
   }
   
@@ -184,9 +222,11 @@ export class CreateTimesheetsComponent implements OnInit {
       '6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24',
       '25','26','27','28', 'cause', 'col', 'good', 'bad', 'comment'];
     }
+
+
   }  
     
-  badAbsent(completed2: boolean,element:any){
+  badAbsent(completed2,element:any){
     if(this.pair2[element.id] === undefined){
       this.pair2[element.id] = 0;}
     if(completed2 == true){
@@ -253,8 +293,10 @@ export class CreateTimesheetsComponent implements OnInit {
       const month = this.today.getMonth()+1;
       if(month2 < month){
         this.oldMonth = true;
-      } else if(month2 >= month){
+      } else if(month2 == month){
         this.oldMonth = false;
+      } else if(month2 > month){
+        this.oldMonth = true;
       }
     // console.log("chouse",month2);
     // console.log("now",month);

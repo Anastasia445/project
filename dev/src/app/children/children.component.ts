@@ -36,14 +36,14 @@ export interface children {
       telephone: string;
   }];
   comment:string;
-  cause:[
+  cause:
   {
     year: number;
     month: number;
     day: number;
     cause:string;
     causeBol:boolean;
-  }];
+  };
   relatives:[{
     firstName:string;
     lastName:string;

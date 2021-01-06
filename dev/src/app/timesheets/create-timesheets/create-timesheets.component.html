@@ -13,9 +13,17 @@
 </mat-form-field>
 </div>
 
-<div *ngIf="!oldMonth">
+
+<div *ngIf="!oldMonth &&  this.child.length > 0">
+
+  <div  *ngIf="getMonth" class="download">
+    <button mat-raised-button color="primary" (click)="downloadTimesheet()">
+      Скачать табель
+    </button>
+ </div>
+
    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="getMonth">
-     <!-- FIO column -->
+     <!-- FIO column this.child[0]-->
     <ng-container matColumnDef="FIO">
         <th class="n" mat-header-cell *matHeaderCellDef > <strong>ФИО</strong> </th>
         <td class="n" mat-cell *matCellDef="let element">  {{element.lastName}}&nbsp;{{element.firstName}}&nbsp;{{element.patronymic}} </td>
@@ -33,286 +41,721 @@
  
    <ng-container matColumnDef="1">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>1</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [(ngModel)]="element.causeBol" (click)="addAbsentGood(1,element.id,true)" color="primary" title="уважительная причина"   [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(1,element.id,false)"  color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
+     <td mat-cell *matCellDef="let element" class="firstDays">
+     <ng-container *ngIf="isCorrect(element,1) && element.cause.length > 0; else default">
+     <div *ngFor="let item of element.cause | keyvalue; let i = index">
+       <div *ngIf="element.cause[item.key].day == 1 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">       
+          <mat-checkbox class="example-margin" [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+          <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+       </div><!-- [value]="goodAbsent(true,1)"  -->
+       <ng-template #goodAbsentNo>
+         <div *ngIf="(element.cause[item.key].day == 1 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+           <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+           <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+         </div>
+        </ng-template>
+     </div>
+      </ng-container> 
+       <ng-template #default >
+         <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(1,element.id,true)" ></mat-checkbox>
+         <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(1,element.id,false)" ></mat-checkbox>
+       </ng-template> 
+       </td>
    </ng-container>
+
    <ng-container matColumnDef="2">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>2</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(2,element.id,true)"  color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(2,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,2) && element.cause.length > 0; else default">
+      <div *ngFor="let item of element.cause | keyvalue; let i = index">
+        <div *ngIf="element.cause[item.key].day == 2 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">       
+           <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+           <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+        </div>
+        <ng-template #goodAbsentNo>
+          <div *ngIf="(element.cause[item.key].day == 2 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+            <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+            <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+          </div>
+         </ng-template>
+      </div>
+       </ng-container> 
+        <ng-template #default >
+          <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(2,element.id,true)" ></mat-checkbox>
+          <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(2,element.id,false)" ></mat-checkbox>
+        </ng-template> 
      </td>
    </ng-container>
 
    <ng-container matColumnDef="3">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>3</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(3,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(3,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+     <td mat-cell *matCellDef="let element" class="firstDays">   
+      <ng-container *ngIf="isCorrect(element,3) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 3 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">  
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 3 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(3,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(3,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
 
    <ng-container matColumnDef="4">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>4</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(4,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"  (click)="addAbsentGood(4,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,4) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 4 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 4 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(4,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(4,element.id,false)" ></mat-checkbox>
+          </ng-template> 
+     </td>
      </ng-container>
 
    <ng-container matColumnDef="5">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>5</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(5,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(5,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,5) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 5 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 5 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(5,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(5,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
 
    <ng-container matColumnDef="6">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>6</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(6,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(6,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+     <td mat-cell *matCellDef="let element" class="firstDays">  
+      <ng-container *ngIf="isCorrect(element,6) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 6 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 6 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(6,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(6,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="7">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>7</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(7,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(7,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,7) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 7 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 7 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(7,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(7,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="8">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>8</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(8,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(8,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,8) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 8 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 8 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(8,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(8,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="9">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>9</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(9,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(9,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,9) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 9 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 9 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(9,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(9,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="10">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>10</strong> </th>
      <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(10,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(10,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,10) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 10 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 10 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(10,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(10,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="11">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>11</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(11,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <br>
-       <mat-checkbox class="example-margin" color="warn" (click)="addAbsentGood(11,element.id,false)" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,11) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 11 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 11 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(11,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(11,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="12">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>12</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(12,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(12,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,12) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 12 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 12 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(12,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(12,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="13">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>13</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(13,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(13,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,13) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 13 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 13 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(13,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(13,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="14">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>14</strong> </th>
      <td mat-cell *matCellDef="let element" class="checkDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(14,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"(click)="addAbsentGood(14,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,14) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 14 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 14 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(14,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(14,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="15">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>15</strong> </th>
      <td mat-cell *matCellDef="let element" class="checkDays" > 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(15,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(15,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,15) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 15 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 15 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(15,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(15,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="16">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>16</strong> </th>
      <td mat-cell *matCellDef="let element" class="checkDays" > 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(16,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(16,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,16) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 16 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 16 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(16,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(16,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="17">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>17</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(17,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(17,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,17) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 17 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 17 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(17,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(17,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="18">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>18</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(18,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(18,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,18) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 18 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 18 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(18,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(18,element.id,false)" ></mat-checkbox>
+          </ng-template> 
       </td>
    </ng-container>
    <ng-container matColumnDef="19">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>19</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(19,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(19,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,19) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 19 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 19 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(19,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(19,element.id,false)" ></mat-checkbox>
+          </ng-template> 
        </td>
    </ng-container>
    <ng-container matColumnDef="20">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>20</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(20,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(20,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,20) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 20 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 20 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(20,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(20,element.id,false)" ></mat-checkbox>
+          </ng-template> 
         </td>
    </ng-container>
    <ng-container matColumnDef="21">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>21</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(21,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(21,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,21) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 21 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 21 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(21,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(21,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="22">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>22</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(22,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(22,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,22) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 22 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 22 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(22,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(22,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="23">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>23</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(23,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(23,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,23) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 23 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 23 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(23,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(23,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="24">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>24</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(24,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(24,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,24) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 24 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 24 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(24,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(24,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="25">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>25</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(25,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(25,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,25) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 25 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 25 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(25,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(25,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="26">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>26</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(26,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(26,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,26) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 26 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 26 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(26,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(26,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="27">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>27</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(27,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(27,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,27) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 27 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 27 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(27,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(27,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="28">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>28</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(28,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(28,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,28) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 28 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 28 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(28,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(28,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="29" *ngIf="day29">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>29</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(29,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(29,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,29) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 29 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin" [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 29 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(29,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(29,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
    <ng-container matColumnDef="30" *ngIf="day30">
      <th mat-header-cell *matHeaderCellDef class="days" > <strong>30</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays" > 
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(30,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" (click)="addAbsentGood(30,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,30) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 30 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 30 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(30,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(30,element.id,false)" ></mat-checkbox>
+          </ng-template> 
      </td>
    </ng-container>
 
    <ng-container matColumnDef="31" *ngIf="day31">
     <th mat-header-cell *matHeaderCellDef class="days" > <strong>31</strong> </th>
     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-      <mat-checkbox class="example-margin" (click)="addAbsentGood(31,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-      </mat-checkbox>
-      <mat-checkbox class="example-margin" (click)="addAbsentGood(31,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-      </mat-checkbox>
+      <ng-container *ngIf="isCorrect(element,31) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue">       
+          <div *ngIf="element.cause[item.key].day == 31 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+             <mat-checkbox class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 31 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+              <mat-checkbox class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(31,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" color="warn" (click)="countGoodAbsent(element.id)" title="неуважительная причина" (click)="addAbsentGood(31,element.id,false)" ></mat-checkbox>
+          </ng-template> 
     </td>
   </ng-container>
 
@@ -320,9 +763,21 @@
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Причина отсутствия</strong> </th>
     <td mat-cell *matCellDef="let element">
       <br>
-      <mat-form-field>
-        <textarea matInput readonly>{{element.cause.cause}} </textarea>
+      <ng-container *ngIf="element.cause.length > 0; else default">
+        <mat-form-field class="cause">
+        <div *ngFor="let item of element.cause| keyvalue " >
+          <div *ngIf="element.cause[item.key].month == this.selectedValue">
+            <input type="text" matInput readonly>
+            {{element.cause[item.key].day}}&nbsp;-&nbsp;{{element.cause[item.key].cause}}
+          </div>
+        </div>
       </mat-form-field>
+    </ng-container>
+    <ng-template #default>
+      <mat-form-field class="cause">
+        <input type="text" matInput readonly>пропусков нет
+      </mat-form-field>
+    </ng-template>
      </td>
   </ng-container>
 
@@ -354,12 +809,12 @@
 
   <ng-container matColumnDef="good">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Ув причина</strong> </th>
-    <td mat-cell *matCellDef="let element" class="title2">
+    <td mat-cell *matCellDef="let element" class="title2"> {{countGoodAbsent}}
       <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair[element.id]}}
+        <input matInput type="number" >{{pair[element.id]}} 
       </mat-form-field>
      </td>
-  </ng-container>
+  </ng-container><!-- [value]="countGoodAbsent(element.id)" -->
 
   <ng-container matColumnDef="bad">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Неув причина</strong> </th>
@@ -388,6 +843,13 @@
                           <!--          If chouse old month                       -->
 
   <div *ngIf="oldMonth">
+
+    <div *ngIf="getMonth && oldMonth && this.child.length > 0" class="download">
+      <button mat-raised-button color="primary" (click)="downloadTimesheet()">
+        Скачать табель
+      </button>
+    </div>  
+
    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="getMonth">
      <!-- FIO column -->
     <ng-container matColumnDef="FIO">
@@ -399,306 +861,743 @@
         <th mat-header-cell *matHeaderCellDef > <strong>Оплата</strong> </th>
         <td mat-cell *matCellDef="let element"> 
           <div class="r">
-          <mat-checkbox [disabled]="true" readoly class="example-margin" title="оплата"  [checked]="element.payed" (change)="payment($event.checked,element)">
+          <mat-checkbox [disabled]="true" class="example-margin" title="оплата"  [checked]="element.payed" (change)="payment($event.checked,element)">
           </mat-checkbox>
         </div>
         </td>
     </ng-container>
- 
-   <ng-container matColumnDef="1">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>1</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin"[disabled]="true"(click)="addAbsentGood(1,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"[disabled]="true" (click)="addAbsentGood(1,element.id,false)"  color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="2">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>2</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin"[disabled]="true" (click)="addAbsentGood(2,element.id,true)"  color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"[disabled]="true" (click)="addAbsentGood(2,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
 
-   <ng-container matColumnDef="3">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>3</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin"[disabled]="true" (click)="addAbsentGood(3,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin"[disabled]="true" (click)="addAbsentGood(3,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-
-   <ng-container matColumnDef="4">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>4</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(4,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(4,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </ng-container>
-
-   <ng-container matColumnDef="5">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>5</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true"(click)="addAbsentGood(5,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true"(click)="addAbsentGood(5,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-
-   <ng-container matColumnDef="6">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>6</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(6,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true"(click)="addAbsentGood(6,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="7">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>7</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(7,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(7,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="8">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>8</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(8,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(8,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="9">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>9</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(9,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(9,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="10">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>10</strong> </th>
-     <td mat-cell *matCellDef="let element" class="firstDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(10,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(10,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="11">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>11</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(11,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <br>
-       <mat-checkbox class="example-margin" [disabled]="true" color="warn" (click)="addAbsentGood(11,element.id,false)" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="12">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>12</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(12,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(12,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="13">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>13</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(13,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(13,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="14">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>14</strong> </th>
-     <td mat-cell *matCellDef="let element" class="checkDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(14,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(14,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="15">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>15</strong> </th>
-     <td mat-cell *matCellDef="let element" class="checkDays" > 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(15,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(15,element.id,false)" color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="16">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>16</strong> </th>
-     <td mat-cell *matCellDef="let element" class="checkDays" > 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(16,element.id,true)" color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(16,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="17">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>17</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(17,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(17,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="18">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>18</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(18,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(18,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+  <ng-container matColumnDef="1">
+  <th mat-header-cell *matHeaderCellDef class="days" > <strong>1</strong> </th>
+  <td mat-cell *matCellDef="let element" class="firstDays">
+  <ng-container *ngIf="absentCount(element,1,this.selectedValue) && element.cause.length > 0; else default">
+    <div *ngFor="let item of element.cause | keyvalue; let i = index">
+      <div *ngIf="element.cause[item.key].day == 1 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">    
+         <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+         <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+      </div>
+      <ng-template #goodAbsentNo>
+        <div *ngIf="(element.cause[item.key].day == 1 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+          <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+          <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+        </div>
+       </ng-template>
+    </div>
+     </ng-container> 
+      <ng-template #default >
+        <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(1,element.id,true)" ></mat-checkbox>
+        <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(1,element.id,false)" ></mat-checkbox>
+      </ng-template> 
+  </td>
+  </ng-container>
+    <ng-container matColumnDef="2">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>2</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,2,this.selectedValue) && element.cause.length > 0; else default">
+       <div *ngFor="let item of element.cause | keyvalue; let i = index">
+         <div *ngIf="element.cause[item.key].day == 2 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">       
+            <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+            <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+         </div>
+         <ng-template #goodAbsentNo>
+           <div *ngIf="(element.cause[item.key].day == 2 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+             <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+           </div>
+          </ng-template>
+       </div>
+        </ng-container> 
+         <ng-template #default >
+           <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(2,element.id,true)" ></mat-checkbox>
+           <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(2,element.id,false)" ></mat-checkbox>
+         </ng-template> 
       </td>
-   </ng-container>
-   <ng-container matColumnDef="19">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>19</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(19,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(19,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+    </ng-container>
+    <ng-container matColumnDef="3">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>3</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays">   
+       <ng-container *ngIf="absentCount(element,3,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 3 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">  
+              <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 3 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(3,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(3,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="4">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>4</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays">
+      <ng-container *ngIf="absentCount(element,4,this.selectedValue) && element.cause.length > 0; else default">
+        <div *ngFor="let item of element.cause | keyvalue; let i = index">
+          <div *ngIf="element.cause[item.key].day == 4 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo">    
+             <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+             <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+          </div>
+          <ng-template #goodAbsentNo>
+            <div *ngIf="(element.cause[item.key].day == 4 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)">
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+            </div>
+           </ng-template>
+        </div>
+         </ng-container> 
+          <ng-template #default >
+            <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(4,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(4,element.id,false)" ></mat-checkbox>
+          </ng-template> 
+      </td>
+      </ng-container>
+    <ng-container matColumnDef="5">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>5</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,5,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 5 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox class="example-margin" [disabled]="true"   [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [disabled]="true"  [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 5 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox class="example-margin" [disabled]="true" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox class="example-margin" [disabled]="true" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(5,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(5,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="6">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>6</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays">  
+       <ng-container *ngIf="absentCount(element,6,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 6 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 6 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(6,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(6,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="7">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>7</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,7,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 7 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 7 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(7,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(7,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="8">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>8</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,8,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 8 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 8 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(8,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(8,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="9">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>9</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,9,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 9 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 9 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(9,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(9,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="10">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>10</strong> </th>
+      <td mat-cell *matCellDef="let element" class="firstDays"> 
+       <ng-container *ngIf="absentCount(element,10,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 10 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 10 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(10,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(10,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="11">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>11</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,11,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 11 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 11 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(11,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(11,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="12">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>12</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,12,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 12 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 12 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(12,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(12,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="13">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>13</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,13,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 13 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox class="example-margin" [disabled]="true"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox class="example-margin" [disabled]="true" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 13 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(13,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(13,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="14">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>14</strong> </th>
+      <td mat-cell *matCellDef="let element" class="checkDays"> 
+       <ng-container *ngIf="absentCount(element,14,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 14 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 14 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(14,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(14,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="15">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>15</strong> </th>
+      <td mat-cell *matCellDef="let element" class="checkDays" > 
+       <ng-container *ngIf="absentCount(element,15,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 15 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 15 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(15,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(15,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="16">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>16</strong> </th>
+      <td mat-cell *matCellDef="let element" class="checkDays" > 
+       <ng-container *ngIf="absentCount(element,16,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 16 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 16 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(16,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(16,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="17">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>17</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,17,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 17 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 17 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(17,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(17,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="18">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>18</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,18,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 18 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true"  class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 18 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(18,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(18,element.id,false)" ></mat-checkbox>
+           </ng-template> 
        </td>
-   </ng-container>
-   <ng-container matColumnDef="20">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>20</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(20,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(20,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+    </ng-container>
+    <ng-container matColumnDef="19">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>19</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,19,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 19 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true"  class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 19 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(19,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(19,element.id,false)" ></mat-checkbox>
+           </ng-template> 
         </td>
-   </ng-container>
-   <ng-container matColumnDef="21">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>21</strong> </th>
+    </ng-container>
+    <ng-container matColumnDef="20">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>20</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,20,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 20 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 20 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(20,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(20,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+         </td>
+    </ng-container>
+    <ng-container matColumnDef="21">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>21</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,21,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 21 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true"  class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 21 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox [disabled]="true"  class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(21,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(21,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="22">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>22</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,22,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 22 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true"  class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 22 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(22,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(22,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="23">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>23</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,23,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 23 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 23 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(23,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(23,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="24">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>24</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,24,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 24 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true"  class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true"  class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 24 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(24,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(24,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="25">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>25</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,25,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 25 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 25 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(25,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(25,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="26">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>26</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,26,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 26 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 26 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true"  [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(26,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true"  [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(26,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="27">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>27</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,27,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 27 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 27 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(27,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(27,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="28">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>28</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,28,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 28 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 28 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(28,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(28,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="29" *ngIf="day29">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>29</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays"> 
+       <ng-container *ngIf="absentCount(element,29,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 29 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 29 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(29,element.id,true)" ></mat-checkbox>
+             <mat-checkbox [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(29,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="30" *ngIf="day30">
+      <th mat-header-cell *matHeaderCellDef class="days" > <strong>30</strong> </th>
+      <td mat-cell *matCellDef="let element" class="CheckDays" > 
+       <ng-container *ngIf="absentCount(element,30,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 30 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 30 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(30,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(30,element.id,false)" ></mat-checkbox>
+           </ng-template> 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="31" *ngIf="day31">
+     <th mat-header-cell *matHeaderCellDef class="days" > <strong>31</strong> </th>
      <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(21,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(21,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
+       <ng-container *ngIf="absentCount(element,31,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause | keyvalue">       
+           <div *ngIf="element.cause[item.key].day == 31 && element.cause[item.key].causeBol == true && element.cause[item.key].month == this.selectedValue; else goodAbsentNo"> 
+              <mat-checkbox  [disabled]="true" class="example-margin"  [checked]="true" color="primary"  title="уважительная причина"></mat-checkbox>
+              <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="warm"  title="неуважительная причина"></mat-checkbox>
+           </div>
+           <ng-template #goodAbsentNo>
+             <div *ngIf="(element.cause[item.key].day == 31 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="false" color="primary"  title="уважительная причина"></mat-checkbox>
+               <mat-checkbox  [disabled]="true" class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
+             </div>
+            </ng-template>
+         </div>
+          </ng-container> 
+           <ng-template #default >
+             <mat-checkbox  [disabled]="true" [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(31,element.id,true)" ></mat-checkbox>
+             <mat-checkbox  [disabled]="true" [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(31,element.id,false)" ></mat-checkbox>
+           </ng-template> 
      </td>
-   </ng-container>
-   <ng-container matColumnDef="22">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>22</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(22,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(22,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="23">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>23</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(23,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(23,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="24">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>24</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(24,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(24,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="25">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>25</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(25,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(25,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="26">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>26</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(26,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(26,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="27">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>27</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(27,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(27,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="28">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>28</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(28,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(28,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="29" *ngIf="day29">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>29</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays"> 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(29,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(29,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
-   <ng-container matColumnDef="30" *ngIf="day30">
-     <th mat-header-cell *matHeaderCellDef class="days" > <strong>30</strong> </th>
-     <td mat-cell *matCellDef="let element" class="CheckDays" > 
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(30,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-       </mat-checkbox>
-       <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(30,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-       </mat-checkbox>
-     </td>
-   </ng-container>
+    </ng-container>
 
-   <ng-container matColumnDef="31" *ngIf="day31">
-    <th mat-header-cell *matHeaderCellDef class="days" > <strong>31</strong> </th>
-    <td mat-cell *matCellDef="let element" class="CheckDays"> 
-      <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(31,element.id,true)"color="primary" title="уважительная причина"  [checked]="check" (change)="goodAbsent($event.checked,element)">
-      </mat-checkbox>
-      <mat-checkbox class="example-margin" [disabled]="true" (click)="addAbsentGood(31,element.id,false)"color="warn" title="неуважительная причина" [checked]="check2" (change)="badAbsent($event.checked,element)">
-      </mat-checkbox>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="cause">
-    <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Причина отсутствия</strong> </th>
-    <td mat-cell *matCellDef="let element">
-      <br>
-      <mat-form-field>
-        <textarea matInput readonly>{{element.cause.cause}} </textarea>
-      </mat-form-field>
-     </td>
-  </ng-container>
+    <ng-container matColumnDef="cause">
+     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Причина отсутствия</strong> </th>
+     <td mat-cell *matCellDef="let element">
+       <br>
+       <ng-container *ngIf="absentCause(element,this.selectedValue) && element.cause.length > 0; else default">
+         <div *ngFor="let item of element.cause| keyvalue " >
+           <div *ngIf="element.cause[item.key].month == this.selectedValue">
+          <!----   <input type="text" matInput readonly> -->
+             {{element.cause[item.key].day}}&nbsp;-&nbsp;{{element.cause[item.key].cause}} 
+           </div>
+         </div>   
+     </ng-container>
+     <ng-template #default>
+         пропусков нет
+     </ng-template>
+      </td>
+    </ng-container>
 
   <ng-container matColumnDef="col">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Пропуски</strong> </th>

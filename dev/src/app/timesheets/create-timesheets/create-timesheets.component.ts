@@ -10,6 +10,7 @@ import { DiaologCauseComponent } from '../diaolog-cause/diaolog-cause.component'
 import { MatPaginator } from '@angular/material/paginator';
 import { DiaologPayComponent } from '../diaolog-pay/diaolog-pay.component';
 import * as moment from 'moment';
+import { saveAs } from 'file-saver';
 
 
 interface Month {
@@ -72,7 +73,7 @@ export class CreateTimesheetsComponent implements OnInit {
   month:any;
   year:any;
   children: any;
-  child:any;
+  //child:any;
   neww:any;
   days: Array<number> = []; 
   day2: number;
@@ -82,11 +83,16 @@ export class CreateTimesheetsComponent implements OnInit {
   colTrue: number = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  downloadTimesheet(){
-    this.MainService.downloadTimesheet(this.route.snapshot.paramMap.get('id'),this.selectedValue)
+  selectedDate: string = moment().format('YYYY-MM-DD');
 
-  
-    
+  onSelectDate(event): void {
+    this.selectedDate = moment(event).format('YYYY-MM-DD')
+  }
+
+  downloadTimesheet(){
+      this.MainService.downloadTimesheet(this.route.snapshot.paramMap.get('id'),this.selectedValue).subscribe((file) => {
+        saveAs(file,`табель-${moment(this.selectedDate).format('DD.MM.YYYY')}.docx`);
+  })
   }
 
   daysInMonth() {
@@ -114,7 +120,7 @@ export class CreateTimesheetsComponent implements OnInit {
     
   ngOnInit() {
     this.getchildren(this.route.snapshot.paramMap.get('id'));
-
+  
   }
 
   getchildren(id): void {
@@ -148,6 +154,17 @@ export class CreateTimesheetsComponent implements OnInit {
     return element.cause.some(t=> t.day === days)
   }
 
+  kolGood:number;
+ trackByElement(){
+  this.kolGood++;
+ }
+
+  f: any;
+  s1: number = 0;
+  sum(element,bol,month2): void{   
+    return element.cause.some(t=> t.causeBol === bol && t.month === month2)
+  }
+
   absentCount(element,days,month2){
       console.log(this.selectedValue);
     return element.cause.some(t=> t.day === days && t.month === month2)
@@ -167,6 +184,35 @@ export class CreateTimesheetsComponent implements OnInit {
       {
       console.log(results);
     });
+   }
+
+   sum1(){
+     this.records.forEach(n=>{
+       console.log(n);
+     })
+   }
+
+t1: boolean = true;
+pair3 ={}
+  count3: number = 0;
+   radioChange3(completed: boolean,element:any){  
+    if(this.pair3[element.id] === undefined){
+      this.pair3[element.id] = 0;}
+        if(completed == true){
+        // this.count=0;
+           console.log('count=',this.count3);
+  
+        this.count3++;
+        console.log(this.pair3); 
+       this.pair3[element.id]+=1;
+      
+        } else if(completed == false)
+        {
+          this.count3--;
+          this.pair3[element.id]-=1;
+        }
+        console.log('count=',this.count3);
+        console.log(this.pair3); 
    }
 
   goodAbsent(completed,element:any){  

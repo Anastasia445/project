@@ -4,9 +4,13 @@ import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { group } from '../main-page/main-page.component';
 import { Observable, of } from 'rxjs';
-import {children} from '../children/children.component'
+import {children, file} from '../children/children.component'
 import {timesheet} from 'src/app/timesheets/timesheets.component'
 import { causes } from 'src/app/timesheets/create-timesheets/create-timesheets.component';
+
+const  httpC = {
+  headers: new HttpHeaders({ 'Content-Type': 'tutorials.xlsx' })
+};
 
 const  httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })/*.set('Authorization','token')*/
@@ -15,6 +19,7 @@ const  httpOptions = {
 const  httpOptions2 = {
   headers: new HttpHeaders({ 'Bearer':'token'})
 };
+
 
 const getGroups = "api/group/findAll"
 const addGroup = "/api/group/createGroup"
@@ -25,6 +30,7 @@ const getchildren= "/api/children/findByGroupId"
 const updateChild = "/api/children/update"
 const addChild = "/api/children/register"
 const getChildById= "/api/children/findById"
+const upload = "/api/children/upload"
 
 const timesheets = "api/timesheet/findAll"
 const getGroupByType = "/api/group/findByGroupTypeId"
@@ -90,6 +96,13 @@ export class MainService {
   return this.http.put<children>( `${updateChild}/${Record.id}`,Record, httpOptions); 
   }  
 
+  uploadChildren(id,formData): Observable<any>{
+    return this.http.post(`${upload}/${id}`, formData, {
+    reportProgress: true,
+    observe: 'events'
+  });
+  }
+
                                /* For timesheets */
 
   getTimesheets(){
@@ -131,17 +144,11 @@ export class MainService {
   addcause(Record: causes): Observable<any>{
     return this.http.put<causes>( `${addCause}/${Record.id}`,Record, httpOptions); 
     }  
+    
 
-  downloadTimesheet(id, month){
-    return this.http.get(`${downloadTimesheets}/${id}/${month}`,{
-      responseType: 'arraybuffer'} 
-     ).subscribe(response => this.downLoadFile(response, "application/ms-excel"));
+  downloadTimesheet(id, month2){
+    return this.http.get(`${downloadTimesheets}/${id}/${month2}`,{ responseType: 'blob' })
   }
-  downLoadFile(response: ArrayBuffer, arg1: string): void {
-    throw new Error('Method not implemented.');
-  }
-
-
 
 }
 

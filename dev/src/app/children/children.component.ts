@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MainService } from '../services/main.service';
 import { AuthService } from '../services/auth.service';
@@ -12,6 +12,9 @@ import { CreateChildrenComponent } from './create-children/create-children.compo
 import { MatDialog } from '@angular/material/dialog';
 import { ViewChildrenComponent } from './view-children/view-children.component';
 
+export interface file {
+  file: string;
+}
 
 export interface children {
   id: number;
@@ -192,8 +195,24 @@ export class ChildrenComponent implements OnInit {
    }
  }
 
-  importChildren(){
+ @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;
+    files  = [];
 
+  f: file;
+  importChildren(file){
+    const id = +this.route.snapshot.paramMap.get('id');
+    const formData = new FormData();
+    formData.append('file', file.xlxs);
+    file.inProgress = true;
+    this.MainService.uploadChildren(id,formData).subscribe((event: any) => {
+        if (typeof (event) === 'object') {
+          console.log(event.body);
+        }
+      });
+    /*this.MainService.uploadChildren(id,this.f).subscribe(results=>
+      {
+        this.f = results;
+      });*/
   }
 
   onNoClick(): void {}

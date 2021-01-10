@@ -12,12 +12,10 @@ import { DiaologPayComponent } from '../diaolog-pay/diaolog-pay.component';
 import * as moment from 'moment';
 import { saveAs } from 'file-saver';
 
-
 interface Month {
   value: number;
   viewValue: string;
 }
-
 export interface causes {
   id: number;
   causes:[

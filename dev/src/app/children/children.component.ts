@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CreateChildrenComponent } from './create-children/create-children.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewChildrenComponent } from './view-children/view-children.component';
+import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 export interface file {
   file: string;
@@ -105,12 +107,37 @@ export class ChildrenComponent implements OnInit {
     private MainService: MainService,
     private route: ActivatedRoute,
     public Auth: AuthService,
+     private http: HttpClient,
     private location: Location,
-    public dialog: MatDialog) 
+    public dialog: MatDialog,
+    private formBuilder: FormBuilder) 
     {    }
 
   ngOnInit() {
    this.getchildren();
+    this.uploadForm = this.formBuilder.group({
+      file: ['']
+    });
+  }
+
+  uploadForm: FormGroup;  
+  isShow: boolean = true;
+  
+  onFileSelectt(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.uploadForm.get('file').setValue(file);
+    }
+  }
+
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('file', this.uploadForm.get('file').value);
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.http.post<any>(`/api/children/upload/${id}`, formData).subscribe(
+      (res) => console.log(res),
+      (err) => console.log(err)
+    );
   }
 
   applyFilter(event: Event) {
@@ -179,6 +206,7 @@ export class ChildrenComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.getGroupTypeId();
+      console.log(results);
     });
   }
 
@@ -194,26 +222,6 @@ export class ChildrenComponent implements OnInit {
      }
    }
  }
-
- @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;
-    files  = [];
-
-  f: file;
-  importChildren(file){
-    const id = +this.route.snapshot.paramMap.get('id');
-    const formData = new FormData();
-    formData.append('file', file.xlxs);
-    file.inProgress = true;
-    this.MainService.uploadChildren(id,formData).subscribe((event: any) => {
-        if (typeof (event) === 'object') {
-          console.log(event.body);
-        }
-      });
-    /*this.MainService.uploadChildren(id,this.f).subscribe(results=>
-      {
-        this.f = results;
-      });*/
-  }
 
   onNoClick(): void {}
 

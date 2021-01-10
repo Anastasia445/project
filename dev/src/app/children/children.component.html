@@ -1,5 +1,5 @@
-<!--*ngIf="Auth.loggedIn()"-->
-<div class="createChildren" *ngIf="Auth.loggedIn()" >
+<!--*ngIf="Auth.loggedIn()"  *ngIf="!isImport"-->
+  <div class="createChildren" *ngIf="Auth.loggedIn()" >
     <button mat-raised-button (click)="addChild()" color="primary"  > <!--routerLink="/addChild"-->
       Добавить ребёнка
     </button>
@@ -8,9 +8,21 @@
       Назад
     </button>
     &nbsp; &nbsp; &nbsp;
-    <button *ngIf="!isImport" mat-raised-button color="primary" (click)="importChildren()">
-      Импортировать список детей
-   </button>
+    <button *ngIf="isShow" (click)="isShow=!isShow" mat-raised-button color="primary">
+      Загрузить список детей
+    </button>
+  </div>
+ 
+  <div class="createChildren" *ngIf="!isShow">
+    <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit()">      
+      <div>
+        <input type="file" name="profile" (change)="onFileSelectt($event)"/>
+      </div>
+      &nbsp; &nbsp; &nbsp;
+      <div>
+        <button mat-raised-button color="primary"  type="submit"> Загрузить список детей </button>
+      </div>
+    </form>
   </div>
   <br>
 

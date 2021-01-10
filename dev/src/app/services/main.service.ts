@@ -30,7 +30,7 @@ const getchildren= "/api/children/findByGroupId"
 const updateChild = "/api/children/update"
 const addChild = "/api/children/register"
 const getChildById= "/api/children/findById"
-const upload = "/api/children/upload"
+const downloadChildren = "/api/file/downloadC"
 
 const timesheets = "api/timesheet/findAll"
 const getGroupByType = "/api/group/findByGroupTypeId"
@@ -96,11 +96,8 @@ export class MainService {
   return this.http.put<children>( `${updateChild}/${Record.id}`,Record, httpOptions); 
   }  
 
-  uploadChildren(id,formData): Observable<any>{
-    return this.http.post(`${upload}/${id}`, formData, {
-    reportProgress: true,
-    observe: 'events'
-  });
+  downloadChildren(id){
+    return this.http.get(`${downloadChildren}/${id}`,{ responseType: 'blob' })
   }
 
                                /* For timesheets */

@@ -6,7 +6,7 @@
 <mat-form-field appearance="fill">
   <mat-label>Месяц:</mat-label>
   <mat-select [(ngModel)]="selectedValue" >
-    <mat-option *ngFor="let month of months" [value]="month.value" (click)="daysInMonth()">
+    <mat-option *ngFor="let month of months" [value]="month.value" (click)="daysInMonth()"  (click)="countAbsent()">
       {{month.viewValue}}
     </mat-option>
   </mat-select>
@@ -57,8 +57,8 @@
      </div>
       </ng-container> 
        <ng-template #default >
-         <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(1,element.id,true)" ></mat-checkbox>
-         <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(1,element.id,false)" ></mat-checkbox>
+         <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)" color="primary" title="уважительная причина" (click)="addAbsentGood(1,element.id,true)" ></mat-checkbox>
+         <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(1,element.id,false)" ></mat-checkbox>
        </ng-template> 
        </td>
    </ng-container>
@@ -74,15 +74,15 @@
         </div>
         <ng-template #goodAbsentNo>
           <div *ngIf="(element.cause[item.key].day == 2 && element.cause[item.key].causeBol == false && element.cause[item.key].month == this.selectedValue)" >
-            <mat-checkbox class="example-margin" [checked]="false" color="primary" (change)="radioChange3($event.checked,element)"  title="уважительная причина"></mat-checkbox>
+            <mat-checkbox class="example-margin" [checked]="false" color="primary" title="уважительная причина"></mat-checkbox>
             <mat-checkbox class="example-margin" [checked]="true" color="warn" title="неуважительная причина"> </mat-checkbox>
           </div>
          </ng-template>
       </div>
        </ng-container> 
         <ng-template #default >
-          <mat-checkbox [checked]="false" color="primary" title="уважительная причина"  (click)="addAbsentGood(2,element.id,true)" ></mat-checkbox>
-          <mat-checkbox [checked]="false" color="warn" title="неуважительная причина"  (click)="addAbsentGood(2,element.id,false)" ></mat-checkbox>
+          <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина"  (click)="addAbsentGood(2,element.id,true)" ></mat-checkbox>
+          <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина"  (click)="addAbsentGood(2,element.id,false)" ></mat-checkbox>
         </ng-template> 
      </td>
    </ng-container>
@@ -105,8 +105,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(3,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(3,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(3,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(3,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -129,8 +129,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(4,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(4,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(4,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(4,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
      </ng-container>
@@ -153,8 +153,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(5,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(5,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(5,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(5,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -177,8 +177,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(6,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(6,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(6,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(6,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -200,8 +200,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(7,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(7,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(7,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(7,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -223,8 +223,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(8,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(8,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(8,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(8,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -246,8 +246,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(9,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(9,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(9,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(9,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -269,8 +269,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(10,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(10,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(10,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(10,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -292,8 +292,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(11,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(11,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(11,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(11,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -315,8 +315,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(12,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(12,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(12,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(12,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -338,8 +338,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(13,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(13,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(13,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(13,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -361,8 +361,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(14,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(14,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(14,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(14,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -384,8 +384,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(15,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(15,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(15,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(15,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -407,8 +407,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(16,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(16,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(16,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(16,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -430,8 +430,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(17,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(17,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(17,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(17,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -453,8 +453,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(18,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(18,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(18,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(18,element.id,false)" ></mat-checkbox>
           </ng-template> 
       </td>
    </ng-container>
@@ -476,8 +476,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(19,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(19,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(19,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(19,element.id,false)" ></mat-checkbox>
           </ng-template> 
        </td>
    </ng-container>
@@ -499,8 +499,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(20,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(20,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(20,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(20,element.id,false)" ></mat-checkbox>
           </ng-template> 
         </td>
    </ng-container>
@@ -522,8 +522,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(21,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(21,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(21,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(21,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -545,8 +545,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(22,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(22,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(22,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(22,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -568,8 +568,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(23,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(23,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(23,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(23,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -591,8 +591,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(24,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(24,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(24,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(24,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -614,8 +614,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(25,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(25,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(25,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(25,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -637,8 +637,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(26,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(26,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(26,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(26,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -660,8 +660,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(27,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(27,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(27,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(27,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -683,8 +683,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(28,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(28,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(28,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(28,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -706,8 +706,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(29,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(29,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(29,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(29,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -729,8 +729,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(30,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" title="неуважительная причина" (click)="addAbsentGood(30,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(30,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" title="неуважительная причина" (click)="addAbsentGood(30,element.id,false)" ></mat-checkbox>
           </ng-template> 
      </td>
    </ng-container>
@@ -753,8 +753,8 @@
         </div>
          </ng-container> 
           <ng-template #default >
-            <mat-checkbox [checked]="false" color="primary" title="уважительная причина" (click)="addAbsentGood(31,element.id,true)" ></mat-checkbox>
-            <mat-checkbox [checked]="false" color="warn" (click)="countGoodAbsent(element.id)" title="неуважительная причина" (click)="addAbsentGood(31,element.id,false)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countGood($event.checked,element)"color="primary" title="уважительная причина" (click)="addAbsentGood(31,element.id,true)" ></mat-checkbox>
+            <mat-checkbox [checked]="false" (change)="countBad($event.checked,element)" color="warn" (click)="countGoodAbsent(element.id)" title="неуважительная причина" (click)="addAbsentGood(31,element.id,false)" ></mat-checkbox>
           </ng-template> 
     </td>
   </ng-container>
@@ -784,22 +784,22 @@
   <ng-container matColumnDef="col">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Пропуски</strong> </th>
     <td mat-cell *matCellDef="let element" class="title2" >  
-      <div *ngIf="pair[element.id] && pair2[element.id] > 0">
+      <div *ngIf="pair3[element.id] && pair4[element.id] > 0">
       <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair[element.id] + pair2[element.id]}}
+        <input matInput type="number" readonly>{{pair3[element.id] + pair4[element.id]}}
       </mat-form-field>
       </div>
-      <div *ngIf="(pair[element.id] > 0) && (pair2[element.id] === undefined || pair2[element.id] <=0)">
+      <div *ngIf="(pair3[element.id] > 0) && (pair4[element.id] === undefined || pair4[element.id] <=0)">
         <mat-form-field class="count">
-          <input matInput type="number" readonly>{{pair[element.id]}}
+          <input matInput type="number" readonly>{{pair3[element.id]}}
         </mat-form-field>
         </div>
-        <div *ngIf="(pair2[element.id] > 0) && (pair[element.id] === undefined || pair[element.id] <=0)">
+        <div *ngIf="(pair4[element.id] > 0) && (pair3[element.id] === undefined || pair3[element.id] <=0)">
           <mat-form-field class="count">
-            <input matInput type="number" readonly>{{pair2[element.id]}}
+            <input matInput type="number" readonly>{{pair4[element.id]}}
           </mat-form-field>
           </div>
-          <div *ngIf="(pair2[element.id]  === undefined) && (pair[element.id] === undefined )">
+          <div *ngIf="(pair4[element.id]  === undefined) && (pair3[element.id] === undefined )">
             <mat-form-field class="count">
               <input matInput type="number" readonly>
             </mat-form-field>
@@ -810,33 +810,17 @@
   <ng-container matColumnDef="good">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Ув причина</strong> </th>
     <td mat-cell *matCellDef="let element" class="title2">  
-    <!--  <ng-container *ngIf="sum(element,true,this.selectedValue) && element.cause.length > 0; else default"> 
-       <ng-container *ngFor="let  item of element.cause| keyvalue;let j = index; last as isLast">
-         <ng-container *ngIf="element.cause[item.key].causeBol == true &&
-          element.cause[item.key].month == selectedValue">
-             {{element.cause[item.key].day}}&nbsp;-&nbsp;{{j+1}}
-        </ng-container>
-       </ng-container>
-    </ng-container> -->
-
-  <ng-container *ngIf="element.cause.length > 0; else default"> 
-   <ng-container *ngFor="let item of element.cause;let i = index; last as isLast">
-     <div *ngIf=" item.causeBol == true && item.month == selectedValue">
-      <div> 
-         {{item.day}}&nbsp;-&nbsp;{{i+1}}
-      </div>
-       </div>
-   </ng-container>
-  </ng-container>
-
+      <mat-form-field class="count">
+        <input matInput type="number" readonly>{{pair3[element.id]}}
+      </mat-form-field>
      </td>
-  </ng-container><!-- {{pair[element.id]}} [value]="countGoodAbsent(element.id)" -->
+  </ng-container>
 
   <ng-container matColumnDef="bad">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Неув причина</strong> </th>
     <td mat-cell *matCellDef="let element" class="title2">
       <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair2[element.id]}}
+        <input matInput type="number" readonly>{{pair4[element.id]}}
       </mat-form-field>
      </td>
   </ng-container>
@@ -1615,49 +1599,47 @@
       </td>
     </ng-container>
 
-  <ng-container matColumnDef="col">
-    <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Пропуски</strong> </th>
-    <td mat-cell *matCellDef="let element" class="title2" >  
-      <div *ngIf="pair[element.id] && pair2[element.id] > 0">
-      <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair[element.id] + pair2[element.id]}}
-      </mat-form-field>
-      </div>
-      <div *ngIf="(pair[element.id] > 0) && (pair2[element.id] === undefined || pair2[element.id] <=0)">
-        <mat-form-field class="count">
-          <input matInput type="number" readonly>{{pair[element.id]}}
-        </mat-form-field>
-        </div>
-        <div *ngIf="(pair2[element.id] > 0) && (pair[element.id] === undefined || pair[element.id] <=0)">
-          <mat-form-field class="count">
-            <input matInput type="number" readonly>{{pair2[element.id]}}
-          </mat-form-field>
-          </div>
-          <div *ngIf="(pair2[element.id]  === undefined) && (pair[element.id] === undefined )">
-            <mat-form-field class="count">
-              <input matInput type="number" readonly>
-            </mat-form-field>
-          </div>
-     </td>
-  </ng-container>
-
-  <ng-container matColumnDef="good">
-    <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Ув причина</strong> </th>
-    <td mat-cell *matCellDef="let element" class="title2">
-      <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair[element.id]}}
-      </mat-form-field>
-     </td>
-  </ng-container>
-
-  <ng-container matColumnDef="bad">
-    <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Неув причина</strong> </th>
-    <td mat-cell *matCellDef="let element" class="title2">
-      <mat-form-field class="count">
-        <input matInput type="number" readonly>{{pair2[element.id]}}
-      </mat-form-field>
-     </td>
-  </ng-container>
+     <ng-container matColumnDef="col">
+   <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Пропуски</strong> </th>
+   <td mat-cell *matCellDef="let element" class="title2" >  
+     <div *ngIf="pair3[element.id] && pair4[element.id] > 0">
+     <mat-form-field class="count">
+       <input matInput type="number" readonly>{{pair3[element.id] + pair4[element.id]}}
+     </mat-form-field>
+     </div>
+     <div *ngIf="(pair3[element.id] > 0) && (pair4[element.id] === undefined || pair4[element.id] <=0)">
+       <mat-form-field class="count">
+         <input matInput type="number" readonly>{{pair3[element.id]}}
+       </mat-form-field>
+       </div>
+       <div *ngIf="(pair4[element.id] > 0) && (pair3[element.id] === undefined || pair3[element.id] <=0)">
+         <mat-form-field class="count">
+           <input matInput type="number" readonly>{{pair4[element.id]}}
+         </mat-form-field>
+         </div>
+         <div *ngIf="(pair4[element.id]  === undefined) && (pair3[element.id] === undefined )">
+           <mat-form-field class="count">
+             <input matInput type="number" readonly>
+           </mat-form-field>
+         </div>
+    </td>
+ </ng-container>
+ <ng-container matColumnDef="good">
+   <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Ув причина</strong> </th>
+   <td mat-cell *matCellDef="let element" class="title2">  
+     <mat-form-field class="count">
+       <input matInput type="number" readonly>{{pair3[element.id]}}
+     </mat-form-field>
+    </td>
+ </ng-container>
+ <ng-container matColumnDef="bad">
+   <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Неув причина</strong> </th>
+   <td mat-cell *matCellDef="let element" class="title2">
+     <mat-form-field class="count">
+       <input matInput type="number" readonly>{{pair4[element.id]}}
+     </mat-form-field>
+    </td>
+ </ng-container>
 
   <ng-container matColumnDef="comment">
     <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Комментарий</strong> </th>

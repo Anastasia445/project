@@ -30,6 +30,7 @@ import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.com
 import { StoreModule } from '@ngrx/store';
 import { DiaologCauseComponent } from './timesheets/diaolog-cause/diaolog-cause.component';
 import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +66,7 @@ import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.compon
       ReactiveFormsModule.withConfig({
         warnOnNgModelWithFormControl: 'never'
       }),
-      StoreModule.forRoot({}, {})
+      StoreModule.forRoot({}, {}),
   ],
   providers: [AuthGuard,
     { provide: MAT_DIALOG_DATA, useValue: {} },

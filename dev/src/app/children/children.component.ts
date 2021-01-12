@@ -134,9 +134,12 @@ export class ChildrenComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.uploadForm.get('file').value);
     const id = +this.route.snapshot.paramMap.get('id');
-    this.http.post<any>(`/api/children/upload/${id}`, formData).subscribe(
-      (res) => console.log(res),
-      (err) => console.log(err)
+    this.http.post<any>(`/api/children/upload/${id}`, formData).subscribe((t) => {
+      this.isLoading = true;
+      this.getchildren();
+      this.isShow = true;
+    },
+      (err) => console.log(err),
     );
   }
 
@@ -206,7 +209,7 @@ export class ChildrenComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.getGroupTypeId();
-      console.log(results);
+      //console.log(results);
     });
   }
 

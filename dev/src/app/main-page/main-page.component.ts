@@ -116,7 +116,7 @@ export class MainPageComponent implements OnInit {
        // id: this.id,
         start: this.start,
         end: this.end,
-        name: this.name,
+       // groupName: this.groupName,
         description: this.description,
       },
     });

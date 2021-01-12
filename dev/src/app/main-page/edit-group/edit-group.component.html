@@ -4,9 +4,9 @@
       <h2 class="element-size">Редактирование группы:</h2>
       <mat-form-field class="element-size">
         <mat-label for="search-box">Название группы</mat-label>
-        <input #name formControlName="name" matInput type="text" id="name" name="name"/>
+        <input #groupName formControlName="groupName" matInput type="text" id="groupName" name="groupName"/>
         <mat-hint
-          *ngIf="formGroups.get('name').invalid && formGroups.get('name').touched"
+          *ngIf="formGroups.get('groupName').invalid && formGroups.get('groupName').touched"
           >Поле Название группы не должно быть пустым</mat-hint>
       </mat-form-field>
       <br/>   

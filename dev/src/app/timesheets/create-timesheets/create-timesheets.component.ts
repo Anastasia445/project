@@ -67,7 +67,7 @@ export class CreateTimesheetsComponent implements OnInit {
     {value: 12, viewValue: 'Декабрь'}
   ];
   d = new Date();
-  selectedValue: number=this.d.getMonth()+1;
+  selectedValue: number=this.d.getMonth();
 
   month:any;
   year:any;
@@ -165,9 +165,8 @@ export class CreateTimesheetsComponent implements OnInit {
           badAbsent++;
         } 
       }) 
-    console.log("count",this.pair3[n.id]=goodAbsent)
-    console.log("count2",this.pair4[n.id]=badAbsent)
-   // this.counttAbsent2(n.cause.causeBol,n)
+   this.pair3[n.id]=goodAbsent
+   this.pair4[n.id]=badAbsent
     })
   }
  

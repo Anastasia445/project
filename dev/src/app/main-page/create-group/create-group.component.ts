@@ -50,14 +50,14 @@ export class CreateGroupComponent implements OnInit {
     const today = new Date();
     const year = today.getFullYear();
     this.formGroups = new FormGroup({
-      name: new FormControl(null, [Validators.required]),
+      groupName: new FormControl(null, [Validators.required]),
       start: new FormControl(new Date(year, 8, 1,23,59)),
       end: new FormControl(new Date(year+1, 4, 31,23,59)),
       groupssTypee: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
-      this.formGroups.get('name').setValue(this.data.item.name);
+      this.formGroups.get('groupName').setValue(this.data.item.groupName);
       this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee);
       this.formGroups.get('start').setValue(this.data.item.start);
       this.formGroups.get('end').setValue(this.data.item.end);

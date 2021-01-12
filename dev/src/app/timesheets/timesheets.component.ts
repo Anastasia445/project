@@ -90,6 +90,13 @@ export class TimesheetsComponent implements OnInit {
     });      
   }
 
+  deleteTimesheet(){
+    this.MainService.deleteTimesheet(this.timesheets[0].id).subscribe((t)=>{
+      this.isLoading = true,
+      this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'))
+    });
+  }
+
   onSelect(group){
     this.router.navigate(['/table', this.route.snapshot.paramMap.get('id')])
   }

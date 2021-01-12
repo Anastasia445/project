@@ -8,6 +8,10 @@
     <button mat-raised-button color="primary" *ngFor="let timesheet of timesheets" (click)="changeTimesheet(timesheet)"> 
       Изменить название табеля
     </button>
+    &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary" (click)="deleteTimesheet()" > 
+      Удалить табель
+    </button>
     <br>
     <br>
     </div>

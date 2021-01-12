@@ -43,6 +43,7 @@ const downloadTimesheets = "/api/file/downloadT"
 const goodAbsent="/api/children/countOfTrue"
 const badAbsent="/api/children/countOfFalse"
 const allAbsent="/api/children/AllGap"
+const deleteTimesheet = "/api/timesheet/delete"
 
 @Injectable({
   providedIn: 'root'
@@ -141,11 +142,15 @@ export class MainService {
   addcause(Record: causes): Observable<any>{
     return this.http.put<causes>( `${addCause}/${Record.id}`,Record, httpOptions); 
     }  
-    
 
   downloadTimesheet(id, month2){
     return this.http.get(`${downloadTimesheets}/${id}/${month2}`,{ responseType: 'blob' })
   }
+
+  deleteTimesheet(id) {
+    const url = `${deleteTimesheet}/${id}`;
+     return this.http.delete(url, httpOptions)
+   }
 
 }
 

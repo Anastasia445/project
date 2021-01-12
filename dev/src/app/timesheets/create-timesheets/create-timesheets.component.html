@@ -764,14 +764,13 @@
     <td mat-cell *matCellDef="let element">
       <br>
       <ng-container *ngIf="element.cause.length > 0; else default">
-        <mat-form-field class="cause">
+        
         <div *ngFor="let item of element.cause| keyvalue" >
-          <div *ngIf="element.cause[item.key].month == this.selectedValue">
-            <input type="text" matInput readonly>
-            {{element.cause[item.key].day}}&nbsp;-&nbsp;{{element.cause[item.key].cause}}
+          <div class="cause" *ngIf="element.cause[item.key].month == this.selectedValue">
+            &nbsp;&nbsp;&nbsp;{{element.cause[item.key].day}}&nbsp;-&nbsp;{{element.cause[item.key].cause}}&nbsp;&nbsp;&nbsp;
+        
           </div>
-        </div>
-      </mat-form-field>
+        </div> 
     </ng-container>
     <ng-template #default>
       <mat-form-field class="cause">

@@ -52,8 +52,10 @@ export class MainPageComponent implements OnInit {
     private route: ActivatedRoute) {
     }
 
+    roles: string;
   ngOnInit(): void {
     this.getGroups();
+    this.roles = this.getRole('roles');
   }
 
   openDialog() {
@@ -135,6 +137,10 @@ export class MainPageComponent implements OnInit {
         });     
     }           
     });      
+  }
+
+  getRole(roles: string): string{
+    return localStorage.getItem(roles);
   }
   
   records2: children[];

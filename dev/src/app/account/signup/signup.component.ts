@@ -79,6 +79,11 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  admin: boolean = false;
+  checkAdmin(){
+    this.admin = !this.admin;
+  }
+
   showSuccess() {
     this.router.navigate(['/login']);
   }
@@ -96,6 +101,16 @@ export class SignupComponent implements OnInit {
       this.showSuccess();
     }, error => this.showError()
     );
+  }
+
+  registerUser(){ 
+      this.Auth.signupEducator(this.signupUser)
+      .subscribe(result => {
+        localStorage.setItem('token', result.token)
+        localStorage.setItem('roles', result.roles)
+        this.showSuccess();
+      }, error => this.showError() 
+      )
   }
 
 }

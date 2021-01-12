@@ -1,4 +1,4 @@
-<!--*ngIf="Auth.loggedIn()"-->
+<!--*ngIf="Auth.loggedIn()"  *ngIf="roles==='ROLE_MODERATOR,ROLE_ADMIN' "-->
 <div class="createGroup" *ngIf="Auth.loggedIn()">
     <button (click)="addGroups()" mat-raised-button color="primary" >
       Создать группу

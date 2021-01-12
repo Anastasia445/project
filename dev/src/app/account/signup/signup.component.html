@@ -13,6 +13,7 @@
 <div class="form" *ngIf="isReady">
 <mat-card  class="signup"> 
     <mat-card-title>Регистрация:</mat-card-title>
+    <br>
        <mat-form-field class="full-width">
               <mat-label>Фамилия</mat-label>
               <input  matInput [(ngModel)]="signupUser.lastName" placeholder="Ivanov" [errorStateMatcher]="matcher"
@@ -84,14 +85,23 @@
               Пароль должен состоять из 6 и более символов
             </mat-error>
           </mat-form-field>
-           <br><br>
-      <button
+           <div class="example-section1">
+            <mat-checkbox  color="primary" class="example-margin1" (click)="checkAdmin()">Администратор</mat-checkbox>
+          </div>
+      <button *ngIf="admin"
         class="ok"
         mat-raised-button color="primary"
         type="button"
         (click)="register()">
         Сохранить
       </button> 
+      <button *ngIf="!admin"
+        class="ok"
+        mat-raised-button color="primary"
+        type="button"
+        (click)="registerUser()">
+        Сохранить
+    </button> 
       <a class="login"  routerLink="/login">Перейти на страницу входа</a>
 <!-- </form> -->
 </mat-card>

@@ -3,6 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 
 const register = '/api/auth/register';
+const registerUser = '/api/educator/register';
 const login = '/api/auth/login';
 
 
@@ -16,6 +17,10 @@ export class AuthService {
   
   signupUser(user) {
     return this.http.post<any>(register, user) 
+  }
+
+  signupEducator(user) {
+    return this.http.post<any>(registerUser, user) 
   }
   
   login(user){

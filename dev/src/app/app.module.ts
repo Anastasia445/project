@@ -30,6 +30,10 @@ import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.com
 import { StoreModule } from '@ngrx/store';
 import { DiaologCauseComponent } from './timesheets/diaolog-cause/diaolog-cause.component';
 import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.component';
+import { TableAttendingComponent } from './timesheets/table-attending/table-attending.component';
+import { PlansComponent } from './plans/plans.component';
+import { CreatePlansComponent } from './plans/create-plans/create-plans.component';
+import { EditPlansComponent } from './plans/edit-plans/edit-plans.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,11 @@ import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.compon
     DetailsComponent,
     ChooseGroupComponent,
     DiaologCauseComponent,
-    DiaologPayComponent
+    DiaologPayComponent,
+    TableAttendingComponent,
+    PlansComponent,
+    CreatePlansComponent,
+    EditPlansComponent
   ],
   entryComponents: [CreateGroupComponent],
   imports: [
@@ -67,6 +75,7 @@ import { DiaologPayComponent } from './timesheets/diaolog-pay/diaolog-pay.compon
         warnOnNgModelWithFormControl: 'never'
       }),
       StoreModule.forRoot({}, {}),
+      
   ],
   providers: [AuthGuard,
     { provide: MAT_DIALOG_DATA, useValue: {} },

@@ -1,0 +1,41 @@
+  
+  *{
+    outline:none;
+  }
+  .spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    margin: 20%;
+  }
+  .createPlan {
+    padding: 20px 0 0 10px;
+   }  
+   .form {
+    padding: 5% 0 0 30%;
+  }
+ /*.plans{
+    max-width: 280px;
+    border-radius: 15px;
+  }*/
+  .plans {
+    padding: 20px 0 0 10px;
+   }
+   table {
+    width: 100%;
+  }
+  .groups {
+    padding: 40px 0 0 30px;
+   }
+  .tableUser{
+    width: 50%;
+    margin: 30px 0 0 40px;
+  }
+  .datePicker{
+    padding: 20px 0 0 20px;
+  }
+  .tableModerator{
+    width: 35%;
+    margin: 30px 0 0 40px;
+  }

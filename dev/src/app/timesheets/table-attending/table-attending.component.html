@@ -1,0 +1,97 @@
+
+  <div *ngIf="!isLoading" class="groups">
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Назад
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading"  class="groups" >
+    <div class="datePicker">
+    <h3>Выберите месяц:</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Месяц:</mat-label>
+      <mat-select [(ngModel)]="selectedValue" >
+        <mat-option *ngFor="let month of months" [value]="month.value" (click)="findMonth()" (click)="daysInMonth()"  (click)="countAbsent()">
+          {{month.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+ <!--<br>
+  <div>
+      <h2>Количество детей в группе:&nbsp;{{child.length}}</h2> 
+  </div>-->
+  </div>
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+
+  <div *ngIf="visiable" class="mat-elevation-z8 tableChildren">
+  
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="FIO">
+        <th mat-header-cell *matHeaderCellDef > <strong>ФИО</strong> </th>
+        <td mat-cell *matCellDef="let element">  {{element.lastName}}&nbsp;{{element.firstName}}&nbsp;{{element.patronymic}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="visits">
+        <th mat-header-cell *matHeaderCellDef > <strong>Посещение(дни)</strong> </th>
+        <td mat-cell *matCellDef="let element"> {{ weekdays12 - (pair3[element.id] + pair4[element.id]) }} </td>
+    </ng-container>
+
+    
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef  class="title" > <strong>Пропуски</strong> </th>
+    <td mat-cell *matCellDef="let element" class="title2" >  
+      &nbsp;{{pair3[element.id] + pair4[element.id]}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="good">
+    <th mat-header-cell *matHeaderCellDef  > <strong>Ув причина</strong> </th>
+    <td mat-cell *matCellDef="let element">  
+      &nbsp;&nbsp;&nbsp;{{pair3[element.id]}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="bad">
+    <th mat-header-cell *matHeaderCellDef > <strong>Неув причина</strong> </th>
+    <td mat-cell *matCellDef="let element">
+      &nbsp;{{pair4[element.id]}} 
+    </td>
+  </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <div *ngIf="visiable" class="groups">
+
+    <table  class="mat-elevation-z8 tableKol" mat-table  [dataSource]="dataSource2">
+      <ng-container matColumnDef="visit">
+        <th mat-header-cell *matHeaderCellDef  > <strong>Посещяемость</strong> </th>
+        <td mat-cell *matCellDef="let element">  
+          &nbsp;&nbsp;&nbsp;{{(sumVisit / sumAlldays) * 100 | number: '1.2-2'}}%
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="kol">
+        <th mat-header-cell *matHeaderCellDef> <strong>Количество детей</strong> </th>
+        <td mat-cell *matCellDef="let element">  
+          &nbsp;&nbsp;&nbsp;{{child.length}}
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+    </table>
+    <br>
+  </div>

@@ -9,4 +9,5 @@ import { AuthService } from './services/auth.service'
 export class AppComponent {
   title = 'dev';
   constructor( public auth: AuthService){}
+
 }

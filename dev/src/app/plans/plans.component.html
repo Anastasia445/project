@@ -1,0 +1,92 @@
+
+
+  <div class="createPlan" *ngIf="!isLoading && this.roles ==='ROLE_MODERATOR'" >
+    <button routerLink="/createPlan" mat-raised-button color="primary" >
+      Создать новый план
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button *ngIf="isShow" (click)="isShow=!isShow" mat-raised-button color="primary">
+        Скачать план
+    </button>
+  </div>
+  <br>
+
+  <div *ngIf="!isLoading" >
+    <div *ngIf="!isShow" class="datePicker">
+    <h3>Выберите месяц:</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Месяц:</mat-label>
+      <mat-select [(ngModel)]="selectedValue" >
+        <mat-option *ngFor="let month of months" [value]="month.value" (click)="daysInMonth()" (click)="downloadPlan()">
+          {{month.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate"> 
+    </mat-progress-spinner>
+  </div>
+
+  <!--<div  *ngIf="!isLoading" class="form">
+    <mat-card class="plans">
+      <mat-card-title>Выберите группу:</mat-card-title>
+      <br>
+      <ng-container *ngFor="let plan of allplans">
+        <button mat-raised-button color="primary" class="buttons" (click)="onSelect(plan)">
+          {{plan.name}}&nbsp;
+        <mat-icon>event_note</mat-icon>
+        </button>
+      </ng-container>
+      <br>
+    </mat-card>
+  </div>-->
+
+  <div *ngIf="!isLoading && this.roles ==='ROLE_MODERATOR'" class="mat-elevation-z8 tableUser">
+    <div >
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> <strong>Название плана</strong> </th>
+        <td mat-cell *matCellDef="let element" routerLink="/viewPlan/{{element.id }}">  
+          {{element.name}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="removePlan(element)">
+            <span class="material-icons"> delete </span>
+          </button>
+        </td>
+      </ng-container> 
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <div *ngIf="!isLoading && (this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR') " class="mat-elevation-z8 tableModerator">
+    <div >
+    <table mat-table [dataSource]="dataSource2">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> <strong>Название плана</strong> </th>
+        <td mat-cell *matCellDef="let element" routerLink="/viewPlan/{{element.id }}">  
+          {{element.name}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+    </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+

@@ -23,10 +23,10 @@
       <br>   
       <mat-form-field class="element-size" appearance="fill">
         <mat-label>Учебный год</mat-label>
-        <mat-date-range-input [formGroup]="formGroups" [rangePicker]="picker" 
+        <mat-date-range-input [min]="minDate" [max]="maxDate2" [formGroup]="formGroups" [rangePicker]="picker"> 
         [comparisonStart]="formGroups.value.start"  [comparisonEnd]="formGroups.value.end">
-          <input #start matStartDate formControlName="start" placeholder="Start date" id="start" name="start">
-          <input #end matEndDate formControlName="end"  placeholder="End date" id="end" name="end">
+          <input #start matStartDate formControlName="start" placeholder="Начало года" id="start" name="start">
+          <input #end matEndDate formControlName="end"  placeholder="Конец года" id="end" name="end">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>

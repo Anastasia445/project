@@ -1,0 +1,40 @@
+table {
+    width: 100%;
+  }
+  .spinner{
+    margin: 10% 20% 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+  .count {
+    max-width: 40px;
+    /*text-align: center;*/
+    max-height: 5px;
+    padding: 0 3px 0 3px;
+  }
+  .tableChildren{  
+    width: 60%;
+    margin: 40px 0 0 30px;
+  }
+  .title {
+    padding: 0 0 0 10px;
+    text-align: center;
+  }
+  .title2 {
+    text-align: center;
+  }
+  .groups {
+    padding: 40px 0 0 30px;
+   }
+   .tableVisit{
+    width: 20%;
+    border-radius: 5px;
+    padding:22px 0 0 10px;
+  }
+  .tableKol{
+    width: 20%;
+    margin: 10px 0 0 10px;
+  }
+  

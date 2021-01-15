@@ -78,6 +78,10 @@ onlyOdds(d: Date): boolean {
   return date % 1 == 1;
 }
 
+  today = new Date();
+  minDate = new Date(this.today.getFullYear(), 0, 1);
+  maxDate2 = new Date(this.today.getFullYear()+1, 11, 31);
+
   onConfirm() {
     this.dialogRef.close(true);
   }

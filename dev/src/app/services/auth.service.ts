@@ -31,6 +31,7 @@ export class AuthService {
   logoutUser(){
     localStorage.removeItem('roles')
     localStorage.removeItem('token')
+    localStorage.removeItem('id')
     this.router.navigate(['/login'])
   }
 
@@ -39,7 +40,7 @@ export class AuthService {
   }
   
   loggedIn(){
-    return !!localStorage.getItem('token')    && !!localStorage.getItem('roles')
+    return !!localStorage.getItem('token') && !!localStorage.getItem('roles') && !!localStorage.getItem('id')
   }
   getRole() {
     this.roleAs = localStorage.getItem('roles');

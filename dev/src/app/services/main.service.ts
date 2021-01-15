@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import {children, file} from '../children/children.component'
 import {timesheet} from 'src/app/timesheets/timesheets.component'
 import { causes } from 'src/app/timesheets/create-timesheets/create-timesheets.component';
+import { plans } from '../plans/plans.component';
 
 const  httpC = {
   headers: new HttpHeaders({ 'Content-Type': 'tutorials.xlsx' })
@@ -44,6 +45,15 @@ const goodAbsent="/api/children/countOfTrue"
 const badAbsent="/api/children/countOfFalse"
 const allAbsent="/api/children/AllGap"
 const deleteTimesheet = "/api/timesheet/delete"
+const attending = "/api/children/attendance"
+
+const getPlanById = "/api/plans/findById"
+const getAllPlans = "/api/plans/findAll"
+const updatePlan = "/api/plans/update"
+const createPlan = "/api/plans/createPlan"
+const deletePlan = "/api/plans/delete"
+const downloadPlan = "/api/file/downloadPlans"
+const getPlanByEducatorid= "/api/plans/allEducPlans"
 
 @Injectable({
   providedIn: 'root'
@@ -151,6 +161,41 @@ export class MainService {
     const url = `${deleteTimesheet}/${id}`;
      return this.http.delete(url, httpOptions)
    }
+
+   getVisits(id, month){
+    return this.http.get(`${attending}/${id}/${month}`, httpOptions)
+  }
+             /*    API for plans     */
+
+  downloadPlan(id, month){
+    return this.http.get(`${downloadPlan}/${id}/${month}`,{ responseType: 'blob' })
+  }
+
+  getPlans(){
+    return this.http.get(getAllPlans)
+  }
+
+  getPlanById(id){
+    return this.http.get(`${getPlanById}/${id}`)
+  }
+
+  createPlan(record:plans):Observable<any>{
+    return this.http.post(`${createPlan}/${record.id}`, record)
+
+}  
+  
+  updatePlan(Record: plans): Observable<any>{
+  return this.http.put<plans>( `${updatePlan}/${Record.id}`,Record, httpOptions); 
+  }  
+
+  deletePlan(Record: plans) {
+    const url = `${deletePlan}/${Record.id}`;
+     return this.http.delete(url, httpOptions)
+  }
+
+  getPlanByEducatorId(id){
+    return this.http.get(`${getPlanByEducatorid}/${id}`)
+  }
 
 }
 

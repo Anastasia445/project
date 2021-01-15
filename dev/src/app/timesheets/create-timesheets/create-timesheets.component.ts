@@ -16,6 +16,7 @@ interface Month {
   value: number;
   viewValue: string;
 }
+
 export interface causes {
   id: number;
   causes:[
@@ -121,6 +122,13 @@ export class CreateTimesheetsComponent implements OnInit {
     this.getchildren(this.route.snapshot.paramMap.get('id'))
   }
   kolGoodAbsent: number = 0;
+
+  tableNumbers(){
+    const id = +this.route.snapshot.paramMap.get('id');
+    return id;
+  }
+   tableNumber = +this.route.snapshot.paramMap.get('id');
+
   getchildren(id): void {
   //  const id = +this.route.snapshot.paramMap.get('id');
     this.MainService.getchildren(id).subscribe(results=>

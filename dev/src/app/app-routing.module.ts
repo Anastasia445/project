@@ -13,6 +13,10 @@ import { CreateTimesheetsComponent } from './timesheets/create-timesheets/create
 import { TimesheetsComponent } from './timesheets/timesheets.component';
 import { ChooseGrouptypeComponent } from './timesheets/choose-grouptype/choose-grouptype.component';
 import { ChooseGroupComponent } from './timesheets/choose-group/choose-group.component';
+import { TableAttendingComponent } from './timesheets/table-attending/table-attending.component';
+import { PlansComponent } from './plans/plans.component';
+import { CreatePlansComponent } from './plans/create-plans/create-plans.component';
+import { EditPlansComponent } from './plans/edit-plans/edit-plans.component';
 
 
 const routes: Routes = [
@@ -23,9 +27,13 @@ const routes: Routes = [
   { path: 'groupType', component: ChooseGrouptypeComponent, canActivate: [AuthGuard] },
   { path: 'group/:id', component: ChooseGroupComponent, canActivate: [AuthGuard] },
   { path: 'timesheets/:id', component: TimesheetsComponent, canActivate: [AuthGuard] },
+  { path: 'tableVisit/:id', component: TableAttendingComponent, canActivate: [AuthGuard] },
   { path: 'children/:id', component: ChildrenComponent, canActivate: [AuthGuard]},
   { path: 'addChild', component: CreateChildrenComponent, canActivate: [AuthGuard]},
   { path: 'viewChild/:id', component: ViewChildrenComponent, canActivate: [AuthGuard]},
+  { path: 'plans', component: PlansComponent, canActivate: [AuthGuard] },
+  { path: 'createPlan', component: CreatePlansComponent, canActivate: [AuthGuard] },
+  { path: 'viewPlan/:id', component: EditPlansComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'sendEmail', component: SendEmailComponent},
   { path: 'signup', component: SignupComponent },

@@ -1,0 +1,46 @@
+
+  <div class="createPlan" *ngIf="!isLoading" >
+    <button mat-raised-button color="primary" >
+      Создать новый план
+    </button>
+  </div>
+  <br>
+
+  <div *ngIf="!isLoading" >
+    <div *ngIf="!isShow" class="datePicker">
+    <h3>Выберите месяц:</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Месяц:</mat-label>
+      <mat-select [(ngModel)]="selectedValue" >
+        <mat-option *ngFor="let month of months" [value]="month.value" (click)="daysInMonth()">
+          {{month.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+  </div>
+
+  <div>
+    <mat-form-field appearance="fill">
+        <mat-label>Input disabled</mat-label>
+        <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="myFilter" [matDatepicker]="dp3" disabled>
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+  </div>
+
+  <div class="createPlan" *ngIf="!isLoading" >
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Название группы</mat-label>
+      <input #name formControlName="name" matInput type="text" id="name" name="name"/>
+      <mat-hint *ngIf="formGroups.get('name').invalid && formGroups.get('name').touched"
+      >Поле Название группы не должно быть пустым</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate"> 
+    </mat-progress-spinner>
+  </div>

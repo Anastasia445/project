@@ -1,0 +1,17 @@
+  <div class="createPlan" *ngIf="!isLoading" >
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Назад
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button  mat-raised-button color="primary" >
+      Распечать план
+    </button>
+  </div>
+  <br>
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate"> 
+    </mat-progress-spinner>
+  </div>

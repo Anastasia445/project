@@ -12,7 +12,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { plans } from '../plans.component';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
+import { Location } from '@angular/common';
 interface Month {
   value: number;
   viewValue: string;
@@ -29,20 +29,25 @@ interface Month {
 })
 export class CreatePlansComponent implements OnInit {
 
-  dataSource: any;
-  displayedColumns: string[] = ['name', 'details'];
-  dataSource2: any;
+  dataSource = [{}];
+  formGroups: FormGroup;
+  displayedColumns: string[] = ['subject', 'day1','day2','day3','day4','day5'];
   records: plans[];
-  displayedColumns2: string[] = ['name'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
-  isLoading = true;
+  isLoading = false;
   allplans: any;
   [x: string]: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   getMonth: boolean;
   isShow: boolean = true;
+  week: any;
+  chouseDate:any;
+  chouseDate2:any;
+  chouseDate3:any;
+  chouseDate4:any;
+  chouseDate5:any;
 
   months: Month[] = [
     {value: 1, viewValue: 'Январь'},
@@ -76,11 +81,12 @@ export class CreatePlansComponent implements OnInit {
   constructor(public Auth: AuthService,
     private MainService: MainService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private location: Location) {
     }
 
     myFilter = (d: any): boolean => {
-      const day = d.weekday();
+      const day = d.weekday(); 
       return day !== 0 && day !== 2 && day !== 3 && day !== 4 && day !== 5 && day !== 6;
     }
   
@@ -90,31 +96,62 @@ export class CreatePlansComponent implements OnInit {
   roles: string;
   id: string;
   ngOnInit(): void {
+    this.roles = this.getRole('roles');
     this.id = this.getId('id');
-    this.formGroups;
-    this.addSubjects();
+    this.formGroups = new FormGroup({
+      // id: new FormControl(this.id),
+       name: new FormControl(null, [Validators.required]),
+       days: new FormArray([
+         new FormGroup({
+           day: new FormControl(),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl(),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl(),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl(),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl(),
+           plans: new FormControl('')
+         })
+       ]),
+       subjects: new FormArray([
+         new FormGroup({
+           name: new FormControl(''),
+         })
+       ])
+     });
+  
+   /* this.addSubjects();
     this.addDays();
     this.addDays();
     this.addDays();
     this.addDays();
-    this.addDays();
+    this.addDays();*/
     
+
+  
+    // days = this.formGroups.get('days') as FormArray;
+ // subjects = this.formGroups.get('relatives') as FormArray;
   }
 
   getId(number: string): string{
     return localStorage.getItem(number);
   }
 
-  formGroups = new FormGroup({
-   // id: new FormControl(this.id),
-    name: new FormControl(null, [Validators.required]),
-    days: new FormArray([]),
-    subjects: new FormArray([])
-  });
-  days = this.formGroups.get('days') as FormArray;
-  subjects = this.formGroups.get('relatives') as FormArray;
+  getRole(roles: string): string{
+    return localStorage.getItem(roles);
+  }
   
-  addDays(){
+  /*addDays(){
     const control = new FormGroup({
       day: new FormControl(''),
       plans: new FormControl(''),
@@ -126,20 +163,65 @@ export class CreatePlansComponent implements OnInit {
     const control = new FormGroup({
       name: new FormControl(''),
     })
-   // this.subjects.push(control);
-  }  
+    this.subjects.push(control);
+  }  */
 
   createPlan(){
-    this.MainService.createPlan(this.group).subscribe((result2) => {
-      this.isLoading = true;
-      this.records.push(result2);
-      });
+  
   }
-
-   group: any;
+  
+  t: plans[];
+  group: any;
   onSubmitGroups(){
     this.formGroups.getRawValue();
-    this.group = this.formGroups.value;
+    const group = this.formGroups.value;
+    this.MainService.createPlan(group,this.id).subscribe((result2) => {
+      this.goBack();
+    });
+  }
+ 
+  chouseWeek(){
+    this.isShow = false;
+    this.chouseDate = new Date(this.week._i.year,this.week._i.month,this.week._i.date);
+    this.chouseDate2 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+1);
+    this.chouseDate3 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+2);
+    this.chouseDate4 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+3);
+    this.chouseDate5 = new Date(this.week._i.year,this.week._i.month,this.week._i.date + 4);
+    this.formGroups = new FormGroup({
+      // id: new FormControl(this.id),
+       name: new FormControl(null, [Validators.required]),
+       days: new FormArray([
+         new FormGroup({
+           day: new FormControl(this.chouseDate),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl( this.chouseDate2),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl( this.chouseDate3),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl( this.chouseDate4),
+           plans: new FormControl('')
+         }),
+         new FormGroup({
+           day: new FormControl( this.chouseDate5),
+           plans: new FormControl('')
+         })
+       ]),
+       subjects: new FormArray([
+         new FormGroup({
+           name: new FormControl(''),
+         })
+       ])
+     });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

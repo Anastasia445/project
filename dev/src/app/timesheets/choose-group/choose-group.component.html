@@ -1,15 +1,15 @@
 
+<div *ngIf="isLoading" class="spinner">
+  <mat-progress-spinner 
+    color="primary" 
+    mode="indeterminate"> 
+  </mat-progress-spinner>
+</div>
+
  <div *ngIf="!isLoading" class="groups">
   <button mat-raised-button color="primary" (click)="goBack()">
     Назад
   </button>
-  </div>
-
-  <div *ngIf="isLoading" class="spinner">
-    <mat-progress-spinner 
-      color="primary" 
-      mode="indeterminate">
-    </mat-progress-spinner>
   </div>
 
  <div  *ngIf="!isLoading" class="form">

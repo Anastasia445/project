@@ -1,4 +1,11 @@
 
+<div *ngIf="isLoading" class="spinner">
+  <mat-progress-spinner 
+    color="primary" 
+    mode="indeterminate"> 
+  </mat-progress-spinner>
+</div>
+
   <div *ngIf="!isLoading" class="groups">
     <button mat-raised-button color="primary" (click)="goBack()">
       Назад
@@ -21,13 +28,6 @@
   <div>
       <h2>Количество детей в группе:&nbsp;{{child.length}}</h2> 
   </div>-->
-  </div>
-
-  <div *ngIf="isLoading" class="spinner">
-    <mat-progress-spinner 
-      color="primary" 
-      mode="indeterminate">
-    </mat-progress-spinner>
   </div>
 
   <div *ngIf="visiable" class="mat-elevation-z8 tableChildren">

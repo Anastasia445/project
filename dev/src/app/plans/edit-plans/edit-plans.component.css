@@ -1,0 +1,21 @@
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    margin: 20%;
+  }
+  .editPlan {
+    padding: 20px 0 0 30px;
+   }  
+   .datePicker{
+    padding: 20px 0 0 20px;
+  }
+  .tablePlan{
+    width: 95%;
+    margin: 30px 0 0 30px;
+  }
+  .example-full-width{
+    margin: 10px;
+    width: 200px;
+  }

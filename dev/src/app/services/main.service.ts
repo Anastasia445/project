@@ -179,10 +179,15 @@ export class MainService {
     return this.http.get(`${getPlanById}/${id}`)
   }
 
-  createPlan(record:plans):Observable<any>{
-    return this.http.post(`${createPlan}/${record.id}`, record)
+  createPlan(record:plans,id):Observable<any>{
+    return this.http.post(`${createPlan}/${id}`, record)
 
 }  
+
+/*createPlan(record,id):Observable<any>{
+  return this.http.post(`${createPlan}/${id}`, record)
+
+} */
   
   updatePlan(Record: plans): Observable<any>{
   return this.http.put<plans>( `${updatePlan}/${Record.id}`,Record, httpOptions); 

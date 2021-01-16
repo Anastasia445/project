@@ -123,6 +123,13 @@ export class CreateTimesheetsComponent implements OnInit {
   }
   kolGoodAbsent: number = 0;
 
+  updateTableAbsent(){
+    const date = this.selectedValue;
+    this.isLoading = false;
+    this.getchildren(this.route.snapshot.paramMap.get('id'));
+    this.selectedValue = date;
+  }
+
   tableNumbers(){
     const id = +this.route.snapshot.paramMap.get('id');
     return id;

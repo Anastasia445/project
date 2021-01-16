@@ -2,7 +2,7 @@ table {
     width: 100%;
   }
   .spinner{
-    margin: 10% 20% 0 0;
+    margin: 15%;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,46 +1,108 @@
 
-  <div class="createPlan" *ngIf="!isLoading" >
-    <button mat-raised-button color="primary" >
-      Создать новый план
-    </button>
-  </div>
-  <br>
-
-  <div *ngIf="!isLoading" >
-    <div *ngIf="!isShow" class="datePicker">
-    <h3>Выберите месяц:</h3>
-    <mat-form-field appearance="fill">
-      <mat-label>Месяц:</mat-label>
-      <mat-select [(ngModel)]="selectedValue" >
-        <mat-option *ngFor="let month of months" [value]="month.value" (click)="daysInMonth()">
-          {{month.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    </div>
-  </div>
-
-  <div>
-    <mat-form-field appearance="fill">
-        <mat-label>Input disabled</mat-label>
-        <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="myFilter" [matDatepicker]="dp3" disabled>
-        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-      </mat-form-field>
-  </div>
-
-  <div class="createPlan" *ngIf="!isLoading" >
-    <mat-form-field class="element-size2">
-      <mat-label for="search-box">Название группы</mat-label>
-      <input #name formControlName="name" matInput type="text" id="name" name="name"/>
-      <mat-hint *ngIf="formGroups.get('name').invalid && formGroups.get('name').touched"
-      >Поле Название группы не должно быть пустым</mat-hint>
-    </mat-form-field>
-  </div>
-
-  <div *ngIf="isLoading" class="spinner">
+  <!--<div *ngIf="isLoading" class="spinner">
     <mat-progress-spinner 
       color="primary" 
       mode="indeterminate"> 
     </mat-progress-spinner>
+  </div>-->
+
+  <!--<div class="createPlan">
+    <button mat-raised-button color="primary" >
+      Создать новый план
+    </button>
   </div>
+  <br>-->
+  
+  <div class="component">
+    <mat-form-field appearance="fill">
+        <mat-label>Выберите неделю:</mat-label>
+        <input matInput (dateChange)="chouseWeek()" [min]="minDate" [max]="maxDate" [(ngModel)]="week" [matDatepickerFilter]="myFilter" [matDatepicker]="dp3" disabled>
+        <mat-datepicker-toggle  matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker  #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+  </div>
+
+  <form [formGroup]="formGroups" (submit)="onSubmitGroups()">
+
+  <div *ngIf="!isShow" class="component">
+    <mat-form-field class="example-full-width">
+      <mat-label>Название плана:</mat-label>
+      <input #name formControlName="name" matInput type="text">
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="!isShow" class="mat-elevation-z8 tablePlan">
+    <table mat-table [dataSource]="dataSource">
+      
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> <strong>Предмет</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="subjects">  
+          <mat-form-field  [formGroupName]="0" class="example-full-width" >
+            <input matInput #name formControlName="name">
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="day1">
+        <th mat-header-cell *matHeaderCellDef> <strong>Понедельник({{ chouseDate | date:'dd-MM-yyyy' }})</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="days">  
+          <mat-form-field  [formGroupName]="0"  class="example-full-width">
+            <mat-label>Планы:</mat-label>
+            <textarea matInput #plans formControlName="plans"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="day2">
+        <th mat-header-cell *matHeaderCellDef> <strong>Вторник({{ chouseDate2 | date:'dd-MM-yyyy' }})</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="days">  
+          <mat-form-field class="example-full-width" [formGroupName]="1">
+            <mat-label>Планы:</mat-label>
+            <textarea matInput #plans formControlName="plans"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="day3">
+        <th mat-header-cell *matHeaderCellDef> <strong>Среда({{ chouseDate3 | date:'dd-MM-yyyy' }})</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="days">  
+          <mat-form-field class="example-full-width"  [formGroupName]="2">
+            <mat-label>Планы:</mat-label>
+            <textarea matInput #plans formControlName="plans"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="day4">
+        <th mat-header-cell *matHeaderCellDef> <strong>Четверг({{ chouseDate4 | date:'dd-MM-yyyy' }})</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="days">  
+          <mat-form-field  [formGroupName]="3" class="example-full-width">
+            <mat-label>Планы:</mat-label>
+            <textarea matInput #plans formControlName="plans"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="day5">
+        <th mat-header-cell *matHeaderCellDef> <strong>Пятница({{ chouseDate5 | date:'dd-MM-yyyy' }})</strong> </th>
+        <td mat-cell *matCellDef="let element" formArrayName="days">  
+          <mat-form-field class="example-full-width"  [formGroupName]="4">
+            <mat-label>Планы:</mat-label>
+            <textarea matInput #plans formControlName="plans"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <br>
+</form>
+  <div class="component">
+    <button *ngIf="!isShow" mat-raised-button color="primary" (click)="onSubmitGroups()" >
+      Сохранить
+    </button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary" (click)="goBack()" >
+      Назад
+    </button>
+  </div>
+
+ 

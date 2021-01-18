@@ -4,9 +4,9 @@
       <span *ngIf="!auth.loggedIn()" >Войдите в систему </span>
         <span *ngIf="auth.loggedIn()">Детский сад </span>
       <span class="example-spacer"></span>
-<button mat-icon-button  aria-label="Example icon-button with heart icon" routerLink="/signup" *ngIf="!auth.loggedIn()" routerLinkActive="active">
+<!--<button mat-icon-button  aria-label="Example icon-button with heart icon" routerLink="/signup" *ngIf="!auth.loggedIn()" routerLinkActive="active">
   <mat-icon>assignment_ind</mat-icon>
-</button>
+</button>-->
 <button mat-icon-button  aria-label="Example icon-button with share icon" routerLink="/login" *ngIf="!auth.loggedIn()" routerLinkActive="active">
   <mat-icon>login</mat-icon>
 </button>

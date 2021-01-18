@@ -1,14 +1,14 @@
 <!--*ngIf="Auth.loggedIn()"  *ngIf="!isImport"-->
   <div class="createChildren" *ngIf="Auth.loggedIn()" >
-    <button mat-raised-button (click)="addChild()" color="primary"  > <!--routerLink="/addChild"-->
+    <button *ngIf="!isLoading" mat-raised-button (click)="addChild()" color="primary"  > <!--routerLink="/addChild"-->
       Добавить ребёнка
     </button>
     &nbsp; &nbsp; &nbsp;
-    <button mat-raised-button color="primary" (click)="goBack()">
+    <button *ngIf="!isLoading" mat-raised-button color="primary" (click)="goBack()">
       Назад
     </button>
     &nbsp; &nbsp; &nbsp;
-    <button *ngIf="isShow" (click)="isShow=!isShow" mat-raised-button color="primary">
+    <button *ngIf="isShow && !isLoading" (click)="isShow=!isShow" mat-raised-button color="primary">
       Загрузить список детей
     </button>
   </div>

@@ -54,7 +54,7 @@ export class TableAttendingComponent implements OnInit {
     {value: 12, viewValue: 'Декабрь'}
   ];
   d = new Date();
-  selectedValue: number=this.d.getMonth();
+  selectedValue: number=this.d.getMonth()+1;
 
   daysInMonth() {
     const today = new Date();
@@ -85,6 +85,9 @@ export class TableAttendingComponent implements OnInit {
   ngOnInit(): void {
    this.getchildren(this.route.snapshot.paramMap.get('id'));
   //  this.roles = this.getRole('roles');
+  this.daysInMonth();
+  this.findMonth();
+
   }
 
   kolGoodAbsent: number = 0;
@@ -114,6 +117,7 @@ export class TableAttendingComponent implements OnInit {
     this.pair4[n.id]=badAbsent
    // this.counttAbsent2(n.cause.causeBol,n)
     })
+    this.countAbsent();
   }
   )}
   
@@ -160,7 +164,7 @@ export class TableAttendingComponent implements OnInit {
     this.sumVisit += this.weekdays12 - (goodAbsent + badAbsent);
   })
     this.sumAlldays = this.weekdays12 * this.child.length;
-    this.visiable = true;
+   // this.visiable = true;
   }
 
   visits: any;

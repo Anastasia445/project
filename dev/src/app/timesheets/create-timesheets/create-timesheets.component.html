@@ -22,7 +22,7 @@
 
 <div *ngIf="!oldMonth &&  this.child.length > 0">
 
-  <div  *ngIf="getMonth" class="download">
+  <div  *ngIf="!isLoading" class="download">
     <button mat-raised-button color="primary" (click)="downloadTimesheet()">
       Скачать табель
     </button>
@@ -36,7 +36,7 @@
     </button>
  </div>
 
-   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="getMonth">
+   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!isLoading">
      <!-- FIO column this.child[0]-->
     <ng-container matColumnDef="FIO">
         <th class="n" mat-header-cell *matHeaderCellDef > <strong>ФИО</strong> </th>

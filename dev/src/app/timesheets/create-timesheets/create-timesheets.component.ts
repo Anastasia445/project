@@ -68,7 +68,7 @@ export class CreateTimesheetsComponent implements OnInit {
     {value: 12, viewValue: 'Декабрь'}
   ];
   d = new Date();
-  selectedValue: number=this.d.getMonth();
+  selectedValue:any = this.d.getMonth()+1;
 
   month:any;
   year:any;
@@ -120,6 +120,8 @@ export class CreateTimesheetsComponent implements OnInit {
     
   ngOnInit() {
     this.getchildren(this.route.snapshot.paramMap.get('id'))
+    this.daysInMonth();
+   // this.getMonth = true;
   }
   kolGoodAbsent: number = 0;
 
@@ -144,7 +146,7 @@ export class CreateTimesheetsComponent implements OnInit {
       this.child = results;
       this.dataSource = new MatTableDataSource(this.child);
       this.getMonth = false;
- 
+     
       this.child.forEach(n=>{
 
       let goodAbsent = 0;

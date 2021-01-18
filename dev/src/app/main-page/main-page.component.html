@@ -1,6 +1,6 @@
 <!--*ngIf="Auth.loggedIn()"  *ngIf="roles==='ROLE_MODERATOR,ROLE_ADMIN' "-->
 <div class="createGroup" *ngIf="Auth.loggedIn()">
-    <button (click)="addGroups()" mat-raised-button color="primary" >
+    <button *ngIf="!isLoading" (click)="addGroups()" mat-raised-button color="primary" >
       Создать группу
     </button>
     &nbsp;&nbsp;&nbsp;
@@ -18,7 +18,7 @@
     </mat-progress-spinner>
   </div>
 
-  <div class="mat-elevation-z8 tableGroup">
+  <div  *ngIf="!isLoading" class="mat-elevation-z8 tableGroup">
   <div  *ngIf="!isLoading" >
   <table  mat-table [dataSource]="dataSource" matSort>
 

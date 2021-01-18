@@ -30,7 +30,7 @@
   </div>-->
   </div>
 
-  <div *ngIf="visiable" class="mat-elevation-z8 tableChildren">
+  <div *ngIf="!isLoading" class="mat-elevation-z8 tableChildren">
   
   <table mat-table [dataSource]="dataSource">
 
@@ -73,7 +73,7 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <div *ngIf="visiable" class="groups">
+  <div *ngIf="!isLoading" class="groups">
 
     <table  class="mat-elevation-z8 tableKol" mat-table  [dataSource]="dataSource2">
       <ng-container matColumnDef="visit">

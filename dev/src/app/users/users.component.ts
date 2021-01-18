@@ -107,13 +107,13 @@ export class UsersComponent implements OnInit {
       if (result) {
           this.MainService.updateUser(result.group).subscribe(data => { 
           this.isLoading = true;
-           const newvalue = data ? this.records.findIndex(h => h.id === data.id) : -1;
+           const newvalue = data ? this.allusers.findIndex(h => h.id === data.id) : -1;
           if (newvalue > -1) {
-            this.records[newvalue] = data;
+            this.allusers[newvalue] = data;
           }
-          this.dataSource = new MatTableDataSource(this.records);
+          this.dataSource = new MatTableDataSource(this.allusers);
           this.dataSource.paginator = this.paginator;
-          this.getPlan(); 
+          this.getusers(); 
         });     
     }           
     });      

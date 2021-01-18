@@ -25,4 +25,5 @@ export class AppComponent {
   getRole(roles: string): string{
     return localStorage.getItem(roles);
   }
+  
 }

@@ -41,6 +41,7 @@ export class EditUsersComponent implements OnInit {
       email: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
+      this.formGroups.get('id').setValue(this.data.item.id);
       this.formGroups.get('username').setValue(this.data.item.username);
       this.formGroups.get('firstName').setValue(this.data.item.firstName);
       this.formGroups.get('lastName').setValue(this.data.item.lastName);

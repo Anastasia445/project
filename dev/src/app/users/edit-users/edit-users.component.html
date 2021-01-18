@@ -1,0 +1,74 @@
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="formGroups" (submit)="onSubmitGroups()">
+  
+    <h1 class="element-size2">Редактирование пользователя:</h1>
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Фамилия</mat-label>
+      <input #firstName formControlName="firstName" matInput type="text" id="firstName" name="firstName"/>
+      <mat-hint
+        *ngIf="formGroups.get('firstName').invalid && formGroups.get('firstName').touched"
+        >Поле фамилия не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br>   
+
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Имя</mat-label>
+      <input #lastName formControlName="lastName" matInput type="text" id="lastName" name="lastName"/>
+      <mat-hint
+        *ngIf="formGroups.get('lastName').invalid && formGroups.get('lastName').touched"
+        >Поле имя не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br>   
+
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Отчество</mat-label>
+      <input #patronymic formControlName="patronymic" matInput type="text" id="patronymic" name="patronymic"/>
+      <mat-hint
+        *ngIf="formGroups.get('patronymic').invalid && formGroups.get('patronymic').touched"
+        >Поле отчество не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br> 
+
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">email</mat-label>
+      <input #email formControlName="email" matInput type="text" id="email" name="email"/>
+      <mat-hint
+        *ngIf="formGroups.get('email').invalid && formGroups.get('email').touched"
+        >Поле email не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br> 
+    
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Логин</mat-label>
+      <input #username formControlName="username" matInput type="text" id="username" name="username"/>
+      <mat-hint
+        *ngIf="formGroups.get('username').invalid && formGroups.get('username').touched"
+        >Поле логин не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br> 
+
+    <mat-form-field class="element-size2">
+      <mat-label for="search-box">Пароль</mat-label>
+      <input #password formControlName="password" matInput type="password" id="password" name="password"/>
+      <mat-hint
+        *ngIf="formGroups.get('password').invalid && formGroups.get('password').touched"
+        >Поле пароль не должно быть пустым</mat-hint>
+    </mat-form-field>
+    <br> 
+    <mat-dialog-actions class="send" align="end">
+    
+    <button 
+        mat-button
+        cdkFocusInitial
+        type="submit"
+        id="submitDetails"
+        name="submitDetails"
+        [disabled]="formGroups.invalid"
+      >
+        Сохранить
+      </button>
+      <button mat-button mat-dialog-close>Отмена</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

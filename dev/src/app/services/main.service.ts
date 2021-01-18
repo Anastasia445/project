@@ -8,6 +8,7 @@ import {children, file} from '../children/children.component'
 import {timesheet} from 'src/app/timesheets/timesheets.component'
 import { causes } from 'src/app/timesheets/create-timesheets/create-timesheets.component';
 import { plans } from '../plans/plans.component';
+import { users } from '../users/users.component';
 
 const  httpC = {
   headers: new HttpHeaders({ 'Content-Type': 'tutorials.xlsx' })
@@ -54,6 +55,10 @@ const createPlan = "/api/plans/createPlan"
 const deletePlan = "/api/plans/delete"
 const downloadPlan = "/api/file/downloadPlans"
 const getPlanByEducatorid= "/api/plans/allEducPlans"
+
+const getAllUsers="/api/educator/findAll"
+const updateUser="/api/auth/update"
+const deleteUser="/api/auth/delete"
 
 @Injectable({
   providedIn: 'root'
@@ -189,8 +194,8 @@ export class MainService {
 
 } */
   
-  updatePlan(Record: plans): Observable<any>{
-  return this.http.put<plans>( `${updatePlan}/${Record.id}`,Record, httpOptions); 
+  updatePlan(Record: plans): Observable<plans>{
+  return this.http.put<any>( `${updatePlan}/${Record.id}`,Record, httpOptions); 
   }  
 
   deletePlan(Record: plans) {
@@ -198,9 +203,23 @@ export class MainService {
      return this.http.delete(url, httpOptions)
   }
 
-  getPlanByEducatorId(id){
-    return this.http.get(`${getPlanByEducatorid}/${id}`)
+  getPlanByEducatorId(id): Observable<plans[]>{
+    return this.http.get<plans[]>(`${getPlanByEducatorid}/${id}`)
   }
 
+         /* API for Users */
+
+   updateUser(Record: users): Observable<users>{
+  return this.http.put<any>( `${updateUser}/${Record.id}`,Record, httpOptions); 
+  }  
+
+  deleteUser(Record: users) {
+    const url = `${deleteUser}/${Record.id}`;
+     return this.http.delete(url, httpOptions)
+  }
+
+  getAllUsers(): Observable<users[]>{
+    return this.http.get<users[]>(getAllUsers, httpOptions)
+  }
 }
 

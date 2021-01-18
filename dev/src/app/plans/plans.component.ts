@@ -8,6 +8,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+import { EditPlansComponent } from './edit-plans/edit-plans.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Month {
   value: number;
@@ -38,20 +40,21 @@ export interface plans {
 
 export class PlansComponent implements OnInit {
 
+  allplanss: plans[];
   dataSource: any;
   displayedColumns: string[] = ['name', 'details'];
   dataSource2: any;
-  displayedColumns2: string[] = ['name'];
+  displayedColumns2: string[] = ['login','FIO','name'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
   isLoading = true;
   allplans: any;
   [x: string]: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+ // @ViewChild(MatSort) sort: MatSort;
   getMonth: boolean;
   isShow: boolean = true;
-
+  
   months: Month[] = [
     {value: 1, viewValue: 'Январь'},
     {value: 2, viewValue: 'Февраль'},
@@ -84,12 +87,14 @@ export class PlansComponent implements OnInit {
   constructor(public Auth: AuthService,
     private MainService: MainService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    public dialog: MatDialog) {
     }
 
   roles: string;
   id: string;
   ngOnInit(): void {
+    
     this.roles = this.getRole('roles');
     this.id = this.getId('id');
     this.getPlan();
@@ -103,21 +108,30 @@ export class PlansComponent implements OnInit {
     return localStorage.getItem(roles);
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+ 
   getPlan(): void {
     if(this.roles ==='ROLE_MODERATOR'){
       this.MainService.getPlanByEducatorId(this.id).subscribe(results=>{
-        this.allplans = results;
-        this.dataSource = new MatTableDataSource(this.allplans);
-        this.dataSource.paginator = this.paginator;
         this.isLoading = false;
-        console.log(this.allplans);
+        this.allplanss = results;
+        this.dataSource = new MatTableDataSource(this.allplanss);
+        this.dataSource.paginator = this.paginator;
+        console.log('mod',this.allplanss);
       });
     } else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
         this.MainService.getPlans().subscribe(results=>{
-          this.allplans = results;
-          this.dataSource2 = new MatTableDataSource(this.allplans);
-          this.dataSource2.paginator = this.paginator;
           this.isLoading = false;
+          this.allplans = results;
+          this.dataSource = new MatTableDataSource(this.allplans);
+          this.dataSource.paginator = this.paginator;
+          console.log('admin',this.allplans);
         });
     }
   }
@@ -126,21 +140,12 @@ export class PlansComponent implements OnInit {
     this.router.navigate(['/viewPlan', plan.id])
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
   records: plans[];
   removePlan(Plan:plans): void { 
       this.isLoading = true;
-      this.dataSource.data.splice(this.allplans.indexOf(Plan), 1);
+      this.dataSource.data.splice(this.allplanss.indexOf(Plan), 1);
       this.dataSource = new MatTableDataSource(this.dataSource.data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
       this.MainService.deletePlan(Plan).subscribe();
       this.getPlan();
   }
@@ -156,6 +161,34 @@ export class PlansComponent implements OnInit {
         saveAs(file,`план-${moment(this.selectedDate).format('DD.MM.YYYY')}.docx`);
   })
   this.isShow = true;
+  }
+
+  changePlan(item): void{
+    const dialogRef = this.dialog.open(EditPlansComponent, {
+      disableClose: true, 
+      data: {
+        item,
+       // id: this.id
+      }
+    });
+  /*  position = {
+      top: "0",
+      left: '0'
+    };*/
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+          this.MainService.updatePlan(result.group).subscribe(data => { 
+          this.isLoading = true;
+           const newvalue = data ? this.records.findIndex(h => h.id === data.id) : -1;
+          if (newvalue > -1) {
+            this.records[newvalue] = data;
+          }
+          this.dataSource = new MatTableDataSource(this.records);
+          this.dataSource.paginator = this.paginator;
+          this.getPlan(); 
+        });     
+    }           
+    });      
   }
 
 }

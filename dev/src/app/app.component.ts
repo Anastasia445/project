@@ -10,4 +10,19 @@ export class AppComponent {
   title = 'dev';
   constructor( public auth: AuthService){}
 
+  roles: string;
+  id: string;
+  ngOnInit(): void {
+    
+    this.roles = this.getRole('roles');
+    this.id = this.getId('id');
+  }
+  
+  getId(number: string): string{
+    return localStorage.getItem(number);
+  }
+
+  getRole(roles: string): string{
+    return localStorage.getItem(roles);
+  }
 }

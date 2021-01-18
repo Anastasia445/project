@@ -80,6 +80,7 @@ export class MainPageComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.groups);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      console.log(this.groups);
   }
     );
   }

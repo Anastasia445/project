@@ -1,0 +1,41 @@
+.signup {
+    max-width: 400px;
+    border-radius: 15px;
+  }
+  .full-width {
+    width: 100%;
+  }
+  .example-full-width {
+    width: 100%;
+  }
+  .form {
+    padding: 3% 0 2% 35%;
+  }
+  .ok {
+    border-radius: 10px;
+  }
+  .login {
+    padding: 0 0 0 100px;
+  }
+  a{
+    text-decoration: none;
+  }
+  a:hover{
+    cursor: pointer;
+  }
+  .example-margin {
+    margin: 18% 0 0 40%;
+    background: white;
+    justify-content: center;
+    align-items: center;
+  }
+  .example-section1 {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  .example-margin1 {
+    margin: 0 10px;
+  }

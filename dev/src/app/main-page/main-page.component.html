@@ -3,6 +3,11 @@
     <button (click)="addGroups()" mat-raised-button color="primary" >
       Создать группу
     </button>
+    &nbsp;&nbsp;&nbsp;
+    <button *ngIf="this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'" mat-raised-button color="warn" routerLink="/users">
+      <mat-icon>group</mat-icon>
+      <span> Пользователи</span>
+    </button>
   </div>
   <br>
   

@@ -1,0 +1,35 @@
+.mat-dialog-content {
+    overflow-y: hidden !important;
+    min-height: 600px;
+   padding: 0 0 0 50px;
+    min-width: 340px;
+    text-size-adjust: 5em;
+  }
+  .example-month-picker .mat-calendar-period-button {
+    pointer-events: none;
+  }
+  
+  .example-month-picker .mat-calendar-arrow {
+    display: none;
+  }
+  .send{
+    padding: 0 20px 0 0;
+  }
+  .element-size {
+    max-width: 230px;
+    padding: 0 0 0 20px;
+  }
+  .element-size2 {
+    width: 240px;
+    padding: 0 0 0 20px;
+  }
+  .example-section1 {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+.example-margin1 {
+    /*margin: 0 10px;*/
+  }  

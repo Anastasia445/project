@@ -34,6 +34,9 @@ import { TableAttendingComponent } from './timesheets/table-attending/table-atte
 import { PlansComponent } from './plans/plans.component';
 import { CreatePlansComponent } from './plans/create-plans/create-plans.component';
 import { EditPlansComponent } from './plans/edit-plans/edit-plans.component';
+import { UsersComponent } from './users/users.component';
+import { CreateUsersComponent } from './users/create-users/create-users.component';
+import { EditUsersComponent } from './users/edit-users/edit-users.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { EditPlansComponent } from './plans/edit-plans/edit-plans.component';
     TableAttendingComponent,
     PlansComponent,
     CreatePlansComponent,
-    EditPlansComponent
+    EditPlansComponent,
+    UsersComponent,
+    CreateUsersComponent,
+    EditUsersComponent
   ],
   entryComponents: [CreateGroupComponent],
   imports: [

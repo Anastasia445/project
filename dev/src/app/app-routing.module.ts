@@ -17,6 +17,8 @@ import { TableAttendingComponent } from './timesheets/table-attending/table-atte
 import { PlansComponent } from './plans/plans.component';
 import { CreatePlansComponent } from './plans/create-plans/create-plans.component';
 import { EditPlansComponent } from './plans/edit-plans/edit-plans.component';
+import { UsersComponent } from './users/users.component';
+import { CreateUsersComponent } from './users/create-users/create-users.component';
 
 
 const routes: Routes = [
@@ -33,7 +35,9 @@ const routes: Routes = [
   { path: 'viewChild/:id', component: ViewChildrenComponent, canActivate: [AuthGuard]},
   { path: 'plans', component: PlansComponent, canActivate: [AuthGuard] },
   { path: 'createPlan', component: CreatePlansComponent, canActivate: [AuthGuard] },
-  { path: 'viewPlan/:id', component: EditPlansComponent, canActivate: [AuthGuard] },
+ // { path: 'viewPlan/:id', component: EditPlansComponent, canActivate: [AuthGuard] },
+ { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+ { path: 'createUsers', component: CreateUsersComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'sendEmail', component: SendEmailComponent},
   { path: 'signup', component: SignupComponent },

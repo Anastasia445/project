@@ -24,4 +24,16 @@
       </ng-container>
       <br>
     </mat-card>
+    <!--*ngIf="roles ==='ROLE_MODERATOR,ROLE_ADMIN' || roles ==='ROLE_ADMIN,ROLE_MODERATOR'" 
+      <mat-card  *ngIf="roles ==='ROLE_MODERATOR' " class="groups">
+      <mat-card-title>Выберите группу:</mat-card-title>
+      <br>
+      <ng-container class="timesheets" *ngFor="let record of records">
+        <button *ngIf="record.educator.id === id" mat-raised-button color="primary" class="buttons" (click)="onSelect(record)">
+          {{record.name}}&nbsp;
+        <mat-icon>group</mat-icon>
+        </button>
+      </ng-container>
+      <br>
+    </mat-card>-->
   </div>

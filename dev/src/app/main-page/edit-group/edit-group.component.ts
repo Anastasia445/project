@@ -29,6 +29,7 @@ export class EditGroupComponent implements OnInit {
 
   ngOnInit() {
     this.formGroups = new FormGroup({
+      educatorId: new FormControl(''),
       id: new FormControl(''),
       groupName: new FormControl(null, [Validators.required]),
       start: new FormControl(''),
@@ -37,6 +38,7 @@ export class EditGroupComponent implements OnInit {
       description: new FormControl(null, [Validators.required]),
     });
     if (this.data.item) {
+       this.formGroups.get('educatorId').setValue(this.data.item.educatorId);
       this.formGroups.get('groupName').setValue(this.data.item.name);
       this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee.id);
       this.formGroups.get('start').setValue(this.data.item.start);

@@ -24,3 +24,77 @@
       </ng-container>
     </mat-card>
   </div>
+  <!--
+      
+  <div *ngIf="isLoading" class="spinner">
+    <mat-progress-spinner 
+      color="primary" 
+      mode="indeterminate"> 
+    </mat-progress-spinner>
+  </div>
+
+<div *ngIf="this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'">
+  <div *ngIf="!isLoading" class="groups">
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Назад
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading" class="form">
+    <mat-card class="groupTypes">
+      <mat-card-title>Выберите тип группы:</mat-card-title>
+      <br>
+      <ng-container *ngFor="let typeGroup of type">
+        <button mat-raised-button color="primary" class="buttons" (click)="onSelect(typeGroup)">
+          {{typeGroup.name}}&nbsp;
+        <mat-icon>groups</mat-icon>
+        </button>
+      </ng-container>
+    </mat-card>
+  </div>
+</div>
+
+  <div *ngIf="this.roles ==='ROLE_MODERATOR'">
+    <div *ngIf="!isLoading" class="createTimesheets">
+      <button mat-raised-button color="primary" *ngIf="timesheets[0] == null" (click)="addTimesheets()"> 
+        Добавить табель
+      </button>
+      <div *ngIf="timesheets[0] != null">
+      <button mat-raised-button color="primary" *ngFor="let timesheet of timesheets" (click)="changeTimesheet(timesheet)"> 
+        Изменить название табеля
+      </button>
+      &nbsp;&nbsp;&nbsp;
+      <button mat-raised-button color="primary" (click)="deleteTimesheet()" > 
+        Удалить табель
+      </button>
+      <br>
+      <br>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+        <button mat-raised-button color="primary" (click)="goBack()">
+          Назад
+        </button>
+      </div>
+    <br>
+  
+    <div *ngIf="!isLoading" class="form">
+      <mat-card class="groups2">
+        <mat-card-title>Выберите табель:</mat-card-title>
+        <br>
+        <div class="timesheets">
+          <div *ngIf="timesheets[0] != null">
+          <button mat-raised-button color="primary"  *ngFor="let timesheet of timesheets" class="buttons2" (click)="onSelect2(timesheet)">
+            {{timesheet.name}}
+          <mat-icon>table_view</mat-icon>
+          </button>
+        </div>
+        <ng-container *ngIf="timesheets[0] == null">
+          <mat-card >
+            Для данной группы табель не создан.
+          </mat-card>
+        </ng-container>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  -->

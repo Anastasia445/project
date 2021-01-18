@@ -15,6 +15,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
 export interface group {
+  educatorId: number;
   id: number;
   name: string;
   start: Date;
@@ -36,7 +37,8 @@ export class MainPageComponent implements OnInit {
   //dataSource1 = new MatTableDataSource<group>(h);
   durationInSeconds = 3;
   dataSource: any;
-  displayedColumns: string[] = [/*'id',*/'name', 'date', 'description','details'];
+  displayedColumns: string[] = ['name', 'date', 'description','details'];
+  displayedColumns2: string[] = ['name', 'date', 'description'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
   isLoading = true;
@@ -52,19 +54,26 @@ export class MainPageComponent implements OnInit {
     private route: ActivatedRoute) {
     }
 
+    id: string;
     roles: string;
   ngOnInit(): void {
-    this.getGroups();
     this.roles = this.getRole('roles');
+    this.id = this.getId('id');
+    this.getGroups();
+    console.log(this.id);
   }
 
-  openDialog() {
+  getId(number: string): string{
+    return localStorage.getItem(number);
+  }
+
+  openDialog() { 
     this._snackBar.openFromComponent(DialogComponent, {
       duration: this.durationInSeconds * 1000,
     });
   }
 
-  applyFilter(event: Event) {
+   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -72,8 +81,27 @@ export class MainPageComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
+  record = [];
+groups2: group[];
   getGroups(): void {
+    if(this.roles ==='ROLE_MODERATOR'){
+    this.MainService./*getGroups*/getGroupForEduc(this.id).subscribe(results=>{
+      this.isLoading = false;
+     
+      this.groups2 = results;
+      this.record[0] = this.groups2;
+      this.dataSource = new MatTableDataSource(this.record);
+      console.log(this.record);
+    
+    /*  this.groups2 = results;
+      this.record[0] = this.groups2;
+      this.dataSource = new MatTableDataSource(this.groups2);*/
+    
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      //console.log(this.rec);
+  });
+  }else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
     this.MainService.getGroups().subscribe(results=>{
       this.isLoading = false;
       this.groups = results;
@@ -81,8 +109,8 @@ export class MainPageComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       console.log(this.groups);
+  });
   }
-    );
   }
   
   addGroups() : void {
@@ -94,6 +122,7 @@ export class MainPageComponent implements OnInit {
         end: this.end,
         groupssTypee: this.groupssTypee,    
         description: this.description,*/
+        educator: this.id
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -137,7 +166,7 @@ export class MainPageComponent implements OnInit {
           this.getGroups(); 
         });     
     }           
-    });      
+    });       
   }
 
   getRole(roles: string): string{
@@ -154,7 +183,7 @@ export class MainPageComponent implements OnInit {
       if(this.records2.length > 0){
         this.openDialog();
       } else{
-        //this.dataSource = this.records.filter(h => h !== Record);
+        //this.dataSource  = this.records.filter(h => h !== Record);
         this.dataSource.data.splice(this.groups.indexOf(Group), 1);
         this.dataSource = new MatTableDataSource(this.dataSource.data);
         this.dataSource.paginator = this.paginator;

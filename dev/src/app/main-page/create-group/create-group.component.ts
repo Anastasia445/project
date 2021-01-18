@@ -46,17 +46,35 @@ export class CreateGroupComponent implements OnInit {
   }
 
   groupControl = new FormControl('', Validators.required);
+
+  id: string;
+  roles: string;
   ngOnInit() {
+    this.roles = this.getRole('roles');
+    this.id = this.getId('id');
     const today = new Date();
     const year = today.getFullYear();
+    if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
     this.formGroups = new FormGroup({
       groupName: new FormControl(null, [Validators.required]),
+      educatorId: new FormControl(null, [Validators.required]),
       start: new FormControl(new Date(year, 8, 1,23,59)),
       end: new FormControl(new Date(year+1, 4, 31,23,59)),
       groupssTypee: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
+   }else if(this.roles ==='ROLE_MODERATOR'){
+    this.formGroups = new FormGroup({
+      groupName: new FormControl(null, [Validators.required]),
+      educatorId: new FormControl(this.id),
+      start: new FormControl(new Date(year, 8, 1,23,59)),
+      end: new FormControl(new Date(year+1, 4, 31,23,59)),
+      groupssTypee: new FormControl(null, [Validators.required]),
+      description: new FormControl(null, [Validators.required]),
+    });
+   }
     if (this.data.item) {
+      this.formGroups.get('educatorId').setValue(this.data.item.educatorId);
       this.formGroups.get('groupName').setValue(this.data.item.groupName);
       this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee);
       this.formGroups.get('start').setValue(this.data.item.start);
@@ -65,6 +83,13 @@ export class CreateGroupComponent implements OnInit {
     }
   }
   
+  getId(number: string): string{
+    return localStorage.getItem(number);
+  }
+
+  getRole(roles: string): string{
+    return localStorage.getItem(roles);
+  }
 public groupssTypee = [
     { groupssTypee: '1', group: 'Первая младшая' },
     { groupssTypee: '2', group: 'Вторая младшая' },

@@ -19,6 +19,15 @@
           >Поле Описание группы не должно быть пустым</mat-hint>
       </mat-form-field>
       <br />
+
+      <mat-form-field class="element-size">
+        <mat-label for="search-box">ID воспитателя</mat-label>
+        <input #educatorId formControlName="educatorId" matInput type="number" id="educatorId" name="educatorId"/>
+        <mat-hint
+          *ngIf="formGroups.get('educatorId').invalid && formGroups.get('educatorId').touched"
+          >Поле ID воспитателя не должно быть пустым</mat-hint>
+      </mat-form-field>
+      <br />
   
       <mat-dialog-actions align="end">
         <button

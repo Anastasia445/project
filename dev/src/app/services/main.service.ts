@@ -27,6 +27,7 @@ const getGroups = "api/group/findAll"
 const addGroup = "/api/group/createGroup"
 const deleteGroup = "/api/group/delete"
 const updateGroup= "/api/group/updateGroup"
+const getGroupForEducators= "/api/group/findByEduc"
 
 const getchildren= "/api/children/findByGroupId"
 const updateChild = "/api/children/update"
@@ -86,6 +87,11 @@ export class MainService {
   getGroup(id:number): Observable<group> {
     const url = `${getGroups}/${id}`;
     return this.http.get<group>(url);
+  }
+
+  getGroupForEduc(id): Observable<group[]> {
+    const url = `${getGroupForEducators}/${id}`;
+    return this.http.get<group[]>(url);
   }
 
   addGroup(Record: group): Observable<any> {

@@ -25,14 +25,27 @@ export class ChooseGroupComponent implements OnInit {
       private router: Router,
       private location: Location) { }
 
-  ngOnInit(): void {
+    id: string;
+    roles: string;
+    ngOnInit(): void {
+      this.roles = this.getRole('roles');
+      this.id = this.getId('id');
     this.getGroupByGroupType(this.route.snapshot.paramMap.get('id'))
   }
 
+  getId(number: string): string{
+    return localStorage.getItem(number);
+  }
+
+  getRole(roles: string): string{
+    return localStorage.getItem(roles);
+  }
+  
   getGroupByGroupType(id){
     this.MainService.getGroupByType(id)
     .subscribe(records => {this.records = records,
-      this.isLoading = false})
+      this.isLoading = false
+    console.log(this.records)})
   }
 
   onSelect(group){

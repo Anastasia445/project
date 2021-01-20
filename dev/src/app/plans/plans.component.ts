@@ -44,7 +44,7 @@ export class PlansComponent implements OnInit {
   dataSource: any;
   displayedColumns: string[] = ['name', 'details'];
   dataSource2: any;
-  displayedColumns2: string[] = ['login','FIO','name'];
+  displayedColumns2: string[] = ['name'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
   isLoading = true;
@@ -98,6 +98,7 @@ export class PlansComponent implements OnInit {
     this.roles = this.getRole('roles');
     this.id = this.getId('id');
     this.getPlan();
+   
   }
   
   getId(number: string): string{
@@ -115,7 +116,7 @@ export class PlansComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
- 
+ f:any;
   getPlan(): void {
     if(this.roles ==='ROLE_MODERATOR'){
       this.MainService.getPlanByEducatorId(this.id).subscribe(results=>{
@@ -124,6 +125,8 @@ export class PlansComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.allplanss);
         this.dataSource.paginator = this.paginator;
         console.log('mod',this.allplanss);
+       // console.log("d",this.f = this.allplanss[1].days[0].day);
+       // console.log('h',this.f.split('-')[1].replace(/^0/, ""));
       });
     } else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
         this.MainService.getPlans().subscribe(results=>{
@@ -141,13 +144,15 @@ export class PlansComponent implements OnInit {
   }
 
   records: plans[];
-  removePlan(Plan:plans): void { 
-      this.isLoading = true;
-      this.dataSource.data.splice(this.allplanss.indexOf(Plan), 1);
-      this.dataSource = new MatTableDataSource(this.dataSource.data);
-        this.dataSource.paginator = this.paginator;
-      this.MainService.deletePlan(Plan).subscribe();
-      this.getPlan();
+  removePlan(Plan:plans): void {
+      this.MainService.deletePlan(Plan).subscribe(results=>
+        {
+          this.isLoading = true;
+          this.dataSource.data.splice(this.allplanss.indexOf(Plan), 1);
+          this.dataSource = new MatTableDataSource(this.dataSource.data);
+          this.dataSource.paginator = this.paginator;
+          this.getPlan();
+        });
   }
 
   selectedDate: string = moment().format('YYYY-MM-DD');
@@ -179,14 +184,15 @@ export class PlansComponent implements OnInit {
       if (result) {
           this.MainService.updatePlan(result.group).subscribe(data => { 
           this.isLoading = true;
-           const newvalue = data ? this.records.findIndex(h => h.id === data.id) : -1;
+           const newvalue = data ? this.allplanss.findIndex(h => h.id === data.id) : -1;
           if (newvalue > -1) {
-            this.records[newvalue] = data;
+            this.allplanss[newvalue] = data;
           }
-          this.dataSource = new MatTableDataSource(this.records);
+          this.dataSource = new MatTableDataSource(this.allplanss);
           this.dataSource.paginator = this.paginator;
           this.getPlan(); 
-        });     
+        });   
+        this.getPlan();  
     }           
     });      
   }

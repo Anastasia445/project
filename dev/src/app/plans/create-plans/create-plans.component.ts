@@ -179,7 +179,11 @@ export class CreatePlansComponent implements OnInit {
       this.goBack();
     });
   }
- 
+ day1:any;
+ day2:any;
+ day3:any;
+ day4:any;
+ day5:any;
   chouseWeek(){
     this.isShow = false;
     this.chouseDate = new Date(this.week._i.year,this.week._i.month,this.week._i.date);
@@ -187,28 +191,34 @@ export class CreatePlansComponent implements OnInit {
     this.chouseDate3 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+2);
     this.chouseDate4 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+3);
     this.chouseDate5 = new Date(this.week._i.year,this.week._i.month,this.week._i.date + 4);
+    this.day1 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+1);
+    this.day2 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+2);
+    this.day3 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+3);
+    this.day4 = new Date(this.week._i.year,this.week._i.month,this.week._i.date+4);
+    this.day5 = new Date(this.week._i.year,this.week._i.month,this.week._i.date +5);
+    console.log(this.chouseDate);
     this.formGroups = new FormGroup({
       // id: new FormControl(this.id),
        name: new FormControl(null, [Validators.required]),
        days: new FormArray([
          new FormGroup({
-           day: new FormControl(this.chouseDate),
+           day: new FormControl(this.day1),
            plans: new FormControl('')
          }),
          new FormGroup({
-           day: new FormControl( this.chouseDate2),
+           day: new FormControl( this.day2),
            plans: new FormControl('')
          }),
          new FormGroup({
-           day: new FormControl( this.chouseDate3),
+           day: new FormControl( this.day3),
            plans: new FormControl('')
          }),
          new FormGroup({
-           day: new FormControl( this.chouseDate4),
+           day: new FormControl( this.day4),
            plans: new FormControl('')
          }),
          new FormGroup({
-           day: new FormControl( this.chouseDate5),
+           day: new FormControl( this.day5),
            plans: new FormControl('')
          })
        ]),

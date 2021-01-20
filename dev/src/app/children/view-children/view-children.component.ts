@@ -76,7 +76,8 @@ export class ViewChildrenComponent implements OnInit {
     private route: ActivatedRoute) { }
    
     formGroups = new FormGroup({
-    id:new FormControl(this.data.id),
+      id: new FormControl(''),
+   // groups: new  FormControl(this.data.id),
     lastName:new FormControl(''),
     firstName:new FormControl(''),
     patronymic:new FormControl(''),
@@ -119,17 +120,18 @@ export class ViewChildrenComponent implements OnInit {
         position: new FormControl('')
       })
     ]),
-    brothersAndSisters: new FormArray([ ])
+    relatives: new FormArray([ ])
   });
 
   koll: any = 0;
   parents = this.formGroups.get('parents') as FormArray;
-  brothersAndSisters = this.formGroups.get('brothersAndSisters') as FormArray;
+  relatives = this.formGroups.get('relatives') as FormArray;
 
   ngOnInit(): void {
 
     this.formGroups;
     if (this.data.item) {
+      this.formGroups.get('id').setValue(this.data.item.id);
       this.formGroups.get('lastName').setValue(this.data.item.lastName);
       this.formGroups.get('firstName').setValue(this.data.item.firstName);
       this.formGroups.get('patronymic').setValue(this.data.item.patronymic);
@@ -178,7 +180,7 @@ export class ViewChildrenComponent implements OnInit {
       education: new FormControl(value.education),
       placeOfWork: new FormControl(value.placeOfWork)   
     });
-   this.brothersAndSisters.push(item);
+   this.relatives.push(item);
   }  
 
   onSelectFile(file){

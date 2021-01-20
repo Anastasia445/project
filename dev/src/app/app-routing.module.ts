@@ -39,8 +39,8 @@ const routes: Routes = [
  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
  { path: 'createUsers', component: CreateUsersComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'sendEmail', component: SendEmailComponent},
-  { path: 'signup', component: SignupComponent },
+ // { path: 'sendEmail', component: SendEmailComponent},
+//  { path: 'signup', component: SignupComponent },
   { path: "**",redirectTo:"/login"}
 ];
 

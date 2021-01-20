@@ -1,5 +1,6 @@
 .login {
-  max-width: 380px;
+  /*max-width: 380px;*/
+  max-width: 340px;
   border-radius: 15px;
 }
 .full-width {

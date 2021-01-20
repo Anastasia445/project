@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit {
   allusers: users[];
  // allusers: any;
   dataSource: any;
-  displayedColumns: string[] = ['fio','username','mail', 'details'];
+  displayedColumns: string[] = ['fio','username', 'ID', 'mail', 'details'];
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
   isLoading = true;

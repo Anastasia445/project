@@ -33,7 +33,7 @@
     </mat-progress-spinner>
   </div>
 
-  <div class="mat-elevation-z8 tableChildren">
+  <div  *ngIf="!isLoading"  class="mat-elevation-z8 tableChildren">
     <div  *ngIf="!isLoading" >
   <table mat-table [dataSource]="dataSource" matSort>
 

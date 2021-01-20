@@ -10,6 +10,9 @@
     <button *ngIf="!isLoading && (roles ==='ROLE_MODERATOR,ROLE_ADMIN' || roles ==='ROLE_ADMIN,ROLE_MODERATOR')" (click)="addGroups()" mat-raised-button color="primary" >
       Создать группу
     </button>
+    <button *ngIf="!isLoading && (roles ==='ROLE_MODERATOR') && groups == null" (click)="addGroups()" mat-raised-button color="primary" >
+      Создать группу
+    </button>
     &nbsp;&nbsp;&nbsp;
     <button *ngIf="!isLoading && (roles ==='ROLE_MODERATOR,ROLE_ADMIN' || roles ==='ROLE_ADMIN,ROLE_MODERATOR')" mat-raised-button color="warn" routerLink="/users">
       <mat-icon>group</mat-icon>
@@ -20,7 +23,7 @@
   
 
   <div class="mat-elevation-z8 tableGroup">
-  <div *ngIf="record != null && !isLoading && roles ==='ROLE_MODERATOR' && record != null" >
+  <div *ngIf="groups != null && roles ==='ROLE_MODERATOR'" >
   <table  mat-table [dataSource]="dataSource" matSort>
 
   <!-- <ng-container matColumnDef="id">   

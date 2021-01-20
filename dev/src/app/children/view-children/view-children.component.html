@@ -224,8 +224,8 @@
       </div>
      </ng-container>
 
-  <ng-container formArrayName="brothersAndSisters">
-   <div *ngFor="let _ of brothersAndSisters.controls; let i = index;">
+  <ng-container formArrayName="relatives">
+   <div *ngFor="let _ of relatives.controls; let i = index;">
     <h2>Сведения о сёстрах и братьях:</h2>  
      <ng-container [formGroupName]="i">
        <br>
@@ -510,8 +510,8 @@
       </div>
      </ng-container>
     
-     <ng-container formArrayName="brothersAndSisters">
-      <div *ngFor="let _ of brothersAndSisters.controls; let i = index;">
+     <ng-container formArrayName="relatives">
+      <div *ngFor="let _ of relatives.controls; let i = index;">
        <h2>Сведения о сёстрах и братьях:</h2>  
         <ng-container [formGroupName]="i">
           <br>

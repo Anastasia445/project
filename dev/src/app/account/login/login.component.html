@@ -8,6 +8,7 @@
 <div class="form" *ngIf="isReady">
     <mat-card  class="login"> 
         <mat-card-title>Вход:</mat-card-title>
+        <br>
           <mat-form-field class="example-full-width">
             <mat-label>Имя пользователя</mat-label>
             <input matInput [(ngModel)]="loginUser.username" placeholder="Иванов_01" [errorStateMatcher]="matcher"
@@ -35,8 +36,8 @@
             (click)="login()" >
             Сохранить
           </button> 
-        <!-- <a class="signUp"  routerLink="/signup">Перейти на страницу регистрации</a>-->
+        <!-- <a class="signUp"  routerLink="/signup">Перейти на страницу регистрации</a>
           <br>
-          <a class="password" routerLink="/sendEmail">Забыли пароль?</a>
+          <a class="password" routerLink="/sendEmail">Забыли пароль?</a>-->
     </mat-card>
     </div>

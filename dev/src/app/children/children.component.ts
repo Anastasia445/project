@@ -24,13 +24,12 @@ export interface children {
   lastName: string;
   firstName: string
   patronymic: string;
-  group: [{
-   id:number;
-   groupssTypee:{
+  groups: number;
+  /* groupssTypee:{
      id: number;
      name:string;
-     }
-  }];
+     }*/
+
   parents:[{
       firstName:string;
       lastName:string;
@@ -110,11 +109,14 @@ export class ChildrenComponent implements OnInit {
      private http: HttpClient,
     private location: Location,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder) 
+    private formBuilder: FormBuilder,
+    public paginator: MatPaginator) 
     {    }
 
   ngOnInit() {
    this.getchildren();
+   this.dataSource = new MatTableDataSource(this.records);
+  // this.dataSource.paginator = new this.paginator(this.records);
     this.uploadForm = this.formBuilder.group({
       file: ['']
     });
@@ -178,11 +180,11 @@ export class ChildrenComponent implements OnInit {
       disableClose: true, 
       data: {
         item,
-        id: +this.route.snapshot.paramMap.get('id'),
-        
+       // id: +this.route.snapshot.paramMap.get('id')
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
+      const id = +this.route.snapshot.paramMap.get('id');
       if (result) {
           this.MainService.updateChild(result.group).subscribe(data => { 
           this.isLoading = true;
@@ -208,21 +210,21 @@ export class ChildrenComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.records);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.getGroupTypeId();
-      //console.log(results);
+     // this.getGroupTypeId();
+      console.log(results);
     });
   }
 
   GroupTypeId: any = 0;
   isImport: boolean = true;
  getGroupTypeId(){
-   if(this.records[0] != undefined){
-     this.GroupTypeId = this.records[0].group[0].groupssTypee.id;
-     if(this.GroupTypeId <= 3){
-        this.isImport = true;
-     } else if(this.GroupTypeId == 4){
+   if(this.records[0] === undefined){
+  //   this.GroupTypeId = this.records[0].group[0].groupssTypee.id;
+   //  if(this.GroupTypeId <= 3){
+     //   this.isImport = true;
+   //  } else if(this.GroupTypeId == 4){
         this.isImport = false;
-     }
+    // }
    }
  }
 

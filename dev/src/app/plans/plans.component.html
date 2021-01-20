@@ -72,20 +72,6 @@
     <div  *ngIf="!isLoading && (this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR') ">
     <table  mat-table [dataSource]="dataSource">
 
-      <ng-container matColumnDef="login">
-        <th mat-header-cell *matHeaderCellDef> <strong>Логин</strong> </th>
-        <td mat-cell *matCellDef="let element" (click)="changePlan(element)">  
-          {{element.educator.username}}
-        </td>
-      </ng-container>
-
-       <ng-container matColumnDef="FIO">
-        <th mat-header-cell *matHeaderCellDef> <strong>ФИО</strong> </th>
-        <td mat-cell *matCellDef="let element"  (click)="changePlan(element)">  
-          {{element.educator.lastName}}&nbsp;{{element.educator.firstName}}&nbsp;{{element.educator.patronymic}}
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> <strong>Название плана</strong> </th>
         <td mat-cell *matCellDef="let element"  (click)="changePlan(element)">  
@@ -97,7 +83,8 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
     </table>
   </div>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+ 
   </div>
 
 

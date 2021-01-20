@@ -60,23 +60,23 @@ export class CreateGroupComponent implements OnInit {
       educatorId: new FormControl(null, [Validators.required]),
       start: new FormControl(new Date(year, 8, 1,23,59)),
       end: new FormControl(new Date(year+1, 4, 31,23,59)),
-      groupssTypee: new FormControl(null, [Validators.required]),
+      groupType: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
    }else if(this.roles ==='ROLE_MODERATOR'){
     this.formGroups = new FormGroup({
       groupName: new FormControl(null, [Validators.required]),
-      educatorId: new FormControl(this.id),
+      educatorId: new FormControl(this.data.educator),
       start: new FormControl(new Date(year, 8, 1,23,59)),
       end: new FormControl(new Date(year+1, 4, 31,23,59)),
-      groupssTypee: new FormControl(null, [Validators.required]),
+      groupType: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
     });
    }
     if (this.data.item) {
       this.formGroups.get('educatorId').setValue(this.data.item.educatorId);
       this.formGroups.get('groupName').setValue(this.data.item.groupName);
-      this.formGroups.get('groupssTypee').setValue(this.data.item.groupssTypee);
+      this.formGroups.get('groupType').setValue(this.data.item.groupType);
       this.formGroups.get('start').setValue(this.data.item.start);
       this.formGroups.get('end').setValue(this.data.item.end);
       this.formGroups.get('description').setValue(this.data.item.description);

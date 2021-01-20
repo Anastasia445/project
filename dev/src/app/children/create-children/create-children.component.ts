@@ -55,10 +55,11 @@ export class CreateChildrenComponent implements OnInit {
     private route: ActivatedRoute) { }
     
     formGroups = new FormGroup({
+     // id: new FormControl(''),
       lastName:new FormControl(''),
       firstName:new FormControl(''),
       patronymic:new FormControl(''),
-      groups: new  FormControl([this.data.id]),
+      groups: new  FormControl(this.data.id),
       dayOfBirth:new FormControl(null, [Validators.required]),
       weightF:new FormControl(null, [Validators.required]),
       heightF:new FormControl(null, [Validators.required]),

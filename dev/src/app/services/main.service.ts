@@ -118,6 +118,11 @@ export class MainService {
   return this.http.put<children>( `${updateChild}/${Record.id}`,Record, httpOptions); 
   }  
 
+  updateChild2(Record: children,id): Observable<any>{
+    const idw = typeof Record === 'number' ? Record : Record.id;
+  return this.http.put<children>( `${updateChild}/${id}`,Record, httpOptions); 
+  }  
+
   downloadChildren(id){
     return this.http.get(`${downloadChildren}/${id}`,{ responseType: 'blob' })
   }

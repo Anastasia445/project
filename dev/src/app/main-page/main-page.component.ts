@@ -17,10 +17,10 @@ import { ActivatedRoute } from '@angular/router';
 export interface group {
   educatorId: number;
   id: number;
-  name: string;
+  groupName: string;
   start: Date;
   end: Date;
-  groupssTypee: {
+  groupType: {
     groupssTypee: string;
     group: string;
   };
@@ -60,6 +60,7 @@ export class MainPageComponent implements OnInit {
     this.roles = this.getRole('roles');
     this.id = this.getId('id');
     this.getGroups();
+    
     console.log(this.id);
   }
 
@@ -87,18 +88,24 @@ groups2: group[];
     if(this.roles ==='ROLE_MODERATOR'){
     this.MainService./*getGroups*/getGroupForEduc(this.id).subscribe(results=>{
       this.isLoading = false;
-     
-      this.groups2 = results;
+     if(results == null){
+      this.groups = results;
       this.record[0] = this.groups2;
-      this.dataSource = new MatTableDataSource(this.record);
-      console.log(this.record);
+      this.dataSource = new MatTableDataSource(this.groups);
+      console.log('educ',this.groups);
+      console.log('educ2',results);}else{
+        this.groups2 = results;
+        this.record[0] = this.groups2;
+        this.dataSource = new MatTableDataSource(this.record);
+        console.log('educ',this.record);
+      }
     
     /*  this.groups2 = results;
       this.record[0] = this.groups2;
       this.dataSource = new MatTableDataSource(this.groups2);*/
     
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+     // this.dataSource.sort = this.sort;
+     // this.dataSource.paginator = this.paginator;
       //console.log(this.rec);
   });
   }else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
@@ -112,7 +119,7 @@ groups2: group[];
   });
   }
   }
-  
+  rec = [];
   addGroups() : void {
     const dialogRef = this.dialog.open(CreateGroupComponent, {
       disableClose: true, 
@@ -127,6 +134,7 @@ groups2: group[];
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
        this.MainService.addGroup(result.group).subscribe((result2) => {
        this.isLoading = true;
        this.groups.push(result2);
@@ -135,10 +143,21 @@ groups2: group[];
        this.dataSource.sort = this.sort;
        this.getGroups();
        });
-      } 
-      
-    });
-  }
+       } else if(this.roles ==='ROLE_MODERATOR'){
+          this.MainService.addGroup(result.group).subscribe((result2) => {
+          this.isLoading = true;
+          this.rec[0].push(result2)
+          this.groups.push(result2);
+          this.dataSource = new MatTableDataSource(this.groups);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.getGroups();
+          });
+        }
+    }
+  
+  });
+}
 
   changeGroup(item): void{
     const dialogRef = this.dialog.open(EditGroupComponent, {

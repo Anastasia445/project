@@ -322,6 +322,8 @@ export class CreateTimesheetsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
        this.MainService.addcause(result.group).subscribe((result2) => {
+         this.isLoading = false;
+         this.getchildren(this.route.snapshot.paramMap.get('id'));
        });
       }  
     });
@@ -337,7 +339,10 @@ export class CreateTimesheetsComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-         this.MainService.updateChild(result.group).subscribe((result2) => {});
+         this.MainService.updateChild(result.group).subscribe((result2) => {
+            this.isLoading = false;
+         this.getchildren(this.route.snapshot.paramMap.get('id'));
+         });
       }
       });
     }

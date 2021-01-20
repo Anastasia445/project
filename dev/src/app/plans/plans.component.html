@@ -10,14 +10,14 @@
     <button routerLink="/createPlan" mat-raised-button color="primary" >
       Создать новый план
     </button>
-    &nbsp;&nbsp;&nbsp;
+     <!--&nbsp;&nbsp;&nbsp;
     <button *ngIf="isShow" (click)="isShow=!isShow" mat-raised-button color="primary">
         Скачать план
-    </button>
+    </button>-->
   </div>
   <br>
 
-  <div *ngIf="!isLoading" >
+<!--- <div *ngIf="!isLoading" >
     <div *ngIf="!isShow" class="datePicker">
     <h3>Выберите месяц:</h3>
     <mat-form-field appearance="fill">
@@ -29,7 +29,7 @@
       </mat-select>
     </mat-form-field>
     </div>
-  </div>
+  </div>-->
 
   <!--<div  *ngIf="!isLoading" class="form">
     <mat-card class="plans">
@@ -58,6 +58,10 @@
       <ng-container matColumnDef="details">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" title="скачать план" (click)="downloadPlan(element.id,element.days[0].day)">
+            <span class="material-icons"> get_app </span>
+          </button>
+          &nbsp;
           <button mat-icon-button color="warn" (click)="removePlan(element)">
             <span class="material-icons"> delete </span>
           </button>

@@ -109,13 +109,12 @@ export class ChildrenComponent implements OnInit {
      private http: HttpClient,
     private location: Location,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
-    public paginator: MatPaginator) 
+    private formBuilder: FormBuilder) 
     {    }
 
   ngOnInit() {
    this.getchildren();
-   this.dataSource = new MatTableDataSource(this.records);
+   //this.dataSource = new MatTableDataSource(this.records);
   // this.dataSource.paginator = new this.paginator(this.records);
     this.uploadForm = this.formBuilder.group({
       file: ['']

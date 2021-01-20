@@ -82,31 +82,27 @@ export class MainPageComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
   record = [];
-groups2: group[];
+  groups2: group[];
   getGroups(): void {
     if(this.roles ==='ROLE_MODERATOR'){
-    this.MainService./*getGroups*/getGroupForEduc(this.id).subscribe(results=>{
-      this.isLoading = false;
-     if(results == null){
-      this.groups = results;
-      this.record[0] = this.groups2;
-      this.dataSource = new MatTableDataSource(this.groups);
-      console.log('educ',this.groups);
-      console.log('educ2',results);}else{
-        this.groups2 = results;
-        this.record[0] = this.groups2;
-        this.dataSource = new MatTableDataSource(this.record);
-        console.log('educ',this.record);
-      }
-    
-    /*  this.groups2 = results;
-      this.record[0] = this.groups2;
-      this.dataSource = new MatTableDataSource(this.groups2);*/
-    
-     // this.dataSource.sort = this.sort;
-     // this.dataSource.paginator = this.paginator;
-      //console.log(this.rec);
+      this.MainService.getGroupForEduc(this.id).subscribe(results=>{
+        this.isLoading = false;
+        if(results == null){
+          this.groups2 = results;
+          //this.record[0] = this.groups2;
+          this.dataSource = new MatTableDataSource(this.record);
+          this.dataSource.paginator = this.paginator;
+         // console.log('educ',this.groups2);
+        //  console.log('educ2',results);
+        }else{
+          this.groups2 = results;
+          this.record[0] = results;
+          this.dataSource = new MatTableDataSource(this.record);
+          this.dataSource.paginator = this.paginator;
+         // console.log('educl',this.record);
+        }
   });
   }else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
     this.MainService.getGroups().subscribe(results=>{
@@ -124,33 +120,31 @@ groups2: group[];
     const dialogRef = this.dialog.open(CreateGroupComponent, {
       disableClose: true, 
       data: {
-    /*    name: this.name,
-        start: this.start,
-        end: this.end,
-        groupssTypee: this.groupssTypee,    
-        description: this.description,*/
         educator: this.id
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
-       this.MainService.addGroup(result.group).subscribe((result2) => {
-       this.isLoading = true;
-       this.groups.push(result2);
-       this.dataSource = new MatTableDataSource(this.groups);
-       this.dataSource.paginator = this.paginator;
-       this.dataSource.sort = this.sort;
-       this.getGroups();
-       });
-       } else if(this.roles ==='ROLE_MODERATOR'){
           this.MainService.addGroup(result.group).subscribe((result2) => {
           this.isLoading = true;
-          this.rec[0].push(result2)
           this.groups.push(result2);
           this.dataSource = new MatTableDataSource(this.groups);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.getGroups();
+          });
+        } else if(this.roles ==='ROLE_MODERATOR'){
+          this.MainService.addGroup(result.group).subscribe((result2) => {
+          this.isLoading = true;
+         // this.rec[0].push(result2)
+         this.groups2 = result2;
+        //  this.record[0] = result2;
+          this.record.push(result2);
+          this.dataSource = new MatTableDataSource(this.record);
+          /*this.groups.push(result2);
+          this.dataSource = new MatTableDataSource(this.groups);*/
+          this.dataSource.paginator = this.paginator;
           this.getGroups();
           });
         }
@@ -197,19 +191,26 @@ groups2: group[];
     const id = Group.id;
    this.MainService.getchildren(id).subscribe(results=>
     {
-      this.isLoading = true;
+     // this.isLoading = true;
       this.records2 = results;
       if(this.records2.length > 0){
         this.openDialog();
       } else{
         //this.dataSource  = this.records.filter(h => h !== Record);
-        this.dataSource.data.splice(this.groups.indexOf(Group), 1);
+       /* this.dataSource.data.splice(this.groups.indexOf(Group), 1);
         this.dataSource = new MatTableDataSource(this.dataSource.data);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.MainService.deleteGroup(Group).subscribe();
+        this.dataSource.sort = this.sort;*/
+        this.MainService.deleteGroup(Group).subscribe(results=>
+          {
+            this.isLoading = true;
+            this.dataSource.data.splice(this.groups.indexOf(Group), 1);
+            this.dataSource = new MatTableDataSource(this.dataSource.data);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.getGroups();
+          });
       }
-      this.getGroups();
     });
   }
 

@@ -116,7 +116,7 @@ export class PlansComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
- f:any;
+  sendMonth:any;
   getPlan(): void {
     if(this.roles ==='ROLE_MODERATOR'){
       this.MainService.getPlanByEducatorId(this.id).subscribe(results=>{
@@ -125,8 +125,8 @@ export class PlansComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.allplanss);
         this.dataSource.paginator = this.paginator;
         console.log('mod',this.allplanss);
-       // console.log("d",this.f = this.allplanss[1].days[0].day);
-       // console.log('h',this.f.split('-')[1].replace(/^0/, ""));
+        //this.sendMonth = this.allplanss[1].days[0].day;
+       // console.log('month',this.sendMonth.split('-')[1].replace(/^0/, ""));
       });
     } else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
         this.MainService.getPlans().subscribe(results=>{
@@ -161,12 +161,23 @@ export class PlansComponent implements OnInit {
     this.selectedDate = moment(event).format('YYYY-MM-DD')
   }
  
-  downloadPlan(){
+ /* downloadPlan(){
       this.MainService.downloadPlan(this.id,this.selectedValue).subscribe((file) => {
         saveAs(file,`план-${moment(this.selectedDate).format('DD.MM.YYYY')}.docx`);
   })
   this.isShow = true;
-  }
+  }*/
+
+  downloadPlan(id,date){
+   const month = date.split('-')[1].replace(/^0/, "");
+   console.log(month);
+    this.MainService.downloadPlan(id,month).subscribe((file) => {
+      this.isLoading = true;
+      saveAs(file,`план-${moment(this.selectedDate).format('DD.MM.YYYY')}.docx`);
+      this.getPlan(); 
+})
+
+}
 
   changePlan(item): void{
     const dialogRef = this.dialog.open(EditPlansComponent, {
@@ -192,7 +203,7 @@ export class PlansComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.getPlan(); 
         });   
-        this.getPlan();  
+       // this.getPlan();  
     }           
     });      
   }

@@ -44,7 +44,7 @@ export class ChooseGroupComponent implements OnInit {
   getGroupByGroupType(id){
     this.MainService.getGroupByType(id)
     .subscribe(records => {this.records = records,
-      this.isLoading = false
+      this.isLoading = false,
     console.log(this.records)})
   }
 

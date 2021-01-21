@@ -125,8 +125,6 @@ export class PlansComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.allplanss);
         this.dataSource.paginator = this.paginator;
         console.log('mod',this.allplanss);
-        //this.sendMonth = this.allplanss[1].days[0].day;
-       // console.log('month',this.sendMonth.split('-')[1].replace(/^0/, ""));
       });
     } else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
         this.MainService.getPlans().subscribe(results=>{

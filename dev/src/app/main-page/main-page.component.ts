@@ -60,7 +60,7 @@ export class MainPageComponent implements OnInit {
     this.roles = this.getRole('roles');
     this.id = this.getId('id');
     this.getGroups();
-    
+  //  this.dataSource.paginator = this.paginator;
     console.log(this.id);
   }
 

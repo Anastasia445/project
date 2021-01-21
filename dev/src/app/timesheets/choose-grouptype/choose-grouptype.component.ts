@@ -6,7 +6,8 @@ import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TimesheetsComponent } from '../timesheets.component';
-import { DetailsComponent } from '../details/details.component';
+import { group } from 'src/app/main-page/main-page.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface timesheet {
   name: string;
@@ -25,6 +26,7 @@ export class ChooseGrouptypeComponent implements OnInit {
   group: timesheet;
   [x: string]: any;
 
+  durationInSeconds = 3;
   groupType:any;
   isLoading = true;
   color: ThemePalette = 'primary';
@@ -41,6 +43,7 @@ export class ChooseGrouptypeComponent implements OnInit {
     private route: ActivatedRoute,
     public dialogRef: MatDialogRef<TimesheetsComponent>,
     private MainService: MainService,
+    private _snackBar: MatSnackBar,
     private router: Router,
     private location: Location) { }
 
@@ -49,11 +52,11 @@ export class ChooseGrouptypeComponent implements OnInit {
   ngOnInit(): void {
     this.roles = this.getRole('roles');
     this.id = this.getId('id');
-    //if(this.roles ==='ROLE_MODERATOR'){
-   // this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'))
-  //}else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
-    this.getGroupTypes();
- // }
+    if(this.roles ==='ROLE_MODERATOR'){
+      this.getTimesheetsByGroupId();
+    }else if(this.roles ==='ROLE_MODERATOR,ROLE_ADMIN' || this.roles ==='ROLE_ADMIN,ROLE_MODERATOR'){
+      this.getGroupTypes();
+    }
   }
 
   getId(number: string): string{
@@ -64,68 +67,35 @@ export class ChooseGrouptypeComponent implements OnInit {
     return localStorage.getItem(roles);
   }
 
+  openDialog() { 
+    this._snackBar.openFromComponent(DialogMessageComponent, {
+      duration: this.durationInSeconds * 700,
+    });
+  }
+
   getGroupTypes(){
     this.MainService.getGroupTypes()
     .subscribe(types => {this.groupType = types,
-    this.isLoading = false;})
+    this.isLoading = false})
   }
 
   onSelect(type){
     this.router.navigate(['/group', type.id])
   }
 
-  getTimesheetsByGroupId(id){
-    this.MainService.getTimesheetsForGroup(id)
-    .subscribe(result => {
-      this.isLoading = false;
-      this.timesheets = result;
-      console.log(this.timesheets);
-    })
-  }
-
-  addTimesheets() : void {
-    const dialogRef = this.dialog.open(DetailsComponent, {
-      disableClose: true, 
-      data: {
-        id: +this.route.snapshot.paramMap.get('id')    
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-       this.MainService.createTimesheet(result.group).subscribe((data)=>{
-       this.isLoading = true,
-       this.timesheets.push(data),
-     this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'))
-       })
-      }  
-    });
-  }
-
-  changeTimesheet(item): void{
-    const dialogRef = this.dialog.open(DetailsComponent, {
-      disableClose: true, 
-      data: {
-        item,
-        id: this.id
-      },
-    });
-    console.log('one1', this.groups);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-          this.MainService.updateTimesheet(result.group).subscribe((data) => { 
-          this.isLoading = true;
-            this.groups = data;
-          this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'));
-        });     
-    }           
-    });      
-  }
-
-  deleteTimesheet(){
-    this.MainService.deleteTimesheet(this.timesheets[0].id).subscribe((t)=>{
-      this.isLoading = true,
-      this.getTimesheetsByGroupId(this.route.snapshot.paramMap.get('id'))
-    });
+  record = [];
+  groups2: group[];
+  getTimesheetsByGroupId(): void {
+    this.MainService.getGroupForEduc(this.id).subscribe(results=>{
+      if(results == null){
+        this.openDialog();
+        this.router.navigate(['/main']);
+      }else{
+        this.record[0] = results;
+        const id = this.record[0].id;
+        this.router.navigate(['/timesheets', id]);
+      }
+    });  
   }
 
   onSelect2(group){
@@ -138,3 +108,15 @@ export class ChooseGrouptypeComponent implements OnInit {
   }
 
 }
+
+
+@Component({
+  selector: 'dialog-message-component',
+  templateUrl: 'dialog-message.component.html',
+  styles: [`
+    .example {
+      color: hotpink;
+    }
+  `],
+})
+export class DialogMessageComponent {}
